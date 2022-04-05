@@ -4,14 +4,14 @@
     <color name="PrimaryVariant">#3700B3</color>
     <color name="Secondary">#03DAC6</color>
     <color name="SecondaryVariant">#018786</color>
-    <color name="Text">#222222</color>
-    <color name="Background">#FFFFFF</color>
+    <color name="Text">#FFFFFFFF</color>
+    <color name="Background">#222222</color>
     <color name="Surface">#FFFFFF</color>
     <color name="Error">#B00020</color>
     <color name="OnPrimary">#FFFFFF</color>
     <color name="OnSecondary">#000000</color>
-    <color name="OnBackground">#222222</color>
-    <color name="OnSurface">#DADADA</color>
+    <color name="OnBackground">#FFFFFF</color>
+    <color name="OnSurface">#3A3A3A</color>
     <color name="OnError">#FFFFFF</color>
 
     <color name="black">#FF000000</color>
