@@ -10,7 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/raisin_black"
+        android:background="@color/Background"
         tools:context=".ui.home.HomeFragment">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -39,18 +39,19 @@
                         android:id="@+id/tv_service_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
+                        android:textColor="@color/Text"
                         android:textSize="28sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:text="이세돌"
                         tools:text="이세돌" />
 
                     <TextView
                         android:id="@+id/tv_plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/ine_primary"
+                        android:textColor="@color/Primary"
                         android:textSize="35sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -91,7 +92,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rv_sns_platform"
-                    tools:listitem="@layout/item_user_status" />
+                    tools:listitem="@layout/item_youtube_video" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
