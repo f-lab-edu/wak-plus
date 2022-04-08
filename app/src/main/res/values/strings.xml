@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">WakPlus</string>
+    <string name="view_count">조회수 %1$s회</string>
+
+    <string name="moments_ago">조금 전</string>
+    <string name="minutes_ago">%1$d분 전</string>
+    <string name="hours_ago">%1$d시간 전</string>
+    <string name="days_ago">%1$d일 전</string>
+    <string name="weeks_ago">%1$d주 전</string>
+    <string name="months_ago">%1$d달 전</string>
+    <string name="years_ago">%1$d년 전</string>
 </resources>

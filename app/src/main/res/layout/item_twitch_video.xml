@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable name="viewModel" type="com.june0122.wakplus.ui.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/twitch_thumbnail_01" />
+            tools:srcCompat="@drawable/twitch_thumbnail_01"
+            />
 
         <TextView
             android:id="@+id/tv_duration"
