@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.data.entitiy.ContentData
-import com.june0122.wakplus.data.entitiy.TwitchVideoEntitiy
-import com.june0122.wakplus.data.entitiy.YoutubeVideoEntitiy
+import com.june0122.wakplus.data.entitiy.TwitchVideoEntity
+import com.june0122.wakplus.data.entitiy.YoutubeVideoEntity
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
@@ -17,8 +17,8 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return when (contentList[position]) {
-            is TwitchVideoEntitiy -> VIEW_TYPE_TWITCH_VIDEO
-            is YoutubeVideoEntitiy -> VIEW_TYPE_YOUTUBE_VIDEO
+            is TwitchVideoEntity -> VIEW_TYPE_TWITCH_VIDEO
+            is YoutubeVideoEntity -> VIEW_TYPE_YOUTUBE_VIDEO
             else -> VIEW_TYPE_TWITCH_VIDEO
         }
     }
@@ -47,10 +47,10 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val content = contentList[holder.absoluteAdapterPosition]) {
-            is TwitchVideoEntitiy -> if (holder is TwitchVideoHolder) {
+            is TwitchVideoEntity -> if (holder is TwitchVideoHolder) {
                 holder.bind(content.twitchUserInfo, content.twitchVideoInfo)
             }
-            is YoutubeVideoEntitiy -> if (holder is YoutubeVideoHolder) {
+            is YoutubeVideoEntity -> if (holder is YoutubeVideoHolder) {
                 holder.bind(content.youtubeUserInfo, content.youtubeVideoInfo)
             }
             else -> {
@@ -90,8 +90,8 @@ class ContentDiffCallback(
         val oldItem = oldItems[oldItemPosition]
         val newItem = newItems[newItemPosition]
 
-        return if (oldItem is TwitchVideoEntitiy && newItem is TwitchVideoEntitiy) oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
-        else if (oldItem is YoutubeVideoEntitiy && newItem is YoutubeVideoEntitiy) oldItem.youtubeVideoInfo.id == newItem.youtubeVideoInfo.id
+        return if (oldItem is TwitchVideoEntity && newItem is TwitchVideoEntity) oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
+        else if (oldItem is YoutubeVideoEntity && newItem is YoutubeVideoEntity) oldItem.youtubeVideoInfo.id == newItem.youtubeVideoInfo.id
         else oldItem == newItem
     }
 

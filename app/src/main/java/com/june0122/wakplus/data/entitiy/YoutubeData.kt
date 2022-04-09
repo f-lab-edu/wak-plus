@@ -1,6 +1,6 @@
 package com.june0122.wakplus.data.entitiy
 
-data class YoutubeVideo(
+data class YoutubeVideoEntity(
     val youtubeUserInfo: YoutubeUserInfo,
     val youtubeVideoInfo: YoutubeVideoInfo,
 ) : ContentData()

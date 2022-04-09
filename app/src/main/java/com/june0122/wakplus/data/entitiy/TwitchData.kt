@@ -2,6 +2,11 @@ package com.june0122.wakplus.data.entitiy
 
 import com.google.gson.annotations.SerializedName
 
+data class TwitchVideoEntity(
+    val twitchUserInfo: TwitchUserInfo,
+    val twitchVideoInfo: TwitchVideoInfo,
+) : ContentData()
+
 data class TwitchToken(
     @SerializedName("access_token") val accessToken: String,
     @SerializedName("expires_in") val expiresIn: String,
@@ -14,11 +19,6 @@ data class TwitchVideos(
 )
 
 data class Pagination(@SerializedName("cursor") val cursor: String)
-
-data class TwitchVideo(
-    val twitchUserInfo: TwitchUserInfo,
-    val twitchVideoInfo: TwitchVideoInfo,
-) : ContentData()
 
 data class TwitchVideoInfo(
     @SerializedName("id") val id: String,

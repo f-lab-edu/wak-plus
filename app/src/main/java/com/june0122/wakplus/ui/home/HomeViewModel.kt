@@ -9,8 +9,9 @@ import com.june0122.wakplus.data.api.TwitchService
 import com.june0122.wakplus.data.api.YoutubeService
 import com.june0122.wakplus.data.entitiy.ContentData
 import com.june0122.wakplus.data.entitiy.TwitchUserInfo
-import com.june0122.wakplus.data.entitiy.TwitchVideo
-import com.june0122.wakplus.data.entitiy.YoutubeVideo
+import com.june0122.wakplus.data.entitiy.TwitchVideoEntity
+import com.june0122.wakplus.data.entitiy.YoutubeVideoEntity
+import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -61,7 +62,7 @@ class HomeViewModel : ViewModel() {
             val twitchVideos = twitchService.getChannelVideos(userId).data
             val twitchUserInfo = twitchService.getUserInfo(userId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
-                TwitchVideo(twitchUserInfo, twitchVideoInfo)
+                TwitchVideoEntity(twitchUserInfo, twitchVideoInfo)
             }
 
             _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
@@ -77,7 +78,7 @@ class HomeViewModel : ViewModel() {
             val youtubeChannelVideos = youtubeService.getChannelVideos(channelId = userId, order = "date").items
             val youtubeUserInfo = youtubeService.getUserInfo(channelId = userId).items[0]
             val contents = youtubeChannelVideos.map { youtubeChannelVideo ->
-                YoutubeVideo(youtubeUserInfo, youtubeService.getVideoInfo(id = youtubeChannelVideo.id.videoId).items[0])
+                YoutubeVideoEntity(youtubeUserInfo, youtubeService.getVideoInfo(id = youtubeChannelVideo.id.videoId).items[0])
             }
 
             _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
@@ -91,6 +92,10 @@ class HomeViewModel : ViewModel() {
         const val TWITCH_ID_GOSEGU = "614351180"
 
         const val YOUTUBE_ID_INE = "UCroM00J2ahCN6k-0-oAiDxg"
-        const val YOUTUBE_ID_GOSEGU = ""
+        const val YOUTUBE_ID_GOSEGU = "UCV9WL7sW6_KjanYkUUaIDfQ"
+        const val YOUTUBE_ID_VIICHAN = "UCs6EwgxKLY9GG4QNUrP5hoQ"
+        const val YOUTUBE_ID_JURURU = "UCTifMx1ONpElK5x6B4ng8eg"
+        const val YOUTUBE_ID_JINGBURGER = "UCHE7GBQVtdh-c1m3tjFdevQ"
+        const val YOUTUBE_ID_LILPA = "UC-oCJP9t47v7-DmsnmXV38Q"
     }
 }
