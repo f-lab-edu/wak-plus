@@ -6,6 +6,8 @@
     <dimen name="user_status_height">150dp</dimen>
     <dimen name="sns_selector_height">50dp</dimen>
 
+    <dimen name="margin_extra_large">32dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_extra_small">4dp</dimen>
