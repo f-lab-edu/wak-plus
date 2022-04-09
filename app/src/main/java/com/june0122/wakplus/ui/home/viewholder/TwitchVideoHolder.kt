@@ -1,4 +1,4 @@
-package com.june0122.wakplus.ui.home
+package com.june0122.wakplus.ui.home.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
 import coil.load

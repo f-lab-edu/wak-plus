@@ -1,22 +1,24 @@
-package com.june0122.wakplus.ui.home
+package com.june0122.wakplus.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.data.entitiy.ContentData
-import com.june0122.wakplus.data.entitiy.TwitchVideo
-import com.june0122.wakplus.data.entitiy.YoutubeVideo
+import com.june0122.wakplus.data.entitiy.TwitchVideoEntitiy
+import com.june0122.wakplus.data.entitiy.YoutubeVideoEntitiy
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
+import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
+import com.june0122.wakplus.ui.home.viewholder.YoutubeVideoHolder
 
 class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val contentList = mutableListOf<ContentData>()
 
     override fun getItemViewType(position: Int): Int {
         return when (contentList[position]) {
-            is TwitchVideo -> VIEW_TYPE_TWITCH_VIDEO
-            is YoutubeVideo -> VIEW_TYPE_YOUTUBE_VIDEO
+            is TwitchVideoEntitiy -> VIEW_TYPE_TWITCH_VIDEO
+            is YoutubeVideoEntitiy -> VIEW_TYPE_YOUTUBE_VIDEO
             else -> VIEW_TYPE_TWITCH_VIDEO
         }
     }
@@ -45,10 +47,10 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val content = contentList[holder.absoluteAdapterPosition]) {
-            is TwitchVideo -> if (holder is TwitchVideoHolder) {
+            is TwitchVideoEntitiy -> if (holder is TwitchVideoHolder) {
                 holder.bind(content.twitchUserInfo, content.twitchVideoInfo)
             }
-            is YoutubeVideo -> if (holder is YoutubeVideoHolder) {
+            is YoutubeVideoEntitiy -> if (holder is YoutubeVideoHolder) {
                 holder.bind(content.youtubeUserInfo, content.youtubeVideoInfo)
             }
             else -> {
@@ -88,7 +90,8 @@ class ContentDiffCallback(
         val oldItem = oldItems[oldItemPosition]
         val newItem = newItems[newItemPosition]
 
-        return if (oldItem is TwitchVideo && newItem is TwitchVideo) oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
+        return if (oldItem is TwitchVideoEntitiy && newItem is TwitchVideoEntitiy) oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
+        else if (oldItem is YoutubeVideoEntitiy && newItem is YoutubeVideoEntitiy) oldItem.youtubeVideoInfo.id == newItem.youtubeVideoInfo.id
         else oldItem == newItem
     }
 
