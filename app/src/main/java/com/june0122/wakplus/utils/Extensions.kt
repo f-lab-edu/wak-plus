@@ -16,21 +16,21 @@ import kotlin.math.pow
 private const val SUFFIX_EN = "kMBTPE"
 private const val SUFFIX_KR = "천만억조"
 private const val SUFFIX_JP = "万億兆"
-private const val THREE_DIGITS = 1000.0
-private const val FOUR_DIGITS = 10000.0
+private const val THREE_DIGITS = 1_000.0
+private const val FOUR_DIGITS = 10_000.0
 
 fun String.withSuffix(language: Language): String {
     val viewCount = this.toLong()
 
     return when (language) {
         KR -> {
-            if (viewCount < 1000) return viewCount.toString()
+            if (viewCount < 1_000) return viewCount.toString()
 
-            if (viewCount in 1000 until 10000) {
-                val number = if ((viewCount.toInt() % 1000) / 100 == 0) {
-                    (viewCount.toInt() / 1000).toString()
+            if (viewCount in 1_000 until 10_000) {
+                val number = if ((viewCount.toInt() % 1_000) / 100 == 0) {
+                    (viewCount.toInt() / 1_000).toString()
                 } else {
-                    (viewCount.toDouble() / 1000).toString()
+                    (viewCount.toDouble() / 1_000).toString()
                 }
                 return String.format("%s%c", number, SUFFIX_KR[0])
             }
@@ -44,7 +44,7 @@ fun String.withSuffix(language: Language): String {
         }
 
         JP -> {
-            if (viewCount < 10000) return viewCount.toString()
+            if (viewCount < 10_000) return viewCount.toString()
 
             val exp = (log10(viewCount.toDouble()) / log10(FOUR_DIGITS)).toInt()
             val format = DecimalFormat("0.#")
@@ -55,7 +55,7 @@ fun String.withSuffix(language: Language): String {
         }
 
         EN -> {
-            if (viewCount < 1000) return viewCount.toString()
+            if (viewCount < 1_000) return viewCount.toString()
 
             val exp = (log10(viewCount.toDouble()) / log10(THREE_DIGITS)).toInt()
             val format = DecimalFormat("0.#")
@@ -89,7 +89,7 @@ fun String.timeAgo(): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
     val date = inputFormat.parse(this) as Date
     var time = date.time
-    if (time < 1000000000000L) time *= 1000
+    if (time < 1_000_000_000_000L) time *= 1_000
     val now = currentDate().time
     if (time > now || time <= 0) return "in the future"
     val diff = now - time
