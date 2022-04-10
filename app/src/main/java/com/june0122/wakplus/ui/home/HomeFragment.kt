@@ -8,7 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.june0122.wakplus.ContentsApplication
 import com.june0122.wakplus.R
 import com.june0122.wakplus.databinding.FragmentHomeBinding
 import com.june0122.wakplus.ui.home.HomeViewModel.Companion.TWITCH_ID_INE
@@ -16,17 +18,35 @@ import com.june0122.wakplus.ui.home.HomeViewModel.Companion.YOUTUBE_ID_INE
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
+import com.june0122.wakplus.utils.CenterSmoothScroller
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
+import com.june0122.wakplus.utils.listeners.StreamerClickListener
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var streamerRecyclerView: RecyclerView
     private lateinit var snsRecyclerView: RecyclerView
     private lateinit var contentRecyclerView: RecyclerView
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels(
+        factoryProducer = {
+            HomeViewModelFactory((requireActivity().application as ContentsApplication).repository)
+        }
+    )
+    private val horizontalLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    }
     private val contentListAdapter: ContentListAdapter = ContentListAdapter()
-    private val streamerListAdapter: StreamerListAdapter = StreamerListAdapter()
+    private val streamerListAdapter: StreamerListAdapter by lazy {
+        StreamerListAdapter(object : StreamerClickListener {
+            override fun onStreamerClick(position: Int) {
+                configureSmoothScroller(position)
+            }
+
+            override fun onStreamerLongClick(position: Int) {
+            }
+        })
+    }
     private val snsListAdapter: SnsListAdapter = SnsListAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -41,6 +61,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.contentListAdapter = contentListAdapter
 
+
         if (contentListAdapter.itemCount == 0) {
             homeViewModel.getTwitchVideos(TWITCH_ID_INE)
             homeViewModel.getYoutubeVideos(YOUTUBE_ID_INE)
@@ -48,6 +69,10 @@ class HomeFragment : Fragment() {
 
         homeViewModel.contents.observe(requireActivity()) {
             contentListAdapter.updateUserListItems(it)
+        }
+
+        homeViewModel.isedolStreamers.observe(requireActivity()) { streamers ->
+            streamerListAdapter.updateStreamerListItems(streamers)
         }
     }
 
@@ -57,13 +82,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun configureRecyclerViews() {
-        val largePx = resources.getDimensionPixelSize(R.dimen.margin_large)
+        val normalPx = resources.getDimensionPixelSize(R.dimen.margin_normal)
         val smallPx = resources.getDimensionPixelSize(R.dimen.margin_small)
 
         streamerRecyclerView = binding.rvStreamer.apply {
-            this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this.layoutManager = horizontalLayoutManager
             adapter = streamerListAdapter
-            addItemDecoration(StreamerItemDecoration(largePx))
+            addItemDecoration(StreamerItemDecoration(normalPx))
         }
 
         snsRecyclerView = binding.rvSnsPlatform.apply {
@@ -76,6 +101,14 @@ class HomeFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(context)
             adapter = contentListAdapter
         }
+    }
+
+    private fun configureSmoothScroller(position: Int) {
+        val smoothScroller = object : CenterSmoothScroller(context) {
+            override fun getHorizontalSnapPreference(): Int = SNAP_TO_END
+        }
+        smoothScroller.targetPosition = position
+        horizontalLayoutManager.startSmoothScroll(smoothScroller)
     }
 }
 
