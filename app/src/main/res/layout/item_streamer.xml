@@ -8,12 +8,17 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_streamer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp">
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_user_profile"
+            android:id="@+id/layout_streamer_profile"
             android:layout_width="95dp"
             android:layout_height="95dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_user_profile"
+            app:layout_constraintTop_toBottomOf="@id/layout_streamer_profile"
             tools:text="아이네" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
