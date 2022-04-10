@@ -1,22 +1,17 @@
 package com.june0122.wakplus.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.june0122.wakplus.data.api.TwitchAuthService
 import com.june0122.wakplus.data.api.TwitchService
 import com.june0122.wakplus.data.api.YoutubeService
-import com.june0122.wakplus.data.entitiy.ContentData
-import com.june0122.wakplus.data.entitiy.TwitchUserInfo
-import com.june0122.wakplus.data.entitiy.TwitchVideoEntity
-import com.june0122.wakplus.data.entitiy.YoutubeVideoEntity
+import com.june0122.wakplus.data.entitiy.*
+import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(repository: ContentRepository) : ViewModel() {
     lateinit var contentListAdapter: ContentListAdapter
 
     private lateinit var twitchService: TwitchService
@@ -27,6 +22,8 @@ class HomeViewModel : ViewModel() {
 
     private val _contents = MutableLiveData<List<ContentData>>()
     val contents: LiveData<List<ContentData>> = _contents
+
+    val isedolStreamers: LiveData<List<StreamerEntity>> = repository.isedolStreamers.asLiveData()
 
     /** TWITCH */
     private suspend fun createTwitchAccessToken(): String = withContext(Dispatchers.IO) {
