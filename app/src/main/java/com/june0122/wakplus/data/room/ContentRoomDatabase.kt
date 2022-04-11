@@ -2,18 +2,17 @@ package com.june0122.wakplus.data.room
 
 import android.content.Context
 import androidx.room.*
+import com.june0122.wakplus.data.entitiy.IdSet
 import com.june0122.wakplus.data.entitiy.StreamerEntity
 import com.june0122.wakplus.data.entitiy.TwitchVideoEntity
 import com.june0122.wakplus.data.entitiy.YoutubeVideoEntity
-import com.june0122.wakplus.utils.converters.TwitchUserInfoTypeConverter
-import com.june0122.wakplus.utils.converters.TwitchVideoInfoTypeConverter
-import com.june0122.wakplus.utils.converters.YotubeUserInfoTypeConverter
-import com.june0122.wakplus.utils.converters.YoutubeVideoInfoTypeConverter
+import com.june0122.wakplus.utils.converters.*
 import kotlinx.coroutines.CoroutineScope
 
 @Database(entities = [StreamerEntity::class, TwitchVideoEntity::class, YoutubeVideoEntity::class], version = 1)
 @TypeConverters(
     value = [
+        IdSetTypeConverter::class,
         TwitchUserInfoTypeConverter::class,
         TwitchVideoInfoTypeConverter::class,
         YotubeUserInfoTypeConverter::class,

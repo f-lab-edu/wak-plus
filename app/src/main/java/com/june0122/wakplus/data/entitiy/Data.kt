@@ -10,6 +10,12 @@ sealed class ContentData
 data class StreamerEntity(
     @PrimaryKey val name: String,
     @ColumnInfo val profileUrl: String,
+    @ColumnInfo val idSet: IdSet
+)
+
+data class IdSet(
+    val twitchId: String,
+    val youtubeId: String,
 )
 
 data class SnsPlatform(
