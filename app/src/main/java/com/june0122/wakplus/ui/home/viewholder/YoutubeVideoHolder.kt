@@ -14,6 +14,7 @@ import com.june0122.wakplus.utils.withSuffix
 
 class YoutubeVideoHolder(binding: ItemYoutubeVideoBinding): RecyclerView.ViewHolder(binding.root) {
     private val thumbnailImageView = binding.imgThumbnail
+    private val durationTextView = binding.tvDuration
     private val channelProfileImageView = binding.imgChannelProfile
     private val videoTitleTextView = binding.tvVideoTitle
     private val channelNameTextView = binding.tvChannelName
@@ -34,6 +35,7 @@ class YoutubeVideoHolder(binding: ItemYoutubeVideoBinding): RecyclerView.ViewHol
             transformations(CircleCropTransformation())
         }
 
+        durationTextView.text = videoInfo.contentDetails.duration
         videoTitleTextView.text = videoInfo.snippet.title
         channelNameTextView.text = videoInfo.snippet.channelTitle
         viewCountTextView.text =
