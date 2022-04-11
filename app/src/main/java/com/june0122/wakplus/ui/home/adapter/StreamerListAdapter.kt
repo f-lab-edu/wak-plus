@@ -33,12 +33,10 @@ class StreamerListAdapter(private val listener: StreamerClickListener) :
 
         if (selectedPosition == position && selectedPosition != previousSelectedPosition) {
             holder.itemView.setBackgroundResource(R.color.Primary50)
-        }
-        else if (selectedPosition == position && selectedPosition == previousSelectedPosition){
+        } else if (selectedPosition == position && selectedPosition == previousSelectedPosition) {
             holder.itemView.setBackgroundResource(R.color.transparent)
             selectedPosition = UNSELECTED
-        }
-        else if(selectedPosition != position) {
+        } else if (selectedPosition != position) {
             holder.itemView.setBackgroundResource(R.color.transparent)
         }
     }
@@ -66,7 +64,7 @@ class StreamerListAdapter(private val listener: StreamerClickListener) :
     }
 
     companion object {
-        private const val UNSELECTED = -1
-        private const val DEFAULT_POS = -2
+        const val UNSELECTED = -1
+        const val DEFAULT_POS = -2
     }
 }

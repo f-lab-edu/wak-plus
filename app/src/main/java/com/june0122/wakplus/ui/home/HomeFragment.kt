@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.ContentsApplication
 import com.june0122.wakplus.R
 import com.june0122.wakplus.databinding.FragmentHomeBinding
-import com.june0122.wakplus.ui.home.HomeViewModel.Companion.TWITCH_ID_INE
-import com.june0122.wakplus.ui.home.HomeViewModel.Companion.YOUTUBE_ID_INE
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
+import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter.Companion.UNSELECTED
 import com.june0122.wakplus.utils.CenterSmoothScroller
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
@@ -41,6 +40,16 @@ class HomeFragment : Fragment() {
             override fun onStreamerClick(position: Int) {
                 configureSmoothScroller(position)
                 streamerListAdapter.selectSinglePosition(position)
+
+                if (streamerListAdapter.selectedPosition == UNSELECTED) {
+                    homeViewModel.collectAllStreamersContents()
+                } else {
+                    homeViewModel.collectStreamerContents(streamerListAdapter[position].idSet)
+                }
+
+                homeViewModel.contents.observe(requireActivity()) {
+                    contentListAdapter.updateUserListItems(it)
+                }
             }
 
             override fun onStreamerLongClick(position: Int) {
@@ -61,10 +70,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.contentListAdapter = contentListAdapter
 
-        if (contentListAdapter.itemCount == 0) {
-            homeViewModel.getTwitchVideos(TWITCH_ID_INE)
-            homeViewModel.getYoutubeVideos(YOUTUBE_ID_INE)
-        }
+        homeViewModel.collectAllStreamersContents()
 
         homeViewModel.contents.observe(requireActivity()) {
             contentListAdapter.updateUserListItems(it)

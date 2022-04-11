@@ -8,10 +8,13 @@ import com.june0122.wakplus.data.entitiy.*
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel(repository: ContentRepository) : ViewModel() {
+class HomeViewModel(private val repository: ContentRepository) : ViewModel() {
     lateinit var contentListAdapter: ContentListAdapter
 
     private lateinit var twitchService: TwitchService
@@ -50,49 +53,68 @@ class HomeViewModel(repository: ContentRepository) : ViewModel() {
         twitchService.getUserInfo(userId).data[0]
     }
 
-    fun getTwitchVideos(userId: String) {
-        viewModelScope.launch {
+    private suspend fun getTwitchVideos(idSet: IdSet): List<ContentData> {
+        val contentData = viewModelScope.async {
 //            twitchService = TwitchService.create(getTwitchAccessToken())
-
             // TODO: 저장된 Access Token을 사용하도록 변경
             twitchService = TwitchService.create("3vxbemh6jsodq7919puu8e562om0yb")
-            val twitchVideos = twitchService.getChannelVideos(userId).data
-            val twitchUserInfo = twitchService.getUserInfo(userId).data[0]
+            val twitchVideos = twitchService.getChannelVideos(idSet.twitchId).data
+            val twitchUserInfo = twitchService.getUserInfo(idSet.twitchId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
                 TwitchVideoEntity(twitchUserInfo, twitchVideoInfo)
             }
-
-            _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
-                addAll(contents)
-            }
+            contents
         }
+
+        return contentData.await()
     }
 
     /** YOUTUBE */
-    fun getYoutubeVideos(userId: String) {
-        viewModelScope.launch {
+    private suspend fun getYoutubeVideos(idSet: IdSet): List<ContentData> {
+        val contentData = viewModelScope.async {
             youtubeService = YoutubeService.create()
-            val youtubeChannelVideos = youtubeService.getChannelVideos(channelId = userId, order = "date").items
-            val youtubeUserInfo = youtubeService.getUserInfo(channelId = userId).items[0]
+            val youtubeChannelVideos =
+                youtubeService.getChannelVideos(channelId = idSet.youtubeId, order = "date").items
+            val youtubeUserInfo = youtubeService.getUserInfo(channelId = idSet.youtubeId).items[0]
             val contents = youtubeChannelVideos.map { youtubeChannelVideo ->
-                YoutubeVideoEntity(youtubeUserInfo, youtubeService.getVideoInfo(id = youtubeChannelVideo.id.videoId).items[0])
+                YoutubeVideoEntity(
+                    youtubeUserInfo,
+                    youtubeService.getVideoInfo(id = youtubeChannelVideo.id.videoId).items[0]
+                )
             }
+            contents
+        }
+
+        return contentData.await()
+    }
+
+    fun collectStreamerContents(idSet: IdSet) {
+        viewModelScope.launch {
+            val contents = getTwitchVideos(idSet) + getYoutubeVideos(idSet)
 
             _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
+                clear()
                 addAll(contents)
             }
         }
     }
 
-    companion object {
-        const val TWITCH_ID_INE = "702754423"
-        const val TWITCH_ID_GOSEGU = "614351180"
+    fun collectAllStreamersContents() {
+        viewModelScope.launch {
+            val contents = mutableListOf<ContentData>()
 
-        const val YOUTUBE_ID_INE = "UCroM00J2ahCN6k-0-oAiDxg"
-        const val YOUTUBE_ID_GOSEGU = "UCV9WL7sW6_KjanYkUUaIDfQ"
-        const val YOUTUBE_ID_VIICHAN = "UCs6EwgxKLY9GG4QNUrP5hoQ"
-        const val YOUTUBE_ID_JURURU = "UCTifMx1ONpElK5x6B4ng8eg"
-        const val YOUTUBE_ID_JINGBURGER = "UCHE7GBQVtdh-c1m3tjFdevQ"
-        const val YOUTUBE_ID_LILPA = "UC-oCJP9t47v7-DmsnmXV38Q"
+            repository.isedolStreamers.map { streamers ->
+                streamers.map { streamer ->
+                    launch {
+                        contents.addAll(getTwitchVideos(streamer.idSet) + getYoutubeVideos(streamer.idSet))
+                    }
+                }
+            }.collect()
+
+            _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
+                clear()
+                addAll(contents)
+            }
+        }
     }
 }
