@@ -24,13 +24,6 @@ class StreamerListViewHolder(binding: ItemStreamerBinding, listener: StreamerCli
 
         streamerLayout.setOnClickListener {
             listener.onStreamerClick(absoluteAdapterPosition)
-            if (streamerLayout.isSelected) {
-                streamerLayout.setBackgroundResource(R.color.transparent)
-                streamerLayout.isSelected = false
-            } else {
-                streamerLayout.setBackgroundResource(R.color.Primary50)
-                streamerLayout.isSelected = true
-            }
         }
     }
 

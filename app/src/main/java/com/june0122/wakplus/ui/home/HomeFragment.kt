@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.ContentsApplication
 import com.june0122.wakplus.R
@@ -41,6 +40,7 @@ class HomeFragment : Fragment() {
         StreamerListAdapter(object : StreamerClickListener {
             override fun onStreamerClick(position: Int) {
                 configureSmoothScroller(position)
+                streamerListAdapter.selectSinglePosition(position)
             }
 
             override fun onStreamerLongClick(position: Int) {
@@ -60,7 +60,6 @@ class HomeFragment : Fragment() {
         configureRecyclerViews()
 
         homeViewModel.contentListAdapter = contentListAdapter
-
 
         if (contentListAdapter.itemCount == 0) {
             homeViewModel.getTwitchVideos(TWITCH_ID_INE)
