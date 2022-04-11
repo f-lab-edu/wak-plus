@@ -11,6 +11,7 @@ import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
 import com.june0122.wakplus.ui.home.viewholder.YoutubeVideoHolder
+import com.june0122.wakplus.utils.DiffCallback
 
 class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val contentList = mutableListOf<ContentData>()
@@ -60,7 +61,18 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun updateUserListItems(items: List<ContentData>) {
-        val diffCallback = ContentDiffCallback(contentList, items)
+        val diffCallback = object : DiffCallback<ContentData>(contentList, items) {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                val oldItem = oldItems[oldItemPosition]
+                val newItem = newItems[newItemPosition]
+
+                return if (oldItem is TwitchVideoEntity && newItem is TwitchVideoEntity)
+                    oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
+                else if (oldItem is YoutubeVideoEntity && newItem is YoutubeVideoEntity)
+                    oldItem.youtubeVideoInfo.id == newItem.youtubeVideoInfo.id
+                else oldItem == newItem
+            }
+        }
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         contentList.clear()
         contentList.addAll(items)
@@ -75,30 +87,5 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         const val VIEW_TYPE_TWITTER_ARTICLE = 4
         const val VIEW_TYPE_NAVER_CAFE_ARTICLE = 5
         const val VIEW_TYPE_SOUND_CLOUD_MUSIC = 6
-    }
-}
-
-class ContentDiffCallback(
-    private val oldItems: List<ContentData>,
-    private val newItems: List<ContentData>
-) : DiffUtil.Callback() {
-    override fun getOldListSize(): Int = oldItems.size
-
-    override fun getNewListSize(): Int = newItems.size
-
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldItems[oldItemPosition]
-        val newItem = newItems[newItemPosition]
-
-        return if (oldItem is TwitchVideoEntity && newItem is TwitchVideoEntity) oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
-        else if (oldItem is YoutubeVideoEntity && newItem is YoutubeVideoEntity) oldItem.youtubeVideoInfo.id == newItem.youtubeVideoInfo.id
-        else oldItem == newItem
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldItems[oldItemPosition]
-        val newItem = newItems[newItemPosition]
-
-        return oldItem == newItem
     }
 }
