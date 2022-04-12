@@ -46,10 +46,6 @@ class HomeFragment : Fragment() {
                 } else {
                     homeViewModel.collectStreamerContents(streamerListAdapter[position].idSet)
                 }
-
-                homeViewModel.contents.observe(requireActivity()) {
-                    contentListAdapter.updateUserListItems(it)
-                }
             }
 
             override fun onStreamerLongClick(position: Int) {
@@ -109,9 +105,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun configureSmoothScroller(position: Int) {
-        val smoothScroller = object : CenterSmoothScroller(context) {
-            override fun getHorizontalSnapPreference(): Int = SNAP_TO_END
-        }
+        val smoothScroller = CenterSmoothScroller(context)
         smoothScroller.targetPosition = position
         horizontalLayoutManager.startSmoothScroll(smoothScroller)
     }
