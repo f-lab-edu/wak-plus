@@ -51,7 +51,7 @@ class ContentDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.
             StreamerEntity(
                 "고세구",
                 "https://yt3.ggpht.com/AIoO_0IdKYBdzlcRQ85oZxMaTBj_RVDvP8QmTmJZoOO_TTJd5NXql17hDfIl_bvcTQ4aAqFGIA=s800-c-k-c0x00ffffff-no-rj",
-                IdSet("614351180", "UCV9WL7sW6_KjanYkUUaIDfQ")
+                IdSet("707328484", "UCV9WL7sW6_KjanYkUUaIDfQ")
             ),
         )
 
