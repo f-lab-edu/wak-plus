@@ -10,7 +10,8 @@ sealed class ContentData
 data class StreamerEntity(
     @PrimaryKey val name: String,
     @ColumnInfo val profileUrl: String,
-    @ColumnInfo val idSet: IdSet
+    @ColumnInfo val idSet: IdSet,
+    val isSelected: Boolean,
 )
 
 data class IdSet(

@@ -15,7 +15,6 @@ import com.june0122.wakplus.databinding.FragmentHomeBinding
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
-import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter.Companion.UNSELECTED
 import com.june0122.wakplus.utils.CenterSmoothScroller
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
@@ -39,13 +38,7 @@ class HomeFragment : Fragment() {
         StreamerListAdapter(object : StreamerClickListener {
             override fun onStreamerClick(position: Int) {
                 configureSmoothScroller(position)
-                streamerListAdapter.selectSinglePosition(position)
-
-                if (streamerListAdapter.selectedPosition == UNSELECTED) {
-                    homeViewModel.collectAllStreamersContents()
-                } else {
-                    homeViewModel.collectStreamerContents(streamerListAdapter[position].idSet)
-                }
+                homeViewModel.onStreamerClick(position)
             }
 
             override fun onStreamerLongClick(position: Int) {
@@ -65,6 +58,7 @@ class HomeFragment : Fragment() {
         configureRecyclerViews()
 
         homeViewModel.contentListAdapter = contentListAdapter
+        homeViewModel.streamerListAdapter = streamerListAdapter
 
         homeViewModel.collectAllStreamersContents()
 
@@ -72,7 +66,7 @@ class HomeFragment : Fragment() {
             contentListAdapter.updateUserListItems(it)
         }
 
-        homeViewModel.isedolStreamers.observe(requireActivity()) { streamers ->
+        homeViewModel.streamers.observe(requireActivity()) { streamers ->
             streamerListAdapter.updateStreamerListItems(streamers)
         }
     }

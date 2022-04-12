@@ -36,5 +36,8 @@ class StreamerListViewHolder(binding: ItemStreamerBinding, listener: StreamerCli
         }
 
         streamerNameTextView.text = streamer.name
+
+        if (streamer.isSelected) streamerLayout.setBackgroundResource(R.color.Primary50)
+        else streamerLayout.setBackgroundResource(R.color.transparent)
     }
 }
