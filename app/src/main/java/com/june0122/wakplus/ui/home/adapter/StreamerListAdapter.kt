@@ -20,9 +20,8 @@ class StreamerListAdapter(private val listener: StreamerClickListener) :
     operator fun get(position: Int): StreamerEntity = streamerList[position]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StreamerListViewHolder {
-        ItemStreamerBinding.inflate(LayoutInflater.from(parent.context), parent, false).also { binding ->
-            return StreamerListViewHolder(binding, listener)
-        }
+        val binding = ItemStreamerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return StreamerListViewHolder(binding, listener)
     }
 
     override fun getItemCount(): Int = streamerList.size
