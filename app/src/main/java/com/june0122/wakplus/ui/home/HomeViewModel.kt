@@ -9,8 +9,6 @@ import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -57,7 +55,7 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel() {
         val contentData = viewModelScope.async {
 //            twitchService = TwitchService.create(getTwitchAccessToken())
             // TODO: 저장된 Access Token을 사용하도록 변경
-            twitchService = TwitchService.create("3vxbemh6jsodq7919puu8e562om0yb")
+            twitchService = TwitchService.create("ywwhqstujqw66iy7ch4qyhapukulls")
             val twitchVideos = twitchService.getChannelVideos(idSet.twitchId).data
             val twitchUserInfo = twitchService.getUserInfo(idSet.twitchId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
@@ -73,19 +71,37 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel() {
     private suspend fun getYoutubeVideos(idSet: IdSet): List<ContentData> {
         val contentData = viewModelScope.async {
             youtubeService = YoutubeService.create()
-            val youtubeChannelVideos =
-                youtubeService.getChannelVideos(channelId = idSet.youtubeId, order = "date").items
-            val youtubeUserInfo = youtubeService.getUserInfo(channelId = idSet.youtubeId).items[0]
-            val contents = youtubeChannelVideos.map { youtubeChannelVideo ->
-                YoutubeVideoEntity(
-                    youtubeUserInfo,
-                    youtubeService.getVideoInfo(id = youtubeChannelVideo.id.videoId).items[0]
-                )
+
+            val contents = mutableListOf<ContentData>()
+            val youtubePlaylists = youtubeService.getPlaylists(channelId = idSet.youtubeId)
+
+            youtubePlaylists.items.map { playlist ->
+                val youtubePlaylistItems = youtubeService.getPlaylistItems(id = playlist.id)
+                youtubePlaylistItems.items.map { playlistItem ->
+                    val youtubeVideoInfo =
+                        youtubeService.getVideoInfo(id = playlistItem.snippet.resourceId.videoId).items[0]
+
+                    contents.add(
+                        YoutubeVideoEntity(getStreamerProfile(youtubeVideoInfo), youtubeVideoInfo)
+                    )
+                }
             }
             contents
         }
 
         return contentData.await()
+    }
+
+    private fun getStreamerProfile(videoInfo: YoutubeVideoInfo): String {
+        var profileUrl = ""
+
+        isedolStreamers.value?.map { streamer ->
+            if (videoInfo.snippet.channelId == streamer.idSet.youtubeId) {
+                profileUrl = streamer.profileUrl
+            }
+        }
+
+        return profileUrl
     }
 
     fun collectStreamerContents(idSet: IdSet) {
@@ -103,13 +119,14 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel() {
         viewModelScope.launch {
             val contents = mutableListOf<ContentData>()
 
-            repository.isedolStreamers.map { streamers ->
-                streamers.map { streamer ->
-                    launch {
-                        contents.addAll(getTwitchVideos(streamer.idSet) + getYoutubeVideos(streamer.idSet))
-                    }
-                }
-            }.collect()
+            // 할당량 소모량이 큰 작업이라 임시 주석 처리
+//            repository.isedolStreamers.map { streamers ->
+//                streamers.map { streamer ->
+//                    launch {
+//                        contents.addAll(getTwitchVideos(streamer.idSet) + getYoutubeVideos(streamer.idSet))
+//                    }
+//                }
+//            }.collect()
 
             _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
                 clear()

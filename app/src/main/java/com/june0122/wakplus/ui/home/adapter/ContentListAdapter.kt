@@ -52,7 +52,7 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 holder.bind(content.twitchUserInfo, content.twitchVideoInfo)
             }
             is YoutubeVideoEntity -> if (holder is YoutubeVideoHolder) {
-                holder.bind(content.youtubeUserInfo, content.youtubeVideoInfo)
+                holder.bind(content.profileUrl, content.youtubeVideoInfo)
             }
             else -> {
 

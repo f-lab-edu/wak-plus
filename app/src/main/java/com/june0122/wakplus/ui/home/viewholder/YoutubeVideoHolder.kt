@@ -5,6 +5,7 @@ import coil.load
 import coil.size.Scale
 import coil.transform.CircleCropTransformation
 import com.june0122.wakplus.R
+import com.june0122.wakplus.data.entitiy.PlaylistItemSnippet
 import com.june0122.wakplus.data.entitiy.YoutubeUserInfo
 import com.june0122.wakplus.data.entitiy.YoutubeVideoInfo
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
@@ -21,14 +22,14 @@ class YoutubeVideoHolder(binding: ItemYoutubeVideoBinding): RecyclerView.ViewHol
     private val viewCountTextView = binding.tvViewCount
     private val elapesdTimeTextView = binding.tvElapsedTime
 
-    fun bind(userInfo: YoutubeUserInfo, videoInfo: YoutubeVideoInfo) {
+    fun bind(profileUrl: String, videoInfo: YoutubeVideoInfo) {
         thumbnailImageView.load(videoInfo.snippet.thumbnails.high.url) {
             scale(Scale.FIT)
             crossfade(true)
             crossfade(300)
         }
 
-        channelProfileImageView.load(userInfo.snippet.thumbnails.high.url) {
+        channelProfileImageView.load(profileUrl) {
             scale(Scale.FIT)
             crossfade(true)
             crossfade(300)

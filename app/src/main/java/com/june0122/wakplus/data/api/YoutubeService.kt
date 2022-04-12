@@ -32,6 +32,21 @@ interface YoutubeService {
         @Query("id") id: String,
     ): YoutubeVideoInfos
 
+    @GET("playlists")
+    suspend fun getPlaylists(
+        @Query("key") key: String = "AIzaSyCfAkqsoGCK982DvNZhU-8hz8FIv4Zrj_8",
+        @Query("part") part: String = "snippet",
+        @Query("channelId") channelId: String,
+    ): YoutubePlaylists
+
+    @GET("playlistItems")
+    suspend fun getPlaylistItems(
+        @Query("key") key: String = "AIzaSyCfAkqsoGCK982DvNZhU-8hz8FIv4Zrj_8",
+        @Query("part") part: String = "id, snippet, contentDetails, status",
+        @Query("playlistId") id: String,
+        @Query("maxResults") maxResults: Int = 10,
+    ): YoutubePlaylistItems
+
     @GET("channelSections")
     suspend fun getChannelHomeInfo(
         @Query("key") key: String = "AIzaSyCfAkqsoGCK982DvNZhU-8hz8FIv4Zrj_8",
