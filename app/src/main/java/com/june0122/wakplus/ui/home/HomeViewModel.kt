@@ -15,19 +15,11 @@ import com.june0122.wakplus.utils.listeners.StreamerClickListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeViewModel(private val repository: ContentRepository) : ViewModel(), StreamerClickListener {
-
-    init {
-        repository.isedolStreamers.map { streamers ->
-            _streamers.value = (_streamers.value?.toMutableList() ?: mutableListOf()).apply {
-                addAll(streamers)
-            }
-        }.launchIn(viewModelScope)
-    }
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
@@ -43,21 +35,27 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
     private val _streamers = MutableLiveData<List<StreamerEntity>>()
     val streamers: LiveData<List<StreamerEntity>> = _streamers
 
+    init {
+        repository.isedolStreamers.onEach { streamers ->
+            _streamers.value = (_streamers.value?.toMutableList() ?: mutableListOf()).apply {
+                addAll(streamers)
+            }
+        }.launchIn(viewModelScope)
+    }
+
     override fun onStreamerClick(position: Int) {
         val selectedStreamer = streamerListAdapter[position]
-
-        _streamers.value = (_streamers.value?.toMutableList() ?: mutableListOf()).map { streamer ->
-            if (streamer == selectedStreamer && streamer.isSelected.not()) {
-                streamer.copy(isSelected = true)
-            } else if (streamer == selectedStreamer && streamer.isSelected) {
-                streamer.copy(isSelected = false)
-            } else {
-                streamer.copy(isSelected = false)
-            }
+        _streamers.value = _streamers.value?.map { streamer ->
+            streamer.copy(
+                isSelected = streamer == selectedStreamer && streamer.isSelected.not()
+            )
         }
 
-        if (selectedStreamer.isSelected) collectAllStreamersContents()
-        else collectStreamerContents(streamerListAdapter[position].idSet)
+        if (selectedStreamer.isSelected) {
+            collectAllStreamersContents()
+        } else {
+            collectStreamerContents(streamerListAdapter[position].idSet)
+        }
     }
 
     override fun onStreamerLongClick(position: Int) {
@@ -106,6 +104,7 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
     }
 
     /** YOUTUBE */
+    // TODO: privacyStatus가 public이 아닌 private(비공개) 처리된 영상 예외 처리
     private suspend fun getYoutubeVideos(idSet: IdSet): List<ContentData> {
         val contentData = viewModelScope.async {
             val contents = mutableListOf<ContentData>()
@@ -123,7 +122,6 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
             }
             contents
         }
-
         return contentData.await()
     }
 
