@@ -105,24 +105,16 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
 
     /** YOUTUBE */
     // TODO: privacyStatus가 public이 아닌 private(비공개) 처리된 영상 예외 처리
-    private suspend fun getYoutubeVideos(idSet: IdSet): List<ContentData> {
-        val contentData = viewModelScope.async {
-            val contents = mutableListOf<ContentData>()
-            youtubeService = YoutubeService.create()
-            with(youtubeService) {
-                getPlaylists(channelId = idSet.youtubeId).items.map { playlist ->
-                    getPlaylistItems(id = playlist.id).items.map { playlistItem ->
-                        getVideoInfo(id = playlistItem.snippet.resourceId.videoId).items[0].run {
-                            contents.add(
-                                YoutubeVideoEntity(getStreamerProfile(this), this)
-                            )
-                        }
+    private suspend fun getYoutubeVideos(idSet: IdSet): List<ContentData> = withContext(Dispatchers.IO) {
+        YoutubeService.create().run {
+            getPlaylists(channelId = idSet.youtubeId).items.flatMap { playlist ->
+                getPlaylistItems(id = playlist.id).items.map { playlistItem ->
+                    getVideoInfo(id = playlistItem.snippet.resourceId.videoId).items[0].let { videoInfo ->
+                        YoutubeVideoEntity(getStreamerProfile(videoInfo), videoInfo)
                     }
                 }
             }
-            contents
         }
-        return contentData.await()
     }
 
     private fun getStreamerProfile(videoInfo: YoutubeVideoInfo): String {
