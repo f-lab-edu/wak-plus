@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun configureSmoothScroller(position: Int) {
-        val smoothScroller = CenterSmoothScroller(context)
+        val smoothScroller = CenterSmoothScroller(requireContext())
         smoothScroller.targetPosition = position
         horizontalLayoutManager.startSmoothScroll(smoothScroller)
     }
