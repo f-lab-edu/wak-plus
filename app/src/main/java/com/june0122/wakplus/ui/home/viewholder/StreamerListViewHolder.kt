@@ -9,11 +9,8 @@ import com.june0122.wakplus.data.entitiy.StreamerEntity
 import com.june0122.wakplus.databinding.ItemStreamerBinding
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 
-class StreamerListViewHolder(binding: ItemStreamerBinding, listener: StreamerClickListener) :
+class StreamerListViewHolder(private val binding: ItemStreamerBinding, listener: StreamerClickListener) :
     RecyclerView.ViewHolder(binding.root) {
-    private val streamerLayout = binding.layoutStreamer
-    private val streamerProfileImageView = binding.imgStreamerProfile
-    private val streamerNameTextView = binding.tvStreamerName
 
     init {
         itemView.setOnClickListener { listener.onStreamerClick(absoluteAdapterPosition) }
@@ -22,22 +19,22 @@ class StreamerListViewHolder(binding: ItemStreamerBinding, listener: StreamerCli
             return@setOnLongClickListener true
         }
 
-        streamerLayout.setOnClickListener {
+        binding.layoutStreamer.setOnClickListener {
             listener.onStreamerClick(absoluteAdapterPosition)
         }
     }
 
-    fun bind(streamer: StreamerEntity) {
-        streamerProfileImageView.load(streamer.profileUrl) {
+    fun bind(streamer: StreamerEntity) = with(binding) {
+        imgStreamerProfile.load(streamer.profileUrl) {
             scale(Scale.FIT)
             crossfade(true)
             crossfade(300)
             transformations(CircleCropTransformation())
         }
 
-        streamerNameTextView.text = streamer.name
+        tvStreamerName.text = streamer.name
 
-        if (streamer.isSelected) streamerLayout.setBackgroundResource(R.color.Primary50)
-        else streamerLayout.setBackgroundResource(R.color.transparent)
+        if (streamer.isSelected) layoutStreamer.setBackgroundResource(R.color.Primary50)
+        else layoutStreamer.setBackgroundResource(R.color.transparent)
     }
 }

@@ -12,36 +12,29 @@ import com.june0122.wakplus.utils.Language
 import com.june0122.wakplus.utils.timeAgo
 import com.june0122.wakplus.utils.withSuffix
 
-class TwitchVideoHolder(binding: ItemTwitchVideoBinding) : RecyclerView.ViewHolder(binding.root) {
-    private val thumbnailImageView = binding.imgThumbnail
-    private val durationTextView = binding.tvDuration
-    private val channelProfileImageView = binding.imgChannelProfile
-    private val videoTitleTextView = binding.tvVideoTitle
-    private val channelNameTextView = binding.tvChannelName
-    private val viewCountTextView = binding.tvViewCount
-    private val elapesdTimeTextView = binding.tvElapsedTime
-
-    fun bind(userInfo: TwitchUserInfo, videoInfo: TwitchVideoInfo) {
+class TwitchVideoHolder(private val binding: ItemTwitchVideoBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(userInfo: TwitchUserInfo, videoInfo: TwitchVideoInfo) = with(binding) {
         val thumbnailUrl = parseThumbnailUrl(videoInfo.thumbnailUrl)
-        thumbnailImageView.load(thumbnailUrl) {
+
+        imgThumbnail.load(thumbnailUrl) {
             scale(Scale.FIT)
             crossfade(true)
             crossfade(300)
         }
 
-        channelProfileImageView.load(userInfo.profile_image_url) {
+        imgChannelProfile.load(userInfo.profile_image_url) {
             scale(Scale.FIT)
             crossfade(true)
             crossfade(300)
             transformations(CircleCropTransformation())
         }
 
-        durationTextView.text = videoInfo.duration
-        videoTitleTextView.text = videoInfo.title
-        channelNameTextView.text = userInfo.display_name
-        viewCountTextView.text =
+        tvDuration.text = videoInfo.duration
+        tvVideoTitle.text = videoInfo.title
+        tvChannelName.text = userInfo.display_name
+        tvViewCount.text =
             itemView.context.getString(R.string.view_count, videoInfo.viewCount.withSuffix(Language.KR))
-        elapesdTimeTextView.text = videoInfo.publishedAt.timeAgo()
+        tvElapsedTime.text = videoInfo.publishedAt.timeAgo(binding.root.context)
     }
 
     private fun parseThumbnailUrl(url: String): String = url.replace("%{width}x%{height}", RES_STANDARD)
