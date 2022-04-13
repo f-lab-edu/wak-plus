@@ -1,5 +1,7 @@
 package com.june0122.wakplus.utils
 
+import android.content.Context
+import com.june0122.wakplus.R
 import com.june0122.wakplus.utils.Language.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -85,7 +87,7 @@ private fun currentDate(): Date {
 }
 
 // TODO: 언어를 영어로 설정 시에만 'a minute ago', 'an hour ago' 케이스 추가
-fun String.timeAgo(): String {
+fun String.timeAgo(context: Context): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
     val date = inputFormat.parse(this) as Date
     var time = date.time
@@ -94,15 +96,15 @@ fun String.timeAgo(): String {
     if (time > now || time <= 0) return "in the future"
     val diff = now - time
     return when {
-        diff < MINUTE_MILLIS -> "moments ago"
+        diff < MINUTE_MILLIS -> context.getString(R.string.moments_ago)
 //        diff < 2 * MINUTE_MILLIS -> "a minute ago"
-        diff < 60 * MINUTE_MILLIS -> "${diff / MINUTE_MILLIS} minutes ago"
+        diff < 60 * MINUTE_MILLIS -> context.getString(R.string.minutes_ago, diff / MINUTE_MILLIS)
 //        diff < 2 * HOUR_MILLIS -> "an hour ago"
-        diff < 24 * HOUR_MILLIS -> "${diff / HOUR_MILLIS} hours ago"
+        diff < 24 * HOUR_MILLIS -> context.getString(R.string.hours_ago, diff / HOUR_MILLIS)
         diff < 48 * HOUR_MILLIS -> "yesterday"
-        diff < WEEK_MILLIS -> "${diff / DAY_MILLIS} days ago"
-        diff < MONTH_MILLIS -> "${diff / WEEK_MILLIS} weeks ago"
-        diff < YEAR_MILLIS -> "${diff / MONTH_MILLIS} months ago"
-        else -> "${diff / YEAR_MILLIS} years ago"
+        diff < WEEK_MILLIS -> context.getString(R.string.days_ago, diff / DAY_MILLIS)
+        diff < MONTH_MILLIS -> context.getString(R.string.weeks_ago, diff / WEEK_MILLIS)
+        diff < YEAR_MILLIS -> context.getString(R.string.months_ago, diff / MONTH_MILLIS)
+        else -> context.getString(R.string.years_ago, diff / YEAR_MILLIS)
     }
 }
