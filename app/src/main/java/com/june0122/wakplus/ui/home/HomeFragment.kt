@@ -62,12 +62,12 @@ class HomeFragment : Fragment() {
 
         homeViewModel.collectAllStreamersContents()
 
-        homeViewModel.contents.observe(requireActivity()) {
-            contentListAdapter.updateUserListItems(it)
+        homeViewModel.contents.observe(requireActivity()) { contents ->
+            contentListAdapter.submitList(contents)
         }
 
         homeViewModel.streamers.observe(requireActivity()) { streamers ->
-            streamerListAdapter.updateStreamerListItems(streamers)
+            streamerListAdapter.submitList(streamers)
         }
     }
 
