@@ -23,6 +23,7 @@ private const val FOUR_DIGITS = 10_000.0
 
 fun String.withSuffix(language: Language): String {
     val viewCount = this.toLong()
+    val format = DecimalFormat("0.#")
 
     return when (language) {
         KR -> {
@@ -32,13 +33,12 @@ fun String.withSuffix(language: Language): String {
                 val number = if ((viewCount.toInt() % 1_000) / 100 == 0) {
                     (viewCount.toInt() / 1_000).toString()
                 } else {
-                    (viewCount.toDouble() / 1_000).toString()
+                    format.format(viewCount.toDouble() / 1_000)
                 }
                 return String.format("%s%c", number, SUFFIX_KR[0])
             }
 
             val exp = (log10(viewCount.toDouble()) / log10(FOUR_DIGITS)).toInt()
-            val format = DecimalFormat("0.#")
             val integer = (viewCount / (FOUR_DIGITS).pow(exp)).toInt()
             val number = if (integer >= 10) integer.toString() else format.format(viewCount / (FOUR_DIGITS).pow(exp))
 
@@ -49,7 +49,6 @@ fun String.withSuffix(language: Language): String {
             if (viewCount < 10_000) return viewCount.toString()
 
             val exp = (log10(viewCount.toDouble()) / log10(FOUR_DIGITS)).toInt()
-            val format = DecimalFormat("0.#")
             val integer = (viewCount / (FOUR_DIGITS).pow(exp)).toInt()
             val number = if (integer >= 10) integer.toString() else format.format(viewCount / (FOUR_DIGITS).pow(exp))
 
@@ -60,7 +59,6 @@ fun String.withSuffix(language: Language): String {
             if (viewCount < 1_000) return viewCount.toString()
 
             val exp = (log10(viewCount.toDouble()) / log10(THREE_DIGITS)).toInt()
-            val format = DecimalFormat("0.#")
             val integer = (viewCount / (THREE_DIGITS).pow(exp)).toInt()
             val number = if (integer >= 10) integer.toString() else format.format(viewCount / (THREE_DIGITS).pow(exp))
 
