@@ -5,14 +5,27 @@
 
     <data>
 
+        <variable
+            name="streamer"
+            type="com.june0122.wakplus.data.entitiy.StreamerEntity" />
+
+        <variable
+            name="streamerClickListener"
+            type="com.june0122.wakplus.utils.listeners.StreamerClickListener" />
+
+        <variable
+            name="position"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_streamer"
+        isSelected="@{streamer.selected}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
+        android:onClick="@{()->streamerClickListener.onStreamerClick(position)}"
         android:paddingStart="4dp"
         android:paddingTop="8dp"
         android:paddingEnd="4dp">
@@ -43,14 +56,15 @@
                 android:layout_height="wrap_content"
                 android:padding="3dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/yt_profile_ine"
+                app:circularImageUrl="@{streamer.profileUrl}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/roundedImageView"
                 app:strokeColor="@color/Background"
-                app:strokeWidth="3dp" />
+                app:strokeWidth="3dp"
+                tools:src="@drawable/yt_profile_ine" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -59,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:text="@{streamer.name}"
             android:textColor="@color/Text"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
