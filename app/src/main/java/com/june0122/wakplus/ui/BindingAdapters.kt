@@ -2,7 +2,6 @@ package com.june0122.wakplus.ui
 
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import coil.load
 import coil.size.Scale
@@ -28,10 +27,18 @@ object BindingAdapters {
     @JvmStatic
     @BindingAdapter("thumbnailUrl")
     fun setThumbnail(view: ImageView, imageUrl: String) {
-        view.load(imageUrl) {
-            scale(Scale.FIT)
-            crossfade(true)
-            crossfade(300)
+        if (imageUrl != "") {
+            view.load(imageUrl) {
+                scale(Scale.FIT)
+                crossfade(true)
+                crossfade(300)
+            }
+        } else {
+            view.load(R.drawable.placeholder_twitch_live) {
+                scale(Scale.FIT)
+                crossfade(true)
+                crossfade(300)
+            }
         }
     }
 
