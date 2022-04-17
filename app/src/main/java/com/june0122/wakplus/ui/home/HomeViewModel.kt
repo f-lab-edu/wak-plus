@@ -1,6 +1,5 @@
 package com.june0122.wakplus.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -137,9 +136,21 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
         return profileUrl
     }
 
+    private fun List<ContentData>.sortByRecentUploads(): List<ContentData> {
+        return this.sortedWith(
+            compareByDescending { content ->
+                when (content) {
+                    is TwitchVideoEntity -> content.twitchVideoInfo.publishedAt
+                    is YoutubeVideoEntity -> content.youtubeVideoInfo.snippet.publishedAt
+                    else -> 0
+                }
+            }
+        )
+    }
+
     private fun collectStreamerContents(idSet: IdSet) {
         viewModelScope.launch {
-            val contents = getTwitchVideos(idSet) + getYoutubeVideos(idSet)
+            val contents = (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
 
             _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
                 clear()
