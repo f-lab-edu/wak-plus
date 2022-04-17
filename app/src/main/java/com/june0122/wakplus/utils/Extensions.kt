@@ -99,7 +99,7 @@ fun String.timeAgo(context: Context): String {
         diff < 60 * MINUTE_MILLIS -> context.getString(R.string.minutes_ago, diff / MINUTE_MILLIS)
 //        diff < 2 * HOUR_MILLIS -> "an hour ago"
         diff < 24 * HOUR_MILLIS -> context.getString(R.string.hours_ago, diff / HOUR_MILLIS)
-        diff < 48 * HOUR_MILLIS -> "yesterday"
+        diff < 48 * HOUR_MILLIS -> context.getString(R.string.day_ago)
         diff < WEEK_MILLIS -> context.getString(R.string.days_ago, diff / DAY_MILLIS)
         diff < MONTH_MILLIS -> context.getString(R.string.weeks_ago, diff / WEEK_MILLIS)
         diff < YEAR_MILLIS -> context.getString(R.string.months_ago, diff / MONTH_MILLIS)
