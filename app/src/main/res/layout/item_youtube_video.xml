@@ -21,7 +21,7 @@
 
         <ImageView
             android:id="@+id/img_thumbnail"
-            youtubeThumbnailUrl="@{videoInfo.snippet.thumbnails.high.url}"
+            thumbnailUrl="@{videoInfo.snippet.thumbnails.high.url}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"

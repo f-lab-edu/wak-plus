@@ -26,20 +26,8 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("twitchThumbnailUrl")
-    fun setTwitchThumbnailUrl(view: ImageView, imageUrl: String) {
-        imageUrl.replace("%{width}x%{height}", RES_STANDARD).let { convertedUrl ->
-            view.load(convertedUrl) {
-                scale(Scale.FIT)
-                crossfade(true)
-                crossfade(300)
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("youtubeThumbnailUrl")
-    fun setYoutubeThumbnail(view: ImageView, imageUrl: String) {
+    @BindingAdapter("thumbnailUrl")
+    fun setThumbnail(view: ImageView, imageUrl: String) {
         view.load(imageUrl) {
             scale(Scale.FIT)
             crossfade(true)
@@ -47,11 +35,12 @@ object BindingAdapters {
         }
     }
 
+    private fun String.parseTwitchThumbnailUrl(): String = this.replace("%{width}x%{height}", RES_STANDARD)
+
     @JvmStatic
-    @BindingAdapter("isSelected")
-    fun setStreamerLayoutBackground(view: ConstraintLayout, isSelected: Boolean) {
-        if (isSelected) view.setBackgroundResource(R.color.Primary50)
-        else view.setBackgroundResource(R.color.transparent)
+    @BindingAdapter("twitchThumbnailUrl")
+    fun setTwitchThumbnailUrl(view: ImageView, imageUrl: String) {
+        setThumbnail(view, imageUrl.parseTwitchThumbnailUrl())
     }
 
     @JvmStatic
