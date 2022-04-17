@@ -77,19 +77,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun configureRecyclerViews() {
-        val normalPx = resources.getDimensionPixelSize(R.dimen.margin_normal)
-        val smallPx = resources.getDimensionPixelSize(R.dimen.margin_small)
+        val streamerItemPx = resources.getDimensionPixelSize(R.dimen.margin_normal)
+        val snsItemPx = resources.getDimensionPixelSize(R.dimen.margin_small)
 
         streamerRecyclerView = binding.rvStreamer.apply {
             this.layoutManager = horizontalLayoutManager
             adapter = streamerListAdapter
-            addItemDecoration(StreamerItemDecoration(normalPx))
+            addItemDecoration(StreamerItemDecoration(streamerItemPx))
         }
 
         snsRecyclerView = binding.rvSnsPlatform.apply {
             this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = snsListAdapter
-            addItemDecoration(SnsPlatformItemDecoration(smallPx))
+            addItemDecoration(SnsPlatformItemDecoration(snsItemPx))
         }
 
         contentRecyclerView = binding.rvContent.apply {
