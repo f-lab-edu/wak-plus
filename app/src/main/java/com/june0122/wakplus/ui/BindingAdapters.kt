@@ -11,6 +11,7 @@ import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder.Companion.RES_S
 import com.june0122.wakplus.utils.Language
 import com.june0122.wakplus.utils.timeAgo
 import com.june0122.wakplus.utils.withSuffix
+import java.util.regex.Pattern
 
 object BindingAdapters {
     @JvmStatic
@@ -42,8 +43,6 @@ object BindingAdapters {
         }
     }
 
-    private fun String.parseTwitchThumbnailUrl(): String = this.replace("%{width}x%{height}", RES_STANDARD)
-
     @JvmStatic
     @BindingAdapter("twitchThumbnailUrl")
     fun setTwitchThumbnailUrl(view: ImageView, imageUrl: String) {
@@ -60,5 +59,51 @@ object BindingAdapters {
     @BindingAdapter("elapsedTime")
     fun setElapsedTime(view: TextView, elapsedTime: String) {
         view.text = elapsedTime.timeAgo(view.context)
+    }
+
+    private fun String.parseTwitchThumbnailUrl(): String = this.replace("%{width}x%{height}", RES_STANDARD)
+
+    /** Duration Parsing */
+    private val regexMap = HashMap<String, String>()
+    private const val oneDigit = "(?<=^|\\D)(\\d)(?=\\D)" // 시간 단위가 한 자릿수인 부분을 찾기 위한 정규식
+    private const val twoDigits = "0$1"
+
+    @JvmStatic
+    @BindingAdapter("duration")
+    fun parseDuration(view: TextView, duration: String) {
+        storeRegexes()
+        val date = duration.replace(oneDigit.toRegex(), twoDigits).run { // 시간 단위가 한 자릿수일 때 두 자릿수로 변환
+            if (this.first() == 'P') {  // Youtube와 Twitch의 duration 포맷 공통화
+                this.substring(2)
+            } else {
+                this.uppercase()
+            }
+        }
+        val literal = date.regexLiteral()
+        val parsedDate = date.replace(literal.toRegex(), regexMap[literal] ?: "$1:$2:$3")
+
+        if (parsedDate.first() == '0') {
+            view.text = parsedDate.substring(1)
+        } else {
+            view.text = parsedDate
+        }
+    }
+
+    private fun String.regexLiteral(): String {
+        for (regex in regexMap.keys) {
+            if (Pattern.matches(regex, this)) return regex
+        }
+
+        return "(\\d\\d)H(\\d\\d)M(\\d\\d)S"
+    }
+
+    private fun storeRegexes() {
+        regexMap["(\\d\\d)S"] = "00:$1"
+        regexMap["(\\d\\d)M"] = "$1:00"
+        regexMap["(\\d\\d)H"] = "$1:00:00"
+        regexMap["(\\d\\d)M(\\d\\d)S"] = "$1:$2"
+        regexMap["(\\d\\d)H(\\d\\d)S"] = "$1:00:$2"
+        regexMap["(\\d\\d)H(\\d\\d)M"] = "$1:$2:00"
+        regexMap["(\\d\\d)H(\\d\\d)M(\\d\\d)S"] = "$1:$2:$3"
     }
 }

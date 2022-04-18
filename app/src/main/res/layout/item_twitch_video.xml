@@ -34,6 +34,7 @@
 
         <TextView
             android:id="@+id/tv_duration"
+            duration="@{videoInfo.duration}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -41,7 +42,6 @@
             android:background="#E6000000"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:text="@{videoInfo.duration}"
             android:textAlignment="center"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/img_thumbnail"
