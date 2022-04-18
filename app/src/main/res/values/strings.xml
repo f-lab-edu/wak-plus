@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">WakPlus</string>
+
     <string name="view_count">조회수 %1$s회</string>
 
+    <!-- Elapsed Time -->
     <string name="moments_ago">조금 전</string>
     <string name="minutes_ago">%1$d분 전</string>
     <string name="hours_ago">%1$d시간 전</string>
@@ -10,4 +12,13 @@
     <string name="weeks_ago">%1$d주 전</string>
     <string name="months_ago">%1$d달 전</string>
     <string name="years_ago">%1$d년 전</string>
+
+    <!-- SNS Platforms -->
+    <string name="sns_all">전체</string>
+    <string name="sns_twitch">트위치</string>
+    <string name="sns_youtube">유튜브</string>
+    <string name="sns_instagram">인스타그램</string>
+    <string name="sns_twitter">트위터</string>
+    <string name="sns_naver_cafe">왁물원</string>
+    <string name="sns_soundcloud">사운드클라우드</string>
 </resources>
