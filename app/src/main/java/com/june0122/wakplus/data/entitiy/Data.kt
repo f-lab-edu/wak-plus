@@ -19,6 +19,8 @@ data class IdSet(
     val youtubeId: String,
 )
 
-data class SnsPlatform(
-    val serviceName: String,
+@Entity(tableName = "sns_table")
+data class SnsPlatformEntity(
+    @PrimaryKey val serviceName: String,
+    val isSelected: Boolean,
 )

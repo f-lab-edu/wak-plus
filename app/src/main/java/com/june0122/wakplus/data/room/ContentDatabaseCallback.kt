@@ -3,6 +3,7 @@ package com.june0122.wakplus.data.room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.june0122.wakplus.data.entitiy.IdSet
+import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
 import com.june0122.wakplus.data.entitiy.StreamerEntity
 import com.june0122.wakplus.data.room.ContentRoomDatabase.Companion.INSTANCE
 import kotlinx.coroutines.CoroutineScope
@@ -62,5 +63,17 @@ class ContentDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.
         )
 
         streamerList.map { streamer -> contentDao.insertStreamer(streamer) }
+
+        val snsList = mutableListOf(
+            SnsPlatformEntity("전체", true), // Default Selected Sns Platform
+            SnsPlatformEntity("트위치", false),
+            SnsPlatformEntity("유튜브", false),
+            SnsPlatformEntity("인스타그램", false),
+            SnsPlatformEntity("왁물원", false),
+            SnsPlatformEntity("트위치", false),
+            SnsPlatformEntity("사운드클라우드", false),
+        )
+
+        snsList.map { sns -> contentDao.insertSnsPlatform(sns) }
     }
 }

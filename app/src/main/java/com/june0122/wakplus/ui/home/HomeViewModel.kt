@@ -10,24 +10,36 @@ import com.june0122.wakplus.data.api.YoutubeService
 import com.june0122.wakplus.data.entitiy.*
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
+import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
+import com.june0122.wakplus.utils.listeners.SnsClickListener
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel(private val repository: ContentRepository) : ViewModel(), StreamerClickListener {
+class HomeViewModel(
+    private val repository: ContentRepository
+) : ViewModel(), StreamerClickListener, SnsClickListener {
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
+    lateinit var snsListAdapter: SnsListAdapter
 
     private lateinit var twitchService: TwitchService
     private val twitchAuthService: TwitchAuthService = TwitchAuthService.create()
 
     private lateinit var youtubeService: YoutubeService
+
+    private var currentIdSet: IdSet? = null
+    private var currentSns: SnsPlatformEntity = SnsPlatformEntity("전체", true)
+
+    private val _snsPlatforms = MutableLiveData<List<SnsPlatformEntity>>()
+    val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms
 
     private val _contents = MutableLiveData<List<ContentData>>()
     val contents: LiveData<List<ContentData>> = _contents
@@ -41,10 +53,17 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
                 addAll(streamers)
             }
         }.launchIn(viewModelScope)
+
+        repository.snsPlatforms.onEach { snsPlatforms ->
+            _snsPlatforms.value = (_snsPlatforms.value?.toMutableList() ?: mutableListOf()).apply {
+                addAll(snsPlatforms)
+            }
+        }.launchIn(viewModelScope)
     }
 
     override fun onStreamerClick(position: Int) {
         val selectedStreamer = streamerListAdapter[position]
+        currentIdSet = selectedStreamer.idSet
         _streamers.value = _streamers.value?.map { streamer ->
             streamer.copy(
                 isSelected = streamer == selectedStreamer && streamer.isSelected.not()
@@ -52,14 +71,30 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
         }
 
         if (selectedStreamer.isSelected) {
+            currentIdSet = null
             collectAllStreamersContents()
         } else {
-            collectStreamerContents(streamerListAdapter[position].idSet)
+            currentIdSet = selectedStreamer.idSet
+            collectSnsContents(selectedStreamer.idSet, currentSns)
         }
     }
 
     override fun onStreamerLongClick(position: Int) {
         TODO("Not yet implemented")
+    }
+
+    override fun onSnsClick(position: Int) {
+        val selectedSns = snsListAdapter[position]
+        currentSns = selectedSns
+        _snsPlatforms.value = _snsPlatforms.value?.map { sns ->
+            sns.copy(isSelected = sns == selectedSns)
+        }
+
+        if (currentIdSet != null) {
+            collectSnsContents(currentIdSet ?: return, currentSns)
+        } else {
+            collectAllStreamersContents()
+        }
     }
 
     /** TWITCH */
@@ -71,17 +106,10 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
         ).accessToken
     }
 
-    //    // SharedPreference 또는 DB에 Access Token 저장시키기
+    // TODO: SharedPreference 또는 DB에 Access Token 저장시키기
     fun storeTwitchAccessToken() {
 //        viewModelScope.launch { twitchService = TwitchService.create(getTwitchAccessToken()) }
     }
-
-//    fun getTwitchUserInfo(userId: String) {
-//        viewModelScope.launch {
-//            val userInfo = twitchService.getUserInfo(userId).data[0]
-//            Log.d("TEST", "User Info: ${userInfo.display_name}")
-//        }
-//    }
 
     suspend fun getTwitchUserInfo(userId: String): TwitchUserInfo = withContext(Dispatchers.IO) {
         twitchService.getUserInfo(userId).data[0]
@@ -148,9 +176,24 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
         )
     }
 
-    private fun collectStreamerContents(idSet: IdSet) {
+    // TODO: collectAllStreamersContents() 메서드와 공통된 부분 분리하기
+    private fun collectSnsContents(idSet: IdSet, sns: SnsPlatformEntity) {
         viewModelScope.launch {
-            val contents = (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
+
+            val contents = when (currentSns.serviceName) {
+                "전체" -> {
+                    (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
+                }
+                "트위치" -> {
+                    getTwitchVideos(idSet).sortByRecentUploads()
+                }
+                "유튜브" -> {
+                    getYoutubeVideos(idSet).sortByRecentUploads()
+                }
+                else -> {
+                    mutableListOf()
+                }
+            }
 
             _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
                 clear()
@@ -163,19 +206,34 @@ class HomeViewModel(private val repository: ContentRepository) : ViewModel(), St
         viewModelScope.launch {
             val contents = mutableListOf<ContentData>()
 
-            /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
-//            repository.isedolStreamers.map { streamers ->
-//                streamers.map { streamer ->
-//                    launch {
-//                        contents.addAll(getTwitchVideos(streamer.idSet) + getYoutubeVideos(streamer.idSet))
-//                    }
-//                }
-//            }.collect()
+            repository.isedolStreamers.onEach { streamers ->
+                streamers.forEach { streamer ->
+                    contents.addAll(
+                        when (currentSns.serviceName) {
+                            "전체" -> {
+                                /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
+                                mutableListOf()
+//                                getTwitchVideos(streamer.idSet) + getYoutubeVideos(streamer.idSet)
+                            }
+                            "트위치" -> {
+                                getTwitchVideos(streamer.idSet)
+                            }
+                            "유튜브" -> {
+                                getYoutubeVideos(streamer.idSet)
+                            }
+                            else -> {
+                                mutableListOf()
+                            }
+                        }
+                    )
+                }
 
-            _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
-                clear()
-                addAll(contents)
-            }
+                _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
+                    clear()
+                    addAll(contents.sortByRecentUploads())
+                }
+
+            }.collect()
         }
     }
 }

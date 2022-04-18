@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
 import com.june0122.wakplus.data.entitiy.StreamerEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -14,4 +15,10 @@ interface ContentDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertStreamer(streamer: StreamerEntity)
+
+    @Query("SELECT * FROM sns_table")
+    fun getSnsPlatforms(): Flow<List<SnsPlatformEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSnsPlatform(sns: SnsPlatformEntity)
 }

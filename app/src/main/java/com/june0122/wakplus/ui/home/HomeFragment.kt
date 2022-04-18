@@ -45,7 +45,9 @@ class HomeFragment : Fragment() {
             }
         })
     }
-    private val snsListAdapter: SnsListAdapter = SnsListAdapter()
+    private val snsListAdapter: SnsListAdapter = SnsListAdapter { position ->
+        homeViewModel.onSnsClick(position)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
@@ -59,14 +61,19 @@ class HomeFragment : Fragment() {
 
         homeViewModel.contentListAdapter = contentListAdapter
         homeViewModel.streamerListAdapter = streamerListAdapter
+        homeViewModel.snsListAdapter = snsListAdapter
 
         homeViewModel.collectAllStreamersContents()
 
-        homeViewModel.contents.observe(requireActivity()) { contents ->
+        homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
             contentListAdapter.submitList(contents)
         }
 
-        homeViewModel.streamers.observe(requireActivity()) { streamers ->
+        homeViewModel.snsPlatforms.observe(viewLifecycleOwner) { snsPlatforms ->
+            snsListAdapter.submitList(snsPlatforms)
+        }
+
+        homeViewModel.streamers.observe(viewLifecycleOwner) { streamers ->
             streamerListAdapter.submitList(streamers)
         }
     }
