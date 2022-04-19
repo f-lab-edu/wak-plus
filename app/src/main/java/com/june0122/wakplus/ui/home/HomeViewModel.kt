@@ -70,12 +70,12 @@ class HomeViewModel(
             )
         }
 
-        if (selectedStreamer.isSelected) {
+        if (selectedStreamer.isSelected) { // 이미 선택된 상태일 때
             currentIdSet = null
             collectAllStreamersContents()
         } else {
             currentIdSet = selectedStreamer.idSet
-            collectSnsContents(selectedStreamer.idSet, currentSns)
+            collectStreamerContents(selectedStreamer.idSet)
         }
     }
 
@@ -91,7 +91,7 @@ class HomeViewModel(
         }
 
         if (currentIdSet != null) {
-            collectSnsContents(currentIdSet ?: return, currentSns)
+            collectStreamerContents(currentIdSet ?: return)
         } else {
             collectAllStreamersContents()
         }
@@ -176,29 +176,36 @@ class HomeViewModel(
         )
     }
 
-    // TODO: collectAllStreamersContents() 메서드와 공통된 부분 분리하기
-    private fun collectSnsContents(idSet: IdSet, sns: SnsPlatformEntity) {
+    private suspend fun fetchSnsContents(idSet: IdSet): List<ContentData> {
+        return when (currentSns.serviceName) {
+            "전체" -> {
+                /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
+                // (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
+                mutableListOf()
+            }
+            "트위치" -> {
+                getTwitchVideos(idSet)
+            }
+            "유튜브" -> {
+                getYoutubeVideos(idSet)
+            }
+            else -> {
+                mutableListOf()
+            }
+        }
+    }
+
+    private fun updateContentsList(contents: List<ContentData>) {
+        _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
+            clear()
+            addAll(contents.sortByRecentUploads())
+        }
+    }
+
+    private fun collectStreamerContents(idSet: IdSet) {
         viewModelScope.launch {
-
-            val contents = when (currentSns.serviceName) {
-                "전체" -> {
-                    (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
-                }
-                "트위치" -> {
-                    getTwitchVideos(idSet).sortByRecentUploads()
-                }
-                "유튜브" -> {
-                    getYoutubeVideos(idSet).sortByRecentUploads()
-                }
-                else -> {
-                    mutableListOf()
-                }
-            }
-
-            _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
-                clear()
-                addAll(contents)
-            }
+            val contents = fetchSnsContents(idSet)
+            updateContentsList(contents)
         }
     }
 
@@ -208,31 +215,9 @@ class HomeViewModel(
 
             repository.isedolStreamers.onEach { streamers ->
                 streamers.forEach { streamer ->
-                    contents.addAll(
-                        when (currentSns.serviceName) {
-                            "전체" -> {
-                                /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
-                                mutableListOf()
-//                                getTwitchVideos(streamer.idSet) + getYoutubeVideos(streamer.idSet)
-                            }
-                            "트위치" -> {
-                                getTwitchVideos(streamer.idSet)
-                            }
-                            "유튜브" -> {
-                                getYoutubeVideos(streamer.idSet)
-                            }
-                            else -> {
-                                mutableListOf()
-                            }
-                        }
-                    )
+                    contents.addAll(fetchSnsContents(streamer.idSet))
                 }
-
-                _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
-                    clear()
-                    addAll(contents.sortByRecentUploads())
-                }
-
+                updateContentsList(contents)
             }.collect()
         }
     }
