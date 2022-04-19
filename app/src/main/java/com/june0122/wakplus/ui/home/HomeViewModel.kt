@@ -1,5 +1,6 @@
 package com.june0122.wakplus.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,13 +15,10 @@ import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
 import com.june0122.wakplus.utils.listeners.SnsClickListener
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeViewModel(
     private val repository: ContentRepository
@@ -61,7 +59,11 @@ class HomeViewModel(
         }.launchIn(viewModelScope)
     }
 
+    private var contentsJob: Job? = null
+
     override fun onStreamerClick(position: Int) {
+        contentsJob?.cancel("다른 스트리머의 콘텐츠 로딩으로 인한 취소", CancellationException())
+
         val selectedStreamer = streamerListAdapter[position]
         currentIdSet = selectedStreamer.idSet
         _streamers.value = _streamers.value?.map { streamer ->
@@ -84,6 +86,7 @@ class HomeViewModel(
     }
 
     override fun onSnsClick(position: Int) {
+        contentsJob?.cancel("다른 SNS의 콘텐츠 로딩으로 인한 취소", CancellationException())
         val selectedSns = snsListAdapter[position]
         currentSns = selectedSns
         _snsPlatforms.value = _snsPlatforms.value?.map { sns ->
@@ -195,30 +198,51 @@ class HomeViewModel(
         }
     }
 
-    private fun updateContentsList(contents: List<ContentData>) {
-        _contents.value = (_contents.value?.toMutableList() ?: mutableListOf()).apply {
-            clear()
-            addAll(contents.sortByRecentUploads())
+    private fun updateContentsList(contents: List<ContentData>) = viewModelScope.launch {
+        _contents.run {
+            postValue(mutableListOf())
+            postValue(contents.sortByRecentUploads())
         }
     }
 
     private fun collectStreamerContents(idSet: IdSet) {
         viewModelScope.launch {
-            val contents = fetchSnsContents(idSet)
-            updateContentsList(contents)
+            contentsJob = CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val contents = fetchSnsContents(idSet)
+                    updateContentsList(contents)
+                } catch (e: CancellationException) {
+                    Log.e("TEST", "${e.message}")
+                } finally {
+                    Log.d("TEST", "Close resources in finally")
+                }
+            }
+
+            contentsJob?.join()
         }
     }
 
     fun collectAllStreamersContents() {
         viewModelScope.launch {
-            val contents = mutableListOf<ContentData>()
 
-            repository.isedolStreamers.onEach { streamers ->
-                streamers.forEach { streamer ->
-                    contents.addAll(fetchSnsContents(streamer.idSet))
+            contentsJob = CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val contents = mutableListOf<ContentData>()
+                    repository.isedolStreamers.onEach { streamers ->
+                        streamers.forEach { streamer ->
+                            contents.addAll(fetchSnsContents(streamer.idSet))
+                        }
+                        updateContentsList(contents)
+                    }.collect()
+                } catch (e: CancellationException) {
+                    Log.e("TEST", "${e.message}")
+                } finally {
+                    Log.d("TEST", "Close resources in finally")
                 }
-                updateContentsList(contents)
-            }.collect()
+
+            }
+
+            contentsJob?.join()
         }
     }
 }
