@@ -19,17 +19,15 @@ import com.june0122.wakplus.utils.CenterSmoothScroller
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var streamerRecyclerView: RecyclerView
     private lateinit var snsRecyclerView: RecyclerView
     private lateinit var contentRecyclerView: RecyclerView
-    private val homeViewModel: HomeViewModel by viewModels(
-        factoryProducer = {
-            HomeViewModelFactory((requireActivity().application as ContentsApplication).repository)
-        }
-    )
+    private val homeViewModel: HomeViewModel by viewModels()
     private val horizontalLayoutManager by lazy {
         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }

@@ -15,23 +15,25 @@ import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
 import com.june0122.wakplus.utils.listeners.SnsClickListener
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val repository: ContentRepository
 ) : ViewModel(), StreamerClickListener, SnsClickListener {
+
+    @Inject lateinit var twitchService: TwitchService
+    @Inject lateinit var twitchAuthService: TwitchAuthService
+    @Inject lateinit var youtubeService: YoutubeService
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
     lateinit var snsListAdapter: SnsListAdapter
-
-    private lateinit var twitchService: TwitchService
-    private val twitchAuthService: TwitchAuthService = TwitchAuthService.create()
-
-    private lateinit var youtubeService: YoutubeService
 
     private var currentIdSet: IdSet? = null
     private var currentSns: SnsPlatformEntity = SnsPlatformEntity("전체", true)
@@ -122,7 +124,6 @@ class HomeViewModel(
         val contentData = viewModelScope.async {
 //            twitchService = TwitchService.create(getTwitchAccessToken())
             // TODO: 저장된 Access Token을 사용하도록 변경
-            twitchService = TwitchService.create("ywwhqstujqw66iy7ch4qyhapukulls")
             val twitchVideos = twitchService.getChannelVideos(idSet.twitchId).data
             val twitchUserInfo = twitchService.getUserInfo(idSet.twitchId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
@@ -136,7 +137,7 @@ class HomeViewModel(
 
     /** YOUTUBE */
     private suspend fun getYoutubeVideos(idSet: IdSet): List<ContentData> = withContext(Dispatchers.IO) {
-        YoutubeService.create().run {
+        youtubeService.run {
             getPlaylists(channelId = idSet.youtubeId)
                 .items
                 .flatMap { playlist ->

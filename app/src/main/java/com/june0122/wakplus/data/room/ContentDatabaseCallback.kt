@@ -62,7 +62,7 @@ class ContentDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.
             ),
         )
 
-        streamerList.map { streamer -> contentDao.insertStreamer(streamer) }
+        streamerList.forEach { streamer -> contentDao.insertStreamer(streamer) }
 
         val snsList = mutableListOf(
             SnsPlatformEntity("전체", true), // Default Selected Sns Platform
@@ -74,6 +74,6 @@ class ContentDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.
             SnsPlatformEntity("사운드클라우드", false),
         )
 
-        snsList.map { sns -> contentDao.insertSnsPlatform(sns) }
+        snsList.forEach { sns -> contentDao.insertSnsPlatform(sns) }
     }
 }
