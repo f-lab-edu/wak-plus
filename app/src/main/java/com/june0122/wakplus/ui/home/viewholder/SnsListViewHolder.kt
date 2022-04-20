@@ -1,13 +1,19 @@
 package com.june0122.wakplus.ui.home.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
-import com.june0122.wakplus.data.entitiy.SnsPlatform
+import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
 import com.june0122.wakplus.databinding.ItemSnsPlatformBinding
+import com.june0122.wakplus.utils.listeners.SnsClickListener
 
-class SnsListViewHolder(binding: ItemSnsPlatformBinding): RecyclerView.ViewHolder(binding.root) {
-    val snsChip = binding.chipSns
+class SnsListViewHolder(
+    private val binding: ItemSnsPlatformBinding,
+    private val listener: SnsClickListener
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(snsPlatform: SnsPlatform) {
-        snsChip.text = snsPlatform.serviceName
+    fun bind(snsPlatform: SnsPlatformEntity) = with(binding) {
+        this.snsPlatform = snsPlatform
+        this.snsClickListener = listener
+        this.position = absoluteAdapterPosition
+        executePendingBindings()
     }
 }

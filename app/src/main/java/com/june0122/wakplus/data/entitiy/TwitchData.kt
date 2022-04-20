@@ -1,10 +1,14 @@
 package com.june0122.wakplus.data.entitiy
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "twitch_table")
 data class TwitchVideoEntity(
-    val twitchUserInfo: TwitchUserInfo,
-    val twitchVideoInfo: TwitchVideoInfo,
+    @PrimaryKey val twitchUserInfo: TwitchUserInfo,
+    @ColumnInfo val twitchVideoInfo: TwitchVideoInfo,
 ) : ContentData()
 
 data class TwitchToken(

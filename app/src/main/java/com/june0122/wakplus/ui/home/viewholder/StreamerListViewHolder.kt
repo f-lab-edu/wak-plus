@@ -1,24 +1,17 @@
 package com.june0122.wakplus.ui.home.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import coil.size.Scale
-import coil.transform.CircleCropTransformation
-import com.june0122.wakplus.data.entitiy.Streamer
+import com.june0122.wakplus.data.entitiy.StreamerEntity
 import com.june0122.wakplus.databinding.ItemStreamerBinding
+import com.june0122.wakplus.utils.listeners.StreamerClickListener
 
-class StreamerListViewHolder(binding: ItemStreamerBinding): RecyclerView.ViewHolder(binding.root) {
-    private val streamerProfileImageView = binding.imgStreamerProfile
-    private val streamerNameTextView = binding.tvStreamerName
+class StreamerListViewHolder(private val binding: ItemStreamerBinding, private val listener: StreamerClickListener) :
+    RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(streamer: Streamer) {
-        streamerProfileImageView.load(streamer.profileUrl) {
-            scale(Scale.FIT)
-            crossfade(true)
-            crossfade(300)
-            transformations(CircleCropTransformation())
-        }
-
-        streamerNameTextView.text = streamer.name
+    fun bind(streamer: StreamerEntity) = with(binding) {
+        this.streamer = streamer
+        this.streamerClickListener = listener
+        this.position = absoluteAdapterPosition
+        executePendingBindings()
     }
 }

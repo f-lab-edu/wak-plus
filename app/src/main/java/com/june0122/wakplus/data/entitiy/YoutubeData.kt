@@ -1,8 +1,13 @@
 package com.june0122.wakplus.data.entitiy
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "youtube_table")
 data class YoutubeVideoEntity(
-    val youtubeUserInfo: YoutubeUserInfo,
-    val youtubeVideoInfo: YoutubeVideoInfo,
+    @PrimaryKey val profileUrl: String,
+    @ColumnInfo val youtubeVideoInfo: YoutubeVideoInfo,
 ) : ContentData()
 
 /** Get User Info */
@@ -116,7 +121,7 @@ data class YoutubeVideoInfo(
     val statistics: Statistics,
     val status: Status,
     val topicDetails: TopicDetails
-): ContentData()
+) : ContentData()
 
 data class ContentDetails(
     val caption: String,
@@ -220,4 +225,76 @@ data class ChannelHomeSnippet(
     val position: Int,
     val title: String,
     val type: String
+)
+
+/** Get Playlists */
+
+data class YoutubePlaylists(
+    val etag: String,
+    val items: List<YoutubePlaylist>,
+    val kind: String,
+    val nextPageToken: String,
+    val pageInfo: PageInfo
+)
+
+data class YoutubePlaylist(
+    val etag: String,
+    val id: String,
+    val kind: String,
+    val snippet: PlaylistSnippet
+)
+
+data class PlaylistSnippet(
+    val channelId: String,
+    val channelTitle: String,
+    val description: String,
+    val localized: Localized,
+    val publishedAt: String,
+    val thumbnails: VideoThumbnails,
+    val title: String
+)
+
+/** Get PlaylistItems */
+data class YoutubePlaylistItems(
+    val etag: String,
+    val items: List<PlaylistItem>,
+    val kind: String,
+    val pageInfo: PageInfo
+)
+
+data class PlaylistItem(
+    val contentDetails: PlaylistItemDetails,
+    val etag: String,
+    val id: String,
+    val kind: String,
+    val snippet: PlaylistItemSnippet,
+    val status: PlaylistItemStatus
+)
+
+data class PlaylistItemDetails(
+    val videoId: String,
+    val videoPublishedAt: String
+)
+
+data class PlaylistItemSnippet(
+    val channelId: String,
+    val channelTitle: String,
+    val description: String,
+    val playlistId: String,
+    val position: Int,
+    val publishedAt: String,
+    val resourceId: ResourceId,
+    val thumbnails: VideoThumbnails,
+    val title: String,
+    val videoOwnerChannelId: String,
+    val videoOwnerChannelTitle: String
+)
+
+data class PlaylistItemStatus(
+    val privacyStatus: String
+)
+
+data class ResourceId(
+    val kind: String,
+    val videoId: String
 )

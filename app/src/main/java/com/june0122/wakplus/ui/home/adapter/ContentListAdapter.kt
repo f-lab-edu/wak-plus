@@ -2,7 +2,7 @@ package com.june0122.wakplus.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.data.entitiy.ContentData
 import com.june0122.wakplus.data.entitiy.TwitchVideoEntity
@@ -11,12 +11,12 @@ import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
 import com.june0122.wakplus.ui.home.viewholder.YoutubeVideoHolder
+import com.june0122.wakplus.utils.diffcallbacks.ContentDiffCallback
 
-class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val contentList = mutableListOf<ContentData>()
+class ContentListAdapter : ListAdapter<ContentData, RecyclerView.ViewHolder>(ContentDiffCallback()) {
 
     override fun getItemViewType(position: Int): Int {
-        return when (contentList[position]) {
+        return when (currentList[position]) {
             is TwitchVideoEntity -> VIEW_TYPE_TWITCH_VIDEO
             is YoutubeVideoEntity -> VIEW_TYPE_YOUTUBE_VIDEO
             else -> VIEW_TYPE_TWITCH_VIDEO
@@ -43,28 +43,18 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    override fun getItemCount(): Int = contentList.size
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val content = contentList[holder.absoluteAdapterPosition]) {
+        when (val content = currentList[holder.absoluteAdapterPosition]) {
             is TwitchVideoEntity -> if (holder is TwitchVideoHolder) {
                 holder.bind(content.twitchUserInfo, content.twitchVideoInfo)
             }
             is YoutubeVideoEntity -> if (holder is YoutubeVideoHolder) {
-                holder.bind(content.youtubeUserInfo, content.youtubeVideoInfo)
+                holder.bind(content.profileUrl, content.youtubeVideoInfo)
             }
             else -> {
 
             }
         }
-    }
-
-    fun updateUserListItems(items: List<ContentData>) {
-        val diffCallback = ContentDiffCallback(contentList, items)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        contentList.clear()
-        contentList.addAll(items)
-        diffResult.dispatchUpdatesTo(this)
     }
 
     companion object {
@@ -75,30 +65,5 @@ class ContentListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         const val VIEW_TYPE_TWITTER_ARTICLE = 4
         const val VIEW_TYPE_NAVER_CAFE_ARTICLE = 5
         const val VIEW_TYPE_SOUND_CLOUD_MUSIC = 6
-    }
-}
-
-class ContentDiffCallback(
-    private val oldItems: List<ContentData>,
-    private val newItems: List<ContentData>
-) : DiffUtil.Callback() {
-    override fun getOldListSize(): Int = oldItems.size
-
-    override fun getNewListSize(): Int = newItems.size
-
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldItems[oldItemPosition]
-        val newItem = newItems[newItemPosition]
-
-        return if (oldItem is TwitchVideoEntity && newItem is TwitchVideoEntity) oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
-        else if (oldItem is YoutubeVideoEntity && newItem is YoutubeVideoEntity) oldItem.youtubeVideoInfo.id == newItem.youtubeVideoInfo.id
-        else oldItem == newItem
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldItem = oldItems[oldItemPosition]
-        val newItem = newItems[newItemPosition]
-
-        return oldItem == newItem
     }
 }

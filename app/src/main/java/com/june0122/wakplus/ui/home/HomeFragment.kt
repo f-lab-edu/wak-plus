@@ -9,25 +9,43 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.june0122.wakplus.ContentsApplication
 import com.june0122.wakplus.R
 import com.june0122.wakplus.databinding.FragmentHomeBinding
-import com.june0122.wakplus.ui.home.HomeViewModel.Companion.TWITCH_ID_INE
-import com.june0122.wakplus.ui.home.HomeViewModel.Companion.YOUTUBE_ID_INE
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
+import com.june0122.wakplus.utils.CenterSmoothScroller
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
+import com.june0122.wakplus.utils.listeners.StreamerClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var streamerRecyclerView: RecyclerView
     private lateinit var snsRecyclerView: RecyclerView
     private lateinit var contentRecyclerView: RecyclerView
     private val homeViewModel: HomeViewModel by viewModels()
+    private val horizontalLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    }
     private val contentListAdapter: ContentListAdapter = ContentListAdapter()
-    private val streamerListAdapter: StreamerListAdapter = StreamerListAdapter()
-    private val snsListAdapter: SnsListAdapter = SnsListAdapter()
+    private val streamerListAdapter: StreamerListAdapter by lazy {
+        StreamerListAdapter(object : StreamerClickListener {
+            override fun onStreamerClick(position: Int) {
+                configureSmoothScroller(position)
+                homeViewModel.onStreamerClick(position)
+            }
+
+            override fun onStreamerLongClick(position: Int) {
+            }
+        })
+    }
+    private val snsListAdapter: SnsListAdapter = SnsListAdapter { position ->
+        homeViewModel.onSnsClick(position)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
@@ -40,14 +58,21 @@ class HomeFragment : Fragment() {
         configureRecyclerViews()
 
         homeViewModel.contentListAdapter = contentListAdapter
+        homeViewModel.streamerListAdapter = streamerListAdapter
+        homeViewModel.snsListAdapter = snsListAdapter
 
-        if (contentListAdapter.itemCount == 0) {
-            homeViewModel.getTwitchVideos(TWITCH_ID_INE)
-            homeViewModel.getYoutubeVideos(YOUTUBE_ID_INE)
+        homeViewModel.collectAllStreamersContents()
+
+        homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
+            contentListAdapter.submitList(contents)
         }
 
-        homeViewModel.contents.observe(requireActivity()) {
-            contentListAdapter.updateUserListItems(it)
+        homeViewModel.snsPlatforms.observe(viewLifecycleOwner) { snsPlatforms ->
+            snsListAdapter.submitList(snsPlatforms)
+        }
+
+        homeViewModel.streamers.observe(viewLifecycleOwner) { streamers ->
+            streamerListAdapter.submitList(streamers)
         }
     }
 
@@ -57,25 +82,31 @@ class HomeFragment : Fragment() {
     }
 
     private fun configureRecyclerViews() {
-        val largePx = resources.getDimensionPixelSize(R.dimen.margin_large)
-        val smallPx = resources.getDimensionPixelSize(R.dimen.margin_small)
+        val streamerItemPx = resources.getDimensionPixelSize(R.dimen.margin_normal)
+        val snsItemPx = resources.getDimensionPixelSize(R.dimen.margin_small)
 
         streamerRecyclerView = binding.rvStreamer.apply {
-            this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            this.layoutManager = horizontalLayoutManager
             adapter = streamerListAdapter
-            addItemDecoration(StreamerItemDecoration(largePx))
+            addItemDecoration(StreamerItemDecoration(streamerItemPx))
         }
 
         snsRecyclerView = binding.rvSnsPlatform.apply {
             this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = snsListAdapter
-            addItemDecoration(SnsPlatformItemDecoration(smallPx))
+            addItemDecoration(SnsPlatformItemDecoration(snsItemPx))
         }
 
         contentRecyclerView = binding.rvContent.apply {
             this.layoutManager = LinearLayoutManager(context)
             adapter = contentListAdapter
         }
+    }
+
+    private fun configureSmoothScroller(position: Int) {
+        val smoothScroller = CenterSmoothScroller(requireContext())
+        smoothScroller.targetPosition = position
+        horizontalLayoutManager.startSmoothScroll(smoothScroller)
     }
 }
 

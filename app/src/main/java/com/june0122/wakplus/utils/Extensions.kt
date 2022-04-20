@@ -1,5 +1,7 @@
 package com.june0122.wakplus.utils
 
+import android.content.Context
+import com.june0122.wakplus.R
 import com.june0122.wakplus.utils.Language.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -21,6 +23,7 @@ private const val FOUR_DIGITS = 10_000.0
 
 fun String.withSuffix(language: Language): String {
     val viewCount = this.toLong()
+    val format = DecimalFormat("0.#")
 
     return when (language) {
         KR -> {
@@ -30,13 +33,12 @@ fun String.withSuffix(language: Language): String {
                 val number = if ((viewCount.toInt() % 1_000) / 100 == 0) {
                     (viewCount.toInt() / 1_000).toString()
                 } else {
-                    (viewCount.toDouble() / 1_000).toString()
+                    format.format(viewCount.toDouble() / 1_000)
                 }
                 return String.format("%s%c", number, SUFFIX_KR[0])
             }
 
             val exp = (log10(viewCount.toDouble()) / log10(FOUR_DIGITS)).toInt()
-            val format = DecimalFormat("0.#")
             val integer = (viewCount / (FOUR_DIGITS).pow(exp)).toInt()
             val number = if (integer >= 10) integer.toString() else format.format(viewCount / (FOUR_DIGITS).pow(exp))
 
@@ -47,7 +49,6 @@ fun String.withSuffix(language: Language): String {
             if (viewCount < 10_000) return viewCount.toString()
 
             val exp = (log10(viewCount.toDouble()) / log10(FOUR_DIGITS)).toInt()
-            val format = DecimalFormat("0.#")
             val integer = (viewCount / (FOUR_DIGITS).pow(exp)).toInt()
             val number = if (integer >= 10) integer.toString() else format.format(viewCount / (FOUR_DIGITS).pow(exp))
 
@@ -58,7 +59,6 @@ fun String.withSuffix(language: Language): String {
             if (viewCount < 1_000) return viewCount.toString()
 
             val exp = (log10(viewCount.toDouble()) / log10(THREE_DIGITS)).toInt()
-            val format = DecimalFormat("0.#")
             val integer = (viewCount / (THREE_DIGITS).pow(exp)).toInt()
             val number = if (integer >= 10) integer.toString() else format.format(viewCount / (THREE_DIGITS).pow(exp))
 
@@ -85,7 +85,7 @@ private fun currentDate(): Date {
 }
 
 // TODO: 언어를 영어로 설정 시에만 'a minute ago', 'an hour ago' 케이스 추가
-fun String.timeAgo(): String {
+fun String.timeAgo(context: Context): String {
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
     val date = inputFormat.parse(this) as Date
     var time = date.time
@@ -94,15 +94,15 @@ fun String.timeAgo(): String {
     if (time > now || time <= 0) return "in the future"
     val diff = now - time
     return when {
-        diff < MINUTE_MILLIS -> "moments ago"
+        diff < MINUTE_MILLIS -> context.getString(R.string.moments_ago)
 //        diff < 2 * MINUTE_MILLIS -> "a minute ago"
-        diff < 60 * MINUTE_MILLIS -> "${diff / MINUTE_MILLIS} minutes ago"
+        diff < 60 * MINUTE_MILLIS -> context.getString(R.string.minutes_ago, diff / MINUTE_MILLIS)
 //        diff < 2 * HOUR_MILLIS -> "an hour ago"
-        diff < 24 * HOUR_MILLIS -> "${diff / HOUR_MILLIS} hours ago"
-        diff < 48 * HOUR_MILLIS -> "yesterday"
-        diff < WEEK_MILLIS -> "${diff / DAY_MILLIS} days ago"
-        diff < MONTH_MILLIS -> "${diff / WEEK_MILLIS} weeks ago"
-        diff < YEAR_MILLIS -> "${diff / MONTH_MILLIS} months ago"
-        else -> "${diff / YEAR_MILLIS} years ago"
+        diff < 24 * HOUR_MILLIS -> context.getString(R.string.hours_ago, diff / HOUR_MILLIS)
+        diff < 48 * HOUR_MILLIS -> context.getString(R.string.day_ago)
+        diff < WEEK_MILLIS -> context.getString(R.string.days_ago, diff / DAY_MILLIS)
+        diff < MONTH_MILLIS -> context.getString(R.string.weeks_ago, diff / WEEK_MILLIS)
+        diff < YEAR_MILLIS -> context.getString(R.string.months_ago, diff / MONTH_MILLIS)
+        else -> context.getString(R.string.years_ago, diff / YEAR_MILLIS)
     }
 }

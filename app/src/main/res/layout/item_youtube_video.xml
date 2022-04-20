@@ -5,6 +5,13 @@
 
     <data>
 
+        <variable
+            name="profileUrl"
+            type="String" />
+
+        <variable
+            name="videoInfo"
+            type="com.june0122.wakplus.data.entitiy.YoutubeVideoInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +21,7 @@
 
         <ImageView
             android:id="@+id/img_thumbnail"
+            thumbnailUrl="@{videoInfo.snippet.thumbnails.high.url}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
@@ -22,10 +30,11 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/yt_thumbnail_01" />
+            tools:srcCompat="@drawable/yt_thumbnail_01" />
 
         <TextView
             android:id="@+id/tv_duration"
+            duration="@{videoInfo.contentDetails.duration}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -42,6 +51,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_channel_profile"
+            circularImageUrl="@{profileUrl}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -53,13 +63,19 @@
 
         <TextView
             android:id="@+id/tv_video_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{videoInfo.snippet.title}"
             android:textColor="@color/Text"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/img_channel_profile"
             app:layout_constraintTop_toTopOf="@+id/img_channel_profile"
             tools:text="고세구 커버곡 고르기" />
@@ -70,6 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:text="@{videoInfo.snippet.channelTitle}"
             android:textColor="@color/Text"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/img_channel_profile"
@@ -90,6 +107,7 @@
 
         <TextView
             android:id="@+id/tv_view_count"
+            viewCount="@{videoInfo.statistics.viewCount}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -114,6 +132,7 @@
 
         <TextView
             android:id="@+id/tv_elapsed_time"
+            elapsedTime="@{videoInfo.snippet.publishedAt}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
