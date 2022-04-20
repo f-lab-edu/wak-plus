@@ -206,43 +206,33 @@ class HomeViewModel(
     }
 
     private fun collectStreamerContents(idSet: IdSet) {
-        viewModelScope.launch {
-            contentsJob = CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val contents = fetchSnsContents(idSet)
-                    updateContentsList(contents)
-                } catch (e: CancellationException) {
-                    Log.e("TEST", "${e.message}")
-                } finally {
-                    Log.d("TEST", "Close resources in finally")
-                }
+        contentsJob = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val contents = fetchSnsContents(idSet)
+                updateContentsList(contents)
+            } catch (e: CancellationException) {
+                Log.e("TEST", "${e.message}")
+            } finally {
+                Log.d("TEST", "Close contentsJob resources in finally")
             }
-
-            contentsJob?.join()
         }
     }
 
     fun collectAllStreamersContents() {
-        viewModelScope.launch {
-
-            contentsJob = CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val contents = mutableListOf<ContentData>()
-                    repository.isedolStreamers.onEach { streamers ->
-                        streamers.forEach { streamer ->
-                            contents.addAll(fetchSnsContents(streamer.idSet))
-                        }
-                        updateContentsList(contents)
-                    }.collect()
-                } catch (e: CancellationException) {
-                    Log.e("TEST", "${e.message}")
-                } finally {
-                    Log.d("TEST", "Close resources in finally")
-                }
-
+        contentsJob = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val contents = mutableListOf<ContentData>()
+                repository.isedolStreamers.onEach { streamers ->
+                    streamers.forEach { streamer ->
+                        contents.addAll(fetchSnsContents(streamer.idSet))
+                    }
+                    updateContentsList(contents)
+                }.collect()
+            } catch (e: CancellationException) {
+                Log.e("TEST", "${e.message}")
+            } finally {
+                Log.d("TEST", "Close contentsJob resources in finally")
             }
-
-            contentsJob?.join()
         }
     }
 }
