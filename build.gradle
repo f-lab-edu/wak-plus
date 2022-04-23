@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
         // Navigation 컴포넌트의 Safe Args Gradle 플러그인 추가
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version")
         // Hilt 의존성 주입 라이브러리
