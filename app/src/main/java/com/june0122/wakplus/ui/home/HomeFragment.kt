@@ -78,6 +78,8 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        streamerRecyclerView.layoutManager = null
+        snsRecyclerView.layoutManager = null
         contentRecyclerView.layoutManager = null
     }
 
