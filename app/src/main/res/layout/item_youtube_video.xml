@@ -39,14 +39,13 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="#E6000000"
+            android:background="@drawable/bg_rounded_corner"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:textAlignment="center"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/img_thumbnail"
             app:layout_constraintEnd_toEndOf="@+id/img_thumbnail"
-            tools:background="@drawable/bg_rounded_corner"
             tools:text="20:16" />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -142,6 +141,18 @@
             app:layout_constraintStart_toEndOf="@+id/tv_dot2"
             app:layout_constraintTop_toBottomOf="@+id/tv_video_title"
             tools:text="1개월" />
+
+        <ImageView
+            android:id="@+id/btn_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_rounded_corner"
+            android:src="@drawable/ic_favorite_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
