@@ -1,11 +1,7 @@
 package com.june0122.wakplus.data.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.june0122.wakplus.data.entity.SnsPlatformEntity
-import com.june0122.wakplus.data.entity.StreamerEntity
+import androidx.room.*
+import com.june0122.wakplus.data.entity.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,4 +17,16 @@ interface ContentDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSnsPlatform(sns: SnsPlatformEntity)
+
+    @Query("SELECT * FROM twitch_table")
+    fun getTwitchFavorites(): Flow<List<TwitchVideoEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertFavorite(content: TwitchVideoEntity)
+
+    @Delete
+    suspend fun deleteFavorite(content: TwitchVideoEntity)
+
+    @Query("SELECT COUNT(*) FROM twitch_table WHERE twitchVideoInfo LIKE :contentInfo")
+    suspend fun compareInfo(contentInfo: TwitchVideoInfo): Int
 }

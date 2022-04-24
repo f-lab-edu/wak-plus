@@ -1,7 +1,7 @@
 package com.june0122.wakplus.utils.listeners
 
-import com.june0122.wakplus.data.entitiy.ContentData
+import com.june0122.wakplus.data.entity.TwitchVideoEntity
 
 fun interface FavoriteClickListener {
-    fun onFavoriteClick(content: ContentData)
+    fun onFavoriteClick(favoriteContent: TwitchVideoEntity)
 }
