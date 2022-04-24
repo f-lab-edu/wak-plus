@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.june0122.wakplus.data.entity.ContentData
+import com.june0122.wakplus.data.entity.ContentEntity
 import com.june0122.wakplus.data.entity.TwitchVideoEntity
 import com.june0122.wakplus.data.entity.YoutubeVideoEntity
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
@@ -12,8 +12,11 @@ import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
 import com.june0122.wakplus.ui.home.viewholder.YoutubeVideoHolder
 import com.june0122.wakplus.utils.diffcallbacks.ContentDiffCallback
+import com.june0122.wakplus.utils.listeners.FavoriteClickListener
 
-class ContentListAdapter : ListAdapter<ContentData, RecyclerView.ViewHolder>(ContentDiffCallback()) {
+class ContentListAdapter(
+    private val favoriteListener: FavoriteClickListener,
+) : ListAdapter<ContentEntity, RecyclerView.ViewHolder>(ContentDiffCallback()) {
 
     override fun getItemViewType(position: Int): Int {
         return when (currentList[position]) {
@@ -28,17 +31,17 @@ class ContentListAdapter : ListAdapter<ContentData, RecyclerView.ViewHolder>(Con
             VIEW_TYPE_TWITCH_VIDEO -> {
                 val binding =
                     ItemTwitchVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                TwitchVideoHolder(binding)
+                TwitchVideoHolder(binding, favoriteListener)
             }
             VIEW_TYPE_YOUTUBE_VIDEO -> {
                 val binding =
                     ItemYoutubeVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                YoutubeVideoHolder(binding)
+                YoutubeVideoHolder(binding, favoriteListener)
             }
             else -> {
                 val tempBinding =
                     ItemTwitchVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                TwitchVideoHolder(tempBinding)
+                TwitchVideoHolder(tempBinding, favoriteListener)
             }
         }
     }
