@@ -7,7 +7,7 @@
 
         <variable
             name="snsPlatform"
-            type="com.june0122.wakplus.data.entitiy.SnsPlatformEntity" />
+            type="com.june0122.wakplus.data.entity.SnsPlatformEntity" />
 
         <variable
             name="snsClickListener"

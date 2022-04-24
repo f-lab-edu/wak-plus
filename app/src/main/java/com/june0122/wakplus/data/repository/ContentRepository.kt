@@ -1,7 +1,7 @@
 package com.june0122.wakplus.data.repository
 
-import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
-import com.june0122.wakplus.data.entitiy.StreamerEntity
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.data.room.ContentDao
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

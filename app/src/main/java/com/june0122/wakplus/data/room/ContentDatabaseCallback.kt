@@ -2,9 +2,9 @@ package com.june0122.wakplus.data.room
 
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.june0122.wakplus.data.entitiy.IdSet
-import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
-import com.june0122.wakplus.data.entitiy.StreamerEntity
+import com.june0122.wakplus.data.entity.IdSet
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.data.room.ContentRoomDatabase.Companion.INSTANCE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

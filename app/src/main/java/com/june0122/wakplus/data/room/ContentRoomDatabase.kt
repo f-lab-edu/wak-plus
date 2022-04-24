@@ -5,10 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
-import com.june0122.wakplus.data.entitiy.StreamerEntity
-import com.june0122.wakplus.data.entitiy.TwitchVideoEntity
-import com.june0122.wakplus.data.entitiy.YoutubeVideoEntity
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
+import com.june0122.wakplus.data.entity.TwitchVideoEntity
+import com.june0122.wakplus.data.entity.YoutubeVideoEntity
 import com.june0122.wakplus.utils.converters.*
 import kotlinx.coroutines.CoroutineScope
 

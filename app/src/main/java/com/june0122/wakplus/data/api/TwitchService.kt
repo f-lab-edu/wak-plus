@@ -1,7 +1,7 @@
 package com.june0122.wakplus.data.api
 
-import com.june0122.wakplus.data.entitiy.TwitchUserInfos
-import com.june0122.wakplus.data.entitiy.TwitchVideos
+import com.june0122.wakplus.data.entity.TwitchUserInfos
+import com.june0122.wakplus.data.entity.TwitchVideos
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -2,7 +2,7 @@ package com.june0122.wakplus.utils.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.june0122.wakplus.data.entitiy.TwitchVideoInfo
+import com.june0122.wakplus.data.entity.TwitchVideoInfo
 
 class TwitchVideoInfoTypeConverter {
 

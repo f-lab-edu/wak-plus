@@ -1,7 +1,7 @@
 package com.june0122.wakplus.ui.home.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
-import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.databinding.ItemSnsPlatformBinding
 import com.june0122.wakplus.utils.listeners.SnsClickListener
 

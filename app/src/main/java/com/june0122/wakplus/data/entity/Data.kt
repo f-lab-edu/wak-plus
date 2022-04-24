@@ -1,4 +1,4 @@
-package com.june0122.wakplus.data.entitiy
+package com.june0122.wakplus.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

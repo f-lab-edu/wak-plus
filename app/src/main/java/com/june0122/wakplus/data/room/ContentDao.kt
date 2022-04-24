@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
-import com.june0122.wakplus.data.entitiy.StreamerEntity
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
