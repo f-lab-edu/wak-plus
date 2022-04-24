@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.june0122.wakplus.data.entitiy.ContentData
-import com.june0122.wakplus.data.entitiy.TwitchVideoEntity
-import com.june0122.wakplus.data.entitiy.YoutubeVideoEntity
+import com.june0122.wakplus.data.entity.ContentData
+import com.june0122.wakplus.data.entity.TwitchVideoEntity
+import com.june0122.wakplus.data.entity.YoutubeVideoEntity
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
@@ -46,10 +46,10 @@ class ContentListAdapter : ListAdapter<ContentData, RecyclerView.ViewHolder>(Con
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val content = currentList[holder.absoluteAdapterPosition]) {
             is TwitchVideoEntity -> if (holder is TwitchVideoHolder) {
-                holder.bind(content.twitchUserInfo, content.twitchVideoInfo)
+                holder.bind(content)
             }
             is YoutubeVideoEntity -> if (holder is YoutubeVideoHolder) {
-                holder.bind(content.profileUrl, content.youtubeVideoInfo)
+                holder.bind(content)
             }
             else -> {
 

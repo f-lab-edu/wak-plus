@@ -1,4 +1,4 @@
-package com.june0122.wakplus.data.entitiy
+package com.june0122.wakplus.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName
 data class TwitchVideoEntity(
     @PrimaryKey val twitchUserInfo: TwitchUserInfo,
     @ColumnInfo val twitchVideoInfo: TwitchVideoInfo,
+    val isFavorite: Boolean,
 ) : ContentData()
 
 data class TwitchToken(
@@ -63,7 +64,7 @@ data class TwitchUserInfo(
 )
 
 /** Search Channels */
-data class TwitchChannelInfos(
+data class TwitchChannelInfoSet(
     @SerializedName("data") val data: List<TwitchChannelInfo>,
     @SerializedName("pagination") val pagination: Pagination
 )

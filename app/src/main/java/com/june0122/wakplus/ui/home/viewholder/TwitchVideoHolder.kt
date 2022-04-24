@@ -1,14 +1,12 @@
 package com.june0122.wakplus.ui.home.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
-import com.june0122.wakplus.data.entitiy.TwitchUserInfo
-import com.june0122.wakplus.data.entitiy.TwitchVideoInfo
+import com.june0122.wakplus.data.entity.TwitchVideoEntity
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 
 class TwitchVideoHolder(private val binding: ItemTwitchVideoBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(userInfo: TwitchUserInfo, videoInfo: TwitchVideoInfo) = with(binding) {
-        this.userInfo = userInfo
-        this.videoInfo = videoInfo
+    fun bind(content: TwitchVideoEntity) = with(binding) {
+        this.content = content
         executePendingBindings()
     }
 

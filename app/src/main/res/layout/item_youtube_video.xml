@@ -6,12 +6,8 @@
     <data>
 
         <variable
-            name="profileUrl"
-            type="String" />
-
-        <variable
-            name="videoInfo"
-            type="com.june0122.wakplus.data.entitiy.YoutubeVideoInfo" />
+            name="content"
+            type="com.june0122.wakplus.data.entity.YoutubeVideoEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +17,7 @@
 
         <ImageView
             android:id="@+id/img_thumbnail"
-            thumbnailUrl="@{videoInfo.snippet.thumbnails.high.url}"
+            thumbnailUrl="@{content.youtubeVideoInfo.snippet.thumbnails.high.url}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
@@ -34,7 +30,7 @@
 
         <TextView
             android:id="@+id/tv_duration"
-            duration="@{videoInfo.contentDetails.duration}"
+            duration="@{content.youtubeVideoInfo.contentDetails.duration}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -50,7 +46,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_channel_profile"
-            circularImageUrl="@{profileUrl}"
+            circularImageUrl="@{content.profileUrl}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -69,7 +65,7 @@
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{videoInfo.snippet.title}"
+            android:text="@{content.youtubeVideoInfo.snippet.title}"
             android:textColor="@color/Text"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -85,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@{videoInfo.snippet.channelTitle}"
+            android:text="@{content.youtubeVideoInfo.snippet.channelTitle}"
             android:textColor="@color/Text"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/img_channel_profile"
@@ -106,7 +102,7 @@
 
         <TextView
             android:id="@+id/tv_view_count"
-            viewCount="@{videoInfo.statistics.viewCount}"
+            viewCount="@{content.youtubeVideoInfo.statistics.viewCount}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -131,7 +127,7 @@
 
         <TextView
             android:id="@+id/tv_elapsed_time"
-            elapsedTime="@{videoInfo.snippet.publishedAt}"
+            elapsedTime="@{content.youtubeVideoInfo.snippet.publishedAt}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"

@@ -1,4 +1,4 @@
-package com.june0122.wakplus.data.entitiy
+package com.june0122.wakplus.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,10 +8,11 @@ import androidx.room.PrimaryKey
 data class YoutubeVideoEntity(
     @PrimaryKey val profileUrl: String,
     @ColumnInfo val youtubeVideoInfo: YoutubeVideoInfo,
+    val isFavorite: Boolean,
 ) : ContentData()
 
 /** Get User Info */
-data class YoutubeUserInfos(
+data class YoutubeUserInfoSet(
     val etag: String,
     val items: List<YoutubeUserInfo>,
     val kind: String,
