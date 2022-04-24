@@ -3,10 +3,15 @@ package com.june0122.wakplus.ui.home.viewholder
 import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.data.entity.TwitchVideoEntity
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
+import com.june0122.wakplus.utils.listeners.FavoriteClickListener
 
-class TwitchVideoHolder(private val binding: ItemTwitchVideoBinding) : RecyclerView.ViewHolder(binding.root) {
+class TwitchVideoHolder(
+    private val binding: ItemTwitchVideoBinding,
+    private val favoriteListener: FavoriteClickListener,
+) : RecyclerView.ViewHolder(binding.root) {
     fun bind(content: TwitchVideoEntity) = with(binding) {
         this.content = content
+        this.favoriteClickListener = favoriteListener
         executePendingBindings()
     }
 

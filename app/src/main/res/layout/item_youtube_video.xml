@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="favoriteClickListener"
+            type="com.june0122.wakplus.utils.listeners.FavoriteClickListener" />
+
+        <variable
             name="content"
             type="com.june0122.wakplus.data.entity.YoutubeVideoEntity" />
     </data>
@@ -145,10 +149,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/bg_rounded_corner"
-            android:src="@drawable/ic_favorite_border"
+            android:src="@{content.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            tools:src="@drawable/ic_favorite_border" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
