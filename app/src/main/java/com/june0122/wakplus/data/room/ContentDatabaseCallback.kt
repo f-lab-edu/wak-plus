@@ -9,8 +9,9 @@ import com.june0122.wakplus.data.room.ContentRoomDatabase.Companion.INSTANCE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ContentDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+class ContentDatabaseCallback @Inject constructor(private val scope: CoroutineScope) : RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
 
