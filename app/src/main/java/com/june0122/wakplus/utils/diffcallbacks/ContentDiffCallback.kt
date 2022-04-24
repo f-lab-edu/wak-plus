@@ -1,12 +1,12 @@
 package com.june0122.wakplus.utils.diffcallbacks
 
 import androidx.recyclerview.widget.DiffUtil
-import com.june0122.wakplus.data.entity.ContentData
+import com.june0122.wakplus.data.entity.ContentEntity
 import com.june0122.wakplus.data.entity.TwitchVideoEntity
 import com.june0122.wakplus.data.entity.YoutubeVideoEntity
 
-class ContentDiffCallback : DiffUtil.ItemCallback<ContentData>() {
-    override fun areItemsTheSame(oldItem: ContentData, newItem: ContentData): Boolean {
+class ContentDiffCallback : DiffUtil.ItemCallback<ContentEntity>() {
+    override fun areItemsTheSame(oldItem: ContentEntity, newItem: ContentEntity): Boolean {
         return when {
             oldItem is TwitchVideoEntity && newItem is TwitchVideoEntity -> {
                 oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
@@ -20,7 +20,7 @@ class ContentDiffCallback : DiffUtil.ItemCallback<ContentData>() {
         }
     }
 
-    override fun areContentsTheSame(oldItem: ContentData, newItem: ContentData): Boolean {
+    override fun areContentsTheSame(oldItem: ContentEntity, newItem: ContentEntity): Boolean {
         return oldItem == newItem
     }
 }
