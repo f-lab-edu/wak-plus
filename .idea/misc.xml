@@ -4,28 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.21" />
-        <entry key="app/src/main/res/drawable/bg_rounded_corner.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/bg_user_status.xml" value="0.21" />
         <entry key="app/src/main/res/drawable/bg_user_status_ring.xml" value="0.458" />
         <entry key="app/src/main/res/drawable/gradient_status.xml" value="0.21" />
-        <entry key="app/src/main/res/drawable/gradient_status_ring.xml" value="0.458" />
-        <entry key="app/src/main/res/drawable/ic_favorite.xml" value="0.209" />
-        <entry key="app/src/main/res/drawable/ic_favorite_border.xml" value="0.458" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.458" />
-        <entry key="app/src/main/res/drawable/ic_nav_home.xml" value="0.458" />
-        <entry key="app/src/main/res/drawable/ic_twitch.xml" value="0.2105" />
-        <entry key="app/src/main/res/drawable/ic_twitter.xml" value="0.2105" />
-        <entry key="app/src/main/res/drawable/ic_youtube.xml" value="0.121" />
-        <entry key="app/src/main/res/drawable/menu_selector_color.xml" value="0.2105" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.35534488394900293" />
-        <entry key="app/src/main/res/layout/item_sns_platform.xml" value="0.30952380952380953" />
-        <entry key="app/src/main/res/layout/item_streamer.xml" value="0.375" />
-        <entry key="app/src/main/res/layout/item_twitch_video.xml" value="0.375" />
-        <entry key="app/src/main/res/layout/item_user_status.xml" value="0.27956989247311825" />
-        <entry key="app/src/main/res/layout/item_youtube_video.xml" value="0.375" />
-        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.4625908507909363" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2833333333333333" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/item_user_status.xml" value="1.5" />
+        <entry key="app/src/main/res/layout/item_youtube_video.xml" value="0.3206672845227062" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.21" />
       </map>
     </option>
