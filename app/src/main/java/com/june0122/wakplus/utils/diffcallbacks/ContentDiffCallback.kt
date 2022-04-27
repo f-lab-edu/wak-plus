@@ -9,10 +9,10 @@ class ContentDiffCallback : DiffUtil.ItemCallback<ContentEntity>() {
     override fun areItemsTheSame(oldItem: ContentEntity, newItem: ContentEntity): Boolean {
         return when {
             oldItem is TwitchVideoEntity && newItem is TwitchVideoEntity -> {
-                oldItem.twitchVideoInfo.id == newItem.twitchVideoInfo.id
+                oldItem.contentId == newItem.contentId
             }
             oldItem is YoutubeVideoEntity && newItem is YoutubeVideoEntity -> {
-                oldItem.youtubeVideoInfo.id == newItem.youtubeVideoInfo.id
+                oldItem.contentId == newItem.contentId
             }
             else -> {
                 oldItem == newItem

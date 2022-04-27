@@ -18,15 +18,22 @@ interface ContentDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSnsPlatform(sns: SnsPlatformEntity)
 
-    @Query("SELECT * FROM twitch_table")
-    fun getTwitchFavorites(): Flow<List<TwitchVideoEntity>>
+//    @Query("SELECT * FROM favorite_table " +
+//            "INNER JOIN twitch_table ON twitch_table.contentId = favorite_table.contentFavortieId " +
+//            "INNER JOIN youtube_table ON twitch_table.contentId = favorite_table.contentFavortieId "
+//    )
+//    fun getFavorites(): Flow<List<Favorite>>
+
+    @Transaction
+    @Query("SELECT * FROM favorite_table")
+    fun getFavoritesAndContents(): Flow<List<FavoriteWithContents>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFavorite(content: TwitchVideoEntity)
+    suspend fun insertFavorite(favorite: Favorite)
 
     @Delete
-    suspend fun deleteFavorite(content: TwitchVideoEntity)
+    suspend fun deleteFavorite(favorite: Favorite)
 
-    @Query("SELECT COUNT(*) FROM twitch_table WHERE twitchVideoInfo LIKE :contentInfo")
-    suspend fun compareInfo(contentInfo: TwitchVideoInfo): Int
+    @Query("SELECT COUNT(*) FROM favorite_table WHERE contentFavortieId LIKE :contentId")
+    suspend fun compareInfo(contentId: String): Int
 }

@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.june0122.wakplus.data.entity.SnsPlatformEntity
-import com.june0122.wakplus.data.entity.TwitchVideoEntity
+import com.june0122.wakplus.data.entity.*
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
@@ -27,8 +26,8 @@ class FavoriteViewModel @Inject constructor(
 
     private var currentSns: SnsPlatformEntity = SnsPlatformEntity("전체", true)
 
-    private val _favorites = MutableLiveData<List<TwitchVideoEntity>>()
-    val favorites: LiveData<List<TwitchVideoEntity>> = _favorites
+    private val _favorites = MutableLiveData<List<ContentEntity>>()
+    val favorites: LiveData<List<ContentEntity>> = _favorites
 
     private val _snsPlatforms = MutableLiveData<List<SnsPlatformEntity>>()
     val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms
@@ -40,10 +39,10 @@ class FavoriteViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
-        repository.twitchFavorites.onEach { favorites ->
+        repository.favorites.onEach { favorites ->
             _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
                 clear()
-                addAll(favorites)
+                addAll(favorites.flatMap { it.contents })
             }
         }.launchIn(viewModelScope)
     }
@@ -57,10 +56,13 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    override fun onFavoriteClick(favoriteContent: TwitchVideoEntity) {
-        deleteFavorite(favoriteContent)
+    override fun onFavoriteClick(content: ContentEntity) {
+        when (content) {
+            is TwitchVideoEntity -> deleteFavorite(Favorite(content.contentId))
+            is YoutubeVideoEntity -> deleteFavorite(Favorite(content.contentId))
+        }
     }
 
-    private fun deleteFavorite(content: TwitchVideoEntity) =
+    private fun deleteFavorite(content: Favorite) =
         viewModelScope.launch { repository.deleteFavorite(content) }
 }

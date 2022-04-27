@@ -28,9 +28,12 @@ class HomeViewModel @Inject constructor(
     private val repository: ContentRepository
 ) : ViewModel(), StreamerClickListener, SnsClickListener, FavoriteClickListener {
 
-    @Inject lateinit var twitchService: TwitchService
-    @Inject lateinit var twitchAuthService: TwitchAuthService
-    @Inject lateinit var youtubeService: YoutubeService
+    @Inject
+    lateinit var twitchService: TwitchService
+    @Inject
+    lateinit var twitchAuthService: TwitchAuthService
+    @Inject
+    lateinit var youtubeService: YoutubeService
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
@@ -45,8 +48,8 @@ class HomeViewModel @Inject constructor(
     private val _contents = MutableLiveData<List<ContentEntity>>()
     val contents: LiveData<List<ContentEntity>> = _contents
 
-    private val _favorites = MutableLiveData<List<TwitchVideoEntity>>()
-    val favorites: LiveData<List<TwitchVideoEntity>> = _favorites
+    private val _favorites = MutableLiveData<List<Favorite>>()
+    val favorites: LiveData<List<Favorite>> = _favorites
 
     private val _streamers = MutableLiveData<List<StreamerEntity>>()
     val streamers: LiveData<List<StreamerEntity>> = _streamers
@@ -64,10 +67,10 @@ class HomeViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
-        repository.twitchFavorites.onEach { favorites ->
+        repository.favorites.onEach { favorites ->
             _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
-                addAll(favorites)
-                checkFavorites(favorites)
+                addAll(favorites.map { it.favorite })
+                checkFavorites(favorites.map { it.favorite })
             }
         }.launchIn(viewModelScope)
     }
@@ -113,31 +116,67 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onFavoriteClick(favoriteContent: TwitchVideoEntity) {
-        setFavorite(favoriteContent)
+    override fun onFavoriteClick(content: ContentEntity) {
+        setFavorite(content)
     }
 
-    private fun insertFavorite(content: TwitchVideoEntity) =
-        viewModelScope.launch { repository.insertFavorite(content) }
+    private fun insertFavorite(content: Favorite) =
+        viewModelScope.launch {
+            repository.insertFavorite(content)
+        }
 
-    private fun deleteFavorite(content: TwitchVideoEntity) =
-        viewModelScope.launch { repository.deleteFavorite(content) }
+    private fun deleteFavorite(content: Favorite) =
+        viewModelScope.launch {
+            repository.deleteFavorite(content)
+        }
 
-    private fun setFavorite(content: TwitchVideoEntity) = viewModelScope.launch {
-        if (repository.compareInfo(content.twitchVideoInfo)) {
-            deleteFavorite(content)
-        } else {
-            insertFavorite(content.copy(isFavorite = true))
+    private fun setFavorite(content: ContentEntity) = viewModelScope.launch {
+        when (content) {
+            is TwitchVideoEntity -> {
+                if (repository.compareInfo(content.contentId)) {
+                    deleteFavorite(Favorite(content.contentId))
+                } else {
+                    insertFavorite(Favorite(content.contentId))
+                }
+            }
+            is YoutubeVideoEntity -> {
+                if (repository.compareInfo(content.contentId)) {
+                    deleteFavorite(Favorite(content.contentId))
+                } else {
+                    insertFavorite(Favorite(content.contentId))
+                }
+            }
         }
     }
 
-    private fun checkFavorites(favorites: List<TwitchVideoEntity>) {
+    fun checkFavorite(content: ContentEntity): Boolean {
+        return when (content) {
+            is TwitchVideoEntity -> {
+                _favorites.value?.firstOrNull { it.contentFavortieId == content.contentId } != null
+            }
+            is YoutubeVideoEntity -> {
+                _favorites.value?.firstOrNull { it.contentFavortieId == content.contentId } != null
+            }
+        }
+    }
+
+    private fun checkFavorites(favorites: List<Favorite>) {
         _contents.value = _contents.value?.map { content ->
-            val twitchContent = content as TwitchVideoEntity
-            if (favorites.firstOrNull { it.twitchVideoInfo == twitchContent.twitchVideoInfo } != null) twitchContent.copy(
-                isFavorite = true
-            )
-            else twitchContent.copy(isFavorite = false)
+            when (content) {
+                is TwitchVideoEntity -> {
+                    if (favorites.firstOrNull { it.contentFavortieId == content.contentId } != null) content.copy(
+                        isFavorite = true
+                    )
+                    else content.copy(isFavorite = false)
+
+                }
+                is YoutubeVideoEntity -> {
+                    if (favorites.firstOrNull { it.contentFavortieId == content.contentId } != null) content.copy(
+                        isFavorite = true
+                    )
+                    else content.copy(isFavorite = false)
+                }
+            }
         }
     }
 
@@ -165,7 +204,12 @@ class HomeViewModel @Inject constructor(
             val twitchVideos = twitchService.getChannelVideos(idSet.twitchId).data
             val twitchUserInfo = twitchService.getUserInfo(idSet.twitchId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
-                TwitchVideoEntity(twitchVideoInfo, twitchUserInfo, false)
+                TwitchVideoEntity(
+                    contentId = twitchVideoInfo.id,
+                    twitchVideoInfo = twitchVideoInfo,
+                    twitchUserInfo = twitchUserInfo,
+                    isFavorite = false
+                )
             }
             contents
         }
@@ -187,7 +231,12 @@ class HomeViewModel @Inject constructor(
                             getVideoInfo(id = publicItem.snippet.resourceId.videoId)
                                 .items[0]
                                 .let { videoInfo ->
-                                    YoutubeVideoEntity(videoInfo, getStreamerProfile(videoInfo), false)
+                                    YoutubeVideoEntity(
+                                        contentId = videoInfo.id,
+                                        youtubeVideoInfo = videoInfo,
+                                        profileUrl = getStreamerProfile(videoInfo),
+                                        isFavorite = false
+                                    )
                                 }
                         }
                 }
@@ -212,7 +261,6 @@ class HomeViewModel @Inject constructor(
                 when (content) {
                     is TwitchVideoEntity -> content.twitchVideoInfo.publishedAt
                     is YoutubeVideoEntity -> content.youtubeVideoInfo.snippet.publishedAt
-                    else -> 0
                 }
             }
         )
@@ -240,10 +288,13 @@ class HomeViewModel @Inject constructor(
     private fun updateContentsList(contents: List<ContentEntity>) = viewModelScope.launch {
         _contents.run {
             val checkedContent = contents.map { content ->
-                if (content is TwitchVideoEntity) {
-                    content.copy(isFavorite = repository.compareInfo(content.twitchVideoInfo))
-                } else {
-                    content
+                when (content) {
+                    is TwitchVideoEntity -> {
+                        content.copy(isFavorite = repository.compareInfo(content.contentId))
+                    }
+                    is YoutubeVideoEntity -> {
+                        content.copy(isFavorite = repository.compareInfo(content.contentId))
+                    }
                 }
             }
             postValue(mutableListOf())

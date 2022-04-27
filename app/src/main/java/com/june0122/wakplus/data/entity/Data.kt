@@ -1,10 +1,22 @@
 package com.june0122.wakplus.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 sealed class ContentEntity
+
+data class FavoriteWithContents(
+    @Embedded val favorite: Favorite,
+    @Relation(
+        parentColumn = "contentId",
+        entityColumn = "contentFavoriteId"
+    )
+    val contents: List<ContentEntity>
+)
+
+@Entity(tableName = "favorite_table")
+data class Favorite(
+    @PrimaryKey val contentFavortieId: String,
+)
 
 @Entity(tableName = "streamer_table")
 data class StreamerEntity(

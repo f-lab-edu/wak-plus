@@ -49,7 +49,7 @@ class FavoriteFragment : Fragment() {
         }
 
         favoriteViewModel.favorites.observe(viewLifecycleOwner) { favorites ->
-            contentListAdapter.submitList(favorites)
+//            contentListAdapter.submitList(favorites)
         }
     }
 

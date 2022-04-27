@@ -7,9 +7,10 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "twitch_table")
 data class TwitchVideoEntity(
-    @PrimaryKey val twitchVideoInfo: TwitchVideoInfo,
+    @PrimaryKey val contentId: String,
+    @ColumnInfo val twitchVideoInfo: TwitchVideoInfo,
     @ColumnInfo val twitchUserInfo: TwitchUserInfo,
-    val isFavorite: Boolean,
+    @ColumnInfo val isFavorite: Boolean,
 ) : ContentEntity()
 
 data class TwitchToken(

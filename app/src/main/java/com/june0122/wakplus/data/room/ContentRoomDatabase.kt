@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Database(
     entities = [
+        Favorite::class,
         StreamerEntity::class,
         TwitchVideoEntity::class,
         YoutubeVideoEntity::class,

@@ -54,9 +54,6 @@ class ContentListAdapter(
             is YoutubeVideoEntity -> if (holder is YoutubeVideoHolder) {
                 holder.bind(content)
             }
-            else -> {
-
-            }
         }
     }
 

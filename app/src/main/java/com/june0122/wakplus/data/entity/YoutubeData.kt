@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "youtube_table")
 data class YoutubeVideoEntity(
-    @PrimaryKey val youtubeVideoInfo: YoutubeVideoInfo,
+    @PrimaryKey val contentId: String,
+    @ColumnInfo val youtubeVideoInfo: YoutubeVideoInfo,
     @ColumnInfo val profileUrl: String,
-    val isFavorite: Boolean,
+    @ColumnInfo val isFavorite: Boolean,
 ) : ContentEntity()
 
 /** Get User Info */
@@ -122,7 +123,7 @@ data class YoutubeVideoInfo(
     val statistics: Statistics,
     val status: Status,
     val topicDetails: TopicDetails
-) : ContentEntity()
+)
 
 data class ContentDetails(
     val caption: String,
