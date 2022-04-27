@@ -11,21 +11,16 @@ import kotlinx.coroutines.CoroutineScope
 
 @Database(
     entities = [
-        Favorite::class,
+        Content::class,
         StreamerEntity::class,
-        TwitchVideoEntity::class,
-        YoutubeVideoEntity::class,
         SnsPlatformEntity::class],
     version = 1,
     exportSchema = false
 )
 @TypeConverters(
     value = [
+        ContentInfoTypeConverter::class,
         IdSetTypeConverter::class,
-        TwitchUserInfoTypeConverter::class,
-        TwitchVideoInfoTypeConverter::class,
-        YotubeUserInfoTypeConverter::class,
-        YoutubeVideoInfoTypeConverter::class,
         SnsPlatformTypeConverter::class,
     ]
 )

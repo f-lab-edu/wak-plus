@@ -1,7 +1,9 @@
 package com.june0122.wakplus.data.room
 
 import androidx.room.*
-import com.june0122.wakplus.data.entity.*
+import com.june0122.wakplus.data.entity.Content
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,22 +20,15 @@ interface ContentDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSnsPlatform(sns: SnsPlatformEntity)
 
-//    @Query("SELECT * FROM favorite_table " +
-//            "INNER JOIN twitch_table ON twitch_table.contentId = favorite_table.contentFavortieId " +
-//            "INNER JOIN youtube_table ON twitch_table.contentId = favorite_table.contentFavortieId "
-//    )
-//    fun getFavorites(): Flow<List<Favorite>>
-
-    @Transaction
-    @Query("SELECT * FROM favorite_table")
-    fun getFavoritesAndContents(): Flow<List<FavoriteWithContents>>
+    @Query("SELECT * FROM content_table")
+    fun getContents(): Flow<List<Content>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFavorite(favorite: Favorite)
+    suspend fun insertFavorite(content: Content)
 
     @Delete
-    suspend fun deleteFavorite(favorite: Favorite)
+    suspend fun deleteFavorite(content: Content)
 
-    @Query("SELECT COUNT(*) FROM favorite_table WHERE contentFavortieId LIKE :contentId")
+    @Query("SELECT COUNT(*) FROM content_table WHERE contentId LIKE :contentId")
     suspend fun compareInfo(contentId: String): Int
 }

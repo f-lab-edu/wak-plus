@@ -2,20 +2,35 @@ package com.june0122.wakplus.data.entity
 
 import androidx.room.*
 
-sealed class ContentEntity
-
-data class FavoriteWithContents(
-    @Embedded val favorite: Favorite,
-    @Relation(
-        parentColumn = "contentId",
-        entityColumn = "contentFavoriteId"
-    )
-    val contents: List<ContentEntity>
+@Entity(tableName = "content_table")
+data class Content(
+    @PrimaryKey val contentId: String,
+    @ColumnInfo val contentType: String,
+    @ColumnInfo val contentInfo: ContentInfo,
+    @ColumnInfo val profileUrl: String,
+    @ColumnInfo val isFavorite: Boolean,
 )
 
-@Entity(tableName = "favorite_table")
-data class Favorite(
-    @PrimaryKey val contentFavortieId: String,
+data class ContentInfo(
+    val id: String,
+    val streamId: String,
+    val userId: String,
+    val userLogin: String,
+    val userName: String,
+    val title: String,
+    val description: String,
+    val createdAt: String,
+    val publishedAt: String,
+    val url: String,
+    val thumbnailUrl: String,
+    val viewable: String,
+    val viewCount: String,
+    val language: String,
+    val type: String,
+    val duration: String,
+    val mutedSegments: String,
+    val displayName: String,
+    val profileImageUrl: String,
 )
 
 @Entity(tableName = "streamer_table")
