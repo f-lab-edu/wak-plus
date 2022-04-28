@@ -1,6 +1,6 @@
 package com.june0122.wakplus.data.api
 
-import com.june0122.wakplus.data.entitiy.*
+import com.june0122.wakplus.data.entity.*
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,7 +10,7 @@ interface YoutubeService {
         @Query("key") key: String = "AIzaSyCfAkqsoGCK982DvNZhU-8hz8FIv4Zrj_8",
         @Query("part") part: String = "id, snippet",
         @Query("id") channelId: String,
-    ): YoutubeUserInfos
+    ): YoutubeUserInfoSet
 
     @GET("search")
     suspend fun getChannelVideos(

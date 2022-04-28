@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.june0122.wakplus.ContentsApplication
 import com.june0122.wakplus.R
 import com.june0122.wakplus.databinding.FragmentHomeBinding
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
@@ -31,7 +30,9 @@ class HomeFragment : Fragment() {
     private val horizontalLayoutManager by lazy {
         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
-    private val contentListAdapter: ContentListAdapter = ContentListAdapter()
+    private val contentListAdapter: ContentListAdapter = ContentListAdapter { content ->
+        homeViewModel.onFavoriteClick(content)
+    }
     private val streamerListAdapter: StreamerListAdapter by lazy {
         StreamerListAdapter(object : StreamerClickListener {
             override fun onStreamerClick(position: Int) {
@@ -61,7 +62,9 @@ class HomeFragment : Fragment() {
         homeViewModel.streamerListAdapter = streamerListAdapter
         homeViewModel.snsListAdapter = snsListAdapter
 
-        homeViewModel.collectAllStreamersContents()
+        if (contentListAdapter.itemCount == 0) {
+            homeViewModel.collectAllStreamersContents()
+        }
 
         homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
             contentListAdapter.submitList(contents)
@@ -78,6 +81,8 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        streamerRecyclerView.layoutManager = null
+        snsRecyclerView.layoutManager = null
         contentRecyclerView.layoutManager = null
     }
 

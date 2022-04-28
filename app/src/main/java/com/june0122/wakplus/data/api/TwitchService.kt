@@ -1,7 +1,7 @@
 package com.june0122.wakplus.data.api
 
-import com.june0122.wakplus.data.entitiy.TwitchUserInfos
-import com.june0122.wakplus.data.entitiy.TwitchVideos
+import com.june0122.wakplus.data.entity.TwitchUserInfoSet
+import com.june0122.wakplus.data.entity.TwitchVideos
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,5 +10,5 @@ interface TwitchService {
     suspend fun getChannelVideos(@Query("user_id") userId: String): TwitchVideos
 
     @GET("users")
-    suspend fun getUserInfo(@Query("id") userId: String): TwitchUserInfos
+    suspend fun getUserInfo(@Query("id") userId: String): TwitchUserInfoSet
 }

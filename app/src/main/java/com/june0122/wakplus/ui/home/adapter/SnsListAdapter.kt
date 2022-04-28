@@ -3,7 +3,7 @@ package com.june0122.wakplus.ui.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.databinding.ItemSnsPlatformBinding
 import com.june0122.wakplus.ui.home.viewholder.SnsListViewHolder
 import com.june0122.wakplus.utils.diffcallbacks.SnsDiffCallback

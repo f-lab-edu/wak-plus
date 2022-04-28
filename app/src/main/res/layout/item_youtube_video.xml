@@ -6,12 +6,12 @@
     <data>
 
         <variable
-            name="profileUrl"
-            type="String" />
+            name="favoriteClickListener"
+            type="com.june0122.wakplus.utils.listeners.FavoriteClickListener" />
 
         <variable
-            name="videoInfo"
-            type="com.june0122.wakplus.data.entitiy.YoutubeVideoInfo" />
+            name="content"
+            type="com.june0122.wakplus.data.entity.Content" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
 
         <ImageView
             android:id="@+id/img_thumbnail"
-            thumbnailUrl="@{videoInfo.snippet.thumbnails.high.url}"
+            thumbnailUrl="@{content.contentInfo.thumbnailUrl}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
@@ -34,24 +34,23 @@
 
         <TextView
             android:id="@+id/tv_duration"
-            duration="@{videoInfo.contentDetails.duration}"
+            duration="@{content.contentInfo.duration}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="#E6000000"
+            android:background="@drawable/bg_rounded_corner"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:textAlignment="center"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/img_thumbnail"
             app:layout_constraintEnd_toEndOf="@+id/img_thumbnail"
-            tools:background="@drawable/bg_rounded_corner"
             tools:text="20:16" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_channel_profile"
-            circularImageUrl="@{profileUrl}"
+            circularImageUrl="@{content.profileUrl}"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -70,7 +69,7 @@
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{videoInfo.snippet.title}"
+            android:text="@{content.contentInfo.title}"
             android:textColor="@color/Text"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -86,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@{videoInfo.snippet.channelTitle}"
+            android:text="@{content.contentInfo.userName}"
             android:textColor="@color/Text"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/img_channel_profile"
@@ -107,7 +106,7 @@
 
         <TextView
             android:id="@+id/tv_view_count"
-            viewCount="@{videoInfo.statistics.viewCount}"
+            viewCount="@{content.contentInfo.viewCount}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -132,7 +131,7 @@
 
         <TextView
             android:id="@+id/tv_elapsed_time"
-            elapsedTime="@{videoInfo.snippet.publishedAt}"
+            elapsedTime="@{content.contentInfo.publishedAt}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -142,6 +141,19 @@
             app:layout_constraintStart_toEndOf="@+id/tv_dot2"
             app:layout_constraintTop_toBottomOf="@+id/tv_video_title"
             tools:text="1개월" />
+
+        <ImageView
+            android:id="@+id/btn_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_rounded_corner"
+            android:onClick="@{() -> favoriteClickListener.onFavoriteClick(content)}"
+            android:src="@{content.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_border}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_favorite_border" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

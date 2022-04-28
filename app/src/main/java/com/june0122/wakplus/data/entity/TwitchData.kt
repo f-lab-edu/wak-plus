@@ -1,15 +1,6 @@
-package com.june0122.wakplus.data.entitiy
+package com.june0122.wakplus.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-
-@Entity(tableName = "twitch_table")
-data class TwitchVideoEntity(
-    @PrimaryKey val twitchUserInfo: TwitchUserInfo,
-    @ColumnInfo val twitchVideoInfo: TwitchVideoInfo,
-) : ContentData()
 
 data class TwitchToken(
     @SerializedName("access_token") val accessToken: String,
@@ -45,7 +36,7 @@ data class TwitchVideoInfo(
 )
 
 /** Get User Info */
-data class TwitchUserInfos(
+data class TwitchUserInfoSet(
     @SerializedName("data") val data: List<TwitchUserInfo>
 )
 
@@ -63,7 +54,7 @@ data class TwitchUserInfo(
 )
 
 /** Search Channels */
-data class TwitchChannelInfos(
+data class TwitchChannelInfoSet(
     @SerializedName("data") val data: List<TwitchChannelInfo>,
     @SerializedName("pagination") val pagination: Pagination
 )

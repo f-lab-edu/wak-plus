@@ -1,7 +1,7 @@
 package com.june0122.wakplus.ui.home.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
-import com.june0122.wakplus.data.entitiy.StreamerEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.databinding.ItemStreamerBinding
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 

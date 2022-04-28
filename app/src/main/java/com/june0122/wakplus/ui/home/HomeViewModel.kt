@@ -8,11 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.june0122.wakplus.data.api.TwitchAuthService
 import com.june0122.wakplus.data.api.TwitchService
 import com.june0122.wakplus.data.api.YoutubeService
-import com.june0122.wakplus.data.entitiy.*
+import com.june0122.wakplus.data.entity.*
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
+import com.june0122.wakplus.utils.listeners.FavoriteClickListener
 import com.june0122.wakplus.utils.listeners.SnsClickListener
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: ContentRepository
-) : ViewModel(), StreamerClickListener, SnsClickListener {
+) : ViewModel(), StreamerClickListener, SnsClickListener, FavoriteClickListener {
 
     @Inject lateinit var twitchService: TwitchService
     @Inject lateinit var twitchAuthService: TwitchAuthService
@@ -41,8 +42,11 @@ class HomeViewModel @Inject constructor(
     private val _snsPlatforms = MutableLiveData<List<SnsPlatformEntity>>()
     val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms
 
-    private val _contents = MutableLiveData<List<ContentData>>()
-    val contents: LiveData<List<ContentData>> = _contents
+    private val _contents = MutableLiveData<List<Content>>()
+    val contents: LiveData<List<Content>> = _contents
+
+    private val _favorites = MutableLiveData<List<Content>>()
+    val favorites: LiveData<List<Content>> = _favorites
 
     private val _streamers = MutableLiveData<List<StreamerEntity>>()
     val streamers: LiveData<List<StreamerEntity>> = _streamers
@@ -57,6 +61,13 @@ class HomeViewModel @Inject constructor(
         repository.snsPlatforms.onEach { snsPlatforms ->
             _snsPlatforms.value = (_snsPlatforms.value?.toMutableList() ?: mutableListOf()).apply {
                 addAll(snsPlatforms)
+            }
+        }.launchIn(viewModelScope)
+
+        repository.favorites.onEach { favorites ->
+            _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
+                addAll(favorites)
+                checkFavorites(favorites)
             }
         }.launchIn(viewModelScope)
     }
@@ -102,6 +113,38 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    override fun onFavoriteClick(content: Content) {
+        setFavorite(content)
+    }
+
+    private fun insertFavorite(content: Content) =
+        viewModelScope.launch {
+            repository.insertFavorite(content)
+        }
+
+    private fun deleteFavorite(content: Content) =
+        viewModelScope.launch {
+            repository.deleteFavorite(content)
+        }
+
+    private fun setFavorite(content: Content) = viewModelScope.launch {
+        if (repository.compareInfo(content.contentId)) {
+            deleteFavorite(content)
+        } else {
+            insertFavorite(content.copy(isFavorite = true))
+        }
+
+    }
+
+    private fun checkFavorites(favorites: List<Content>) {
+        _contents.value = _contents.value?.map { content ->
+            if (favorites.firstOrNull { it.contentId == content.contentId } != null) content.copy(
+                isFavorite = true
+            )
+            else content.copy(isFavorite = false)
+        }
+    }
+
     /** TWITCH */
     private suspend fun createTwitchAccessToken(): String = withContext(Dispatchers.IO) {
         twitchAuthService.getAccessToken(
@@ -120,14 +163,39 @@ class HomeViewModel @Inject constructor(
         twitchService.getUserInfo(userId).data[0]
     }
 
-    private suspend fun getTwitchVideos(idSet: IdSet): List<ContentData> {
+    private suspend fun getTwitchVideos(idSet: IdSet): List<Content> {
         val contentData = viewModelScope.async {
-//            twitchService = TwitchService.create(getTwitchAccessToken())
             // TODO: 저장된 Access Token을 사용하도록 변경
             val twitchVideos = twitchService.getChannelVideos(idSet.twitchId).data
             val twitchUserInfo = twitchService.getUserInfo(idSet.twitchId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
-                TwitchVideoEntity(twitchUserInfo, twitchVideoInfo)
+                Content(
+                    contentId = twitchVideoInfo.id,
+                    contentType = "twitch",
+                    contentInfo = ContentInfo(
+                        twitchVideoInfo.id,
+                        twitchVideoInfo.streamId,
+                        twitchVideoInfo.userId,
+                        twitchVideoInfo.userLogin,
+                        twitchVideoInfo.userName,
+                        twitchVideoInfo.title,
+                        twitchVideoInfo.description,
+                        twitchVideoInfo.createdAt,
+                        twitchVideoInfo.publishedAt,
+                        twitchVideoInfo.url,
+                        twitchVideoInfo.thumbnailUrl,
+                        twitchVideoInfo.viewable,
+                        twitchVideoInfo.viewCount,
+                        twitchVideoInfo.language,
+                        twitchVideoInfo.type,
+                        twitchVideoInfo.duration,
+                        "twitchVideoInfo.mutedSegments",
+                        twitchUserInfo.display_name,
+                        twitchUserInfo.profile_image_url
+                    ),
+                    profileUrl = twitchUserInfo.profile_image_url,
+                    isFavorite = false
+                )
             }
             contents
         }
@@ -136,7 +204,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /** YOUTUBE */
-    private suspend fun getYoutubeVideos(idSet: IdSet): List<ContentData> = withContext(Dispatchers.IO) {
+    private suspend fun getYoutubeVideos(idSet: IdSet): List<Content> = withContext(Dispatchers.IO) {
         youtubeService.run {
             getPlaylists(channelId = idSet.youtubeId)
                 .items
@@ -149,7 +217,33 @@ class HomeViewModel @Inject constructor(
                             getVideoInfo(id = publicItem.snippet.resourceId.videoId)
                                 .items[0]
                                 .let { videoInfo ->
-                                    YoutubeVideoEntity(getStreamerProfile(videoInfo), videoInfo)
+                                    Content(
+                                        contentId = videoInfo.id,
+                                        contentType = "youtube",
+                                        contentInfo = ContentInfo(
+                                            videoInfo.id,
+                                            "videoInfo.streamId",
+                                            videoInfo.snippet.channelId,
+                                            "videoInfo.userLogin",
+                                            videoInfo.snippet.channelTitle,
+                                            videoInfo.snippet.title,
+                                            videoInfo.snippet.description,
+                                            "videoInfo.createdAt",
+                                            videoInfo.snippet.publishedAt,
+                                            "https://youtu.be/" + videoInfo.id,
+                                            videoInfo.snippet.thumbnails.high.url,
+                                            "videoInfo.viewable",
+                                            videoInfo.statistics.viewCount,
+                                            videoInfo.snippet.defaultAudioLanguage,
+                                            videoInfo.kind,
+                                            videoInfo.contentDetails.duration,
+                                            "",
+                                            "",
+                                            ""
+                                        ),
+                                        profileUrl = getStreamerProfile(videoInfo),
+                                        isFavorite = false
+                                    )
                                 }
                         }
                 }
@@ -168,19 +262,15 @@ class HomeViewModel @Inject constructor(
         return profileUrl
     }
 
-    private fun List<ContentData>.sortByRecentUploads(): List<ContentData> {
+    private fun List<Content>.sortByRecentUploads(): List<Content> {
         return this.sortedWith(
             compareByDescending { content ->
-                when (content) {
-                    is TwitchVideoEntity -> content.twitchVideoInfo.publishedAt
-                    is YoutubeVideoEntity -> content.youtubeVideoInfo.snippet.publishedAt
-                    else -> 0
-                }
+                content.contentInfo.publishedAt
             }
         )
     }
 
-    private suspend fun fetchSnsContents(idSet: IdSet): List<ContentData> {
+    private suspend fun fetchSnsContents(idSet: IdSet): List<Content> {
         return when (currentSns.serviceName) {
             "전체" -> {
                 /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
@@ -199,10 +289,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateContentsList(contents: List<ContentData>) = viewModelScope.launch {
+    private fun updateContentsList(contents: List<Content>) = viewModelScope.launch {
         _contents.run {
+            val checkedContent = contents.map { content ->
+                content.copy(isFavorite = repository.compareInfo(content.contentId))
+            }
             postValue(mutableListOf())
-            postValue(contents.sortByRecentUploads())
+            postValue(checkedContent.sortByRecentUploads())
         }
     }
 
@@ -222,7 +315,7 @@ class HomeViewModel @Inject constructor(
     fun collectAllStreamersContents() {
         contentsJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val contents = mutableListOf<ContentData>()
+                val contents = mutableListOf<Content>()
                 repository.isedolStreamers.onEach { streamers ->
                     streamers.forEach { streamer ->
                         contents.addAll(fetchSnsContents(streamer.idSet))

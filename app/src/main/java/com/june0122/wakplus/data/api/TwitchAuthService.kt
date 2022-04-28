@@ -1,6 +1,6 @@
 package com.june0122.wakplus.data.api
 
-import com.june0122.wakplus.data.entitiy.TwitchToken
+import com.june0122.wakplus.data.entity.TwitchToken
 import retrofit2.http.POST
 import retrofit2.http.Query
 

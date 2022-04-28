@@ -1,26 +1,26 @@
 package com.june0122.wakplus.data.room
 
 import android.content.Context
-import androidx.room.*
-import com.june0122.wakplus.data.entitiy.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.june0122.wakplus.data.entity.*
 import com.june0122.wakplus.utils.converters.*
 import kotlinx.coroutines.CoroutineScope
 
 @Database(
     entities = [
+        Content::class,
         StreamerEntity::class,
-        TwitchVideoEntity::class,
-        YoutubeVideoEntity::class,
         SnsPlatformEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(
     value = [
+        ContentInfoTypeConverter::class,
         IdSetTypeConverter::class,
-        TwitchUserInfoTypeConverter::class,
-        TwitchVideoInfoTypeConverter::class,
-        YotubeUserInfoTypeConverter::class,
-        YoutubeVideoInfoTypeConverter::class,
         SnsPlatformTypeConverter::class,
     ]
 )

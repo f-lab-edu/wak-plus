@@ -16,6 +16,7 @@
     <color name="OnError">#FFFFFF</color>
 
     <color name="black">#FF000000</color>
+    <color name="black_80">#CC000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="raisin_black">#222222</color>
     <color name="black_olive">#3A3A3A</color>

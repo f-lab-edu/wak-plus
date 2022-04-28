@@ -1,11 +1,9 @@
 package com.june0122.wakplus.data.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import com.june0122.wakplus.data.entitiy.SnsPlatformEntity
-import com.june0122.wakplus.data.entitiy.StreamerEntity
+import androidx.room.*
+import com.june0122.wakplus.data.entity.Content
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,4 +19,16 @@ interface ContentDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSnsPlatform(sns: SnsPlatformEntity)
+
+    @Query("SELECT * FROM content_table")
+    fun getContents(): Flow<List<Content>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertFavorite(content: Content)
+
+    @Delete
+    suspend fun deleteFavorite(content: Content)
+
+    @Query("SELECT COUNT(*) FROM content_table WHERE contentId LIKE :contentId")
+    suspend fun compareInfo(contentId: String): Int
 }
