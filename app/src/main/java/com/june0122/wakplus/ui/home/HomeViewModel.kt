@@ -5,11 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.june0122.wakplus.BuildConfig
 import com.june0122.wakplus.data.api.TwitchAuthService
 import com.june0122.wakplus.data.api.TwitchService
 import com.june0122.wakplus.data.api.YoutubeService
 import com.june0122.wakplus.data.entity.*
 import com.june0122.wakplus.data.repository.ContentRepository
+import com.june0122.wakplus.data.repository.PreferencesRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
@@ -25,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: ContentRepository
+    private val repository: ContentRepository,
+    private val preferencesRepository: PreferencesRepository
 ) : ViewModel(), StreamerClickListener, SnsClickListener, FavoriteClickListener {
 
     @Inject lateinit var twitchService: TwitchService
@@ -148,15 +151,16 @@ class HomeViewModel @Inject constructor(
     /** TWITCH */
     private suspend fun createTwitchAccessToken(): String = withContext(Dispatchers.IO) {
         twitchAuthService.getAccessToken(
-            "ho8a2b48jp7kpylb5uac3fpbug3pam",
-            "9i7r5g3bizajy8c8yl8uxpevp1hoza",
+            BuildConfig.TWITCH_CLIENT_ID,
+            BuildConfig.TWITCH_CLIENT_SECRET,
             "client_credentials"
         ).accessToken
     }
 
-    // TODO: SharedPreference 또는 DB에 Access Token 저장시키기
-    fun storeTwitchAccessToken() {
-//        viewModelScope.launch { twitchService = TwitchService.create(getTwitchAccessToken()) }
+    private fun storeTwitchAccessToken() {
+        viewModelScope.launch {
+            preferencesRepository.saveTwitchAccessToken(createTwitchAccessToken())
+        }
     }
 
     suspend fun getTwitchUserInfo(userId: String): TwitchUserInfo = withContext(Dispatchers.IO) {
@@ -164,8 +168,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun getTwitchVideos(idSet: IdSet): List<Content> {
+        storeTwitchAccessToken()
+
         val contentData = viewModelScope.async {
-            // TODO: 저장된 Access Token을 사용하도록 변경
             val twitchVideos = twitchService.getChannelVideos(idSet.twitchId).data
             val twitchUserInfo = twitchService.getUserInfo(idSet.twitchId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
