@@ -34,6 +34,7 @@ class HomeViewModel @Inject constructor(
     @Inject lateinit var twitchService: TwitchService
     @Inject lateinit var twitchAuthService: TwitchAuthService
     @Inject lateinit var youtubeService: YoutubeService
+    @Inject lateinit var twitchAuthStatus: String
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
@@ -157,10 +158,8 @@ class HomeViewModel @Inject constructor(
         ).accessToken
     }
 
-    private fun storeTwitchAccessToken() {
-        viewModelScope.launch {
-            preferencesRepository.saveTwitchAccessToken(createTwitchAccessToken())
-        }
+    private suspend fun storeTwitchAccessToken() {
+        preferencesRepository.saveTwitchAccessToken(createTwitchAccessToken())
     }
 
     suspend fun getTwitchUserInfo(userId: String): TwitchUserInfo = withContext(Dispatchers.IO) {
@@ -168,10 +167,17 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun getTwitchVideos(idSet: IdSet): List<Content> {
-        storeTwitchAccessToken()
+        val contentData = viewModelScope.async(Dispatchers.IO) {
 
-        val contentData = viewModelScope.async {
-            val twitchVideos = twitchService.getChannelVideos(idSet.twitchId).data
+            val twitchVideos = try {
+                Log.e("TEST", "NO EXCEPTION")
+                twitchService.getChannelVideos(idSet.twitchId).data
+            } catch (e: Exception) {
+                Log.e("TEST", "EXCEPTION : ${e.printStackTrace()}")
+                storeTwitchAccessToken()
+                twitchService.getChannelVideos(idSet.twitchId).data
+            }
+
             val twitchUserInfo = twitchService.getUserInfo(idSet.twitchId).data[0]
             val contents = twitchVideos.map { twitchVideoInfo ->
                 Content(
