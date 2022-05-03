@@ -1,6 +1,5 @@
 package com.june0122.wakplus.di
 
-import android.util.Log
 import com.june0122.wakplus.BuildConfig
 import com.june0122.wakplus.data.api.TwitchService
 import com.june0122.wakplus.data.repository.PreferencesRepository
@@ -17,6 +16,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -24,7 +24,6 @@ import javax.inject.Singleton
 object TwitchNetworkModule {
     private const val BASE_URL = "https://api.twitch.tv/helix/"
     private val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
-    private lateinit var twitchAccessToken: String
 
     @Singleton
     @Provides
@@ -43,11 +42,13 @@ object TwitchNetworkModule {
             .create(TwitchService::class.java)
     }
 
-    class TwitchAuthInterceptor(
+    class TwitchAuthInterceptor @Inject constructor(
         private val preferencesRepository: PreferencesRepository
     ) : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
+
+            val twitchAccessToken: String
 
             runBlocking {
                 twitchAccessToken = preferencesRepository.getTwitchAccessToken().first()

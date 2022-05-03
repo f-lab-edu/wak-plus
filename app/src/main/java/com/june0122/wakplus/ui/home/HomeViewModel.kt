@@ -34,7 +34,6 @@ class HomeViewModel @Inject constructor(
     @Inject lateinit var twitchService: TwitchService
     @Inject lateinit var twitchAuthService: TwitchAuthService
     @Inject lateinit var youtubeService: YoutubeService
-    @Inject lateinit var twitchAuthStatus: String
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
