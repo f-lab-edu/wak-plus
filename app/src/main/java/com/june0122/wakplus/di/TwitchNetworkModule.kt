@@ -1,10 +1,15 @@
 package com.june0122.wakplus.di
 
+import android.util.Log
+import com.june0122.wakplus.BuildConfig
 import com.june0122.wakplus.data.api.TwitchService
+import com.june0122.wakplus.data.repository.PreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -17,18 +22,19 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object TwitchNetworkModule {
-    // TODO: Access token 변경 및 보안 처리
-    private const val ACCESS_TOKEN = "ywwhqstujqw66iy7ch4qyhapukulls"
     private const val BASE_URL = "https://api.twitch.tv/helix/"
     private val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(logger)
-        .addInterceptor(TwitchAuthInterceptor(ACCESS_TOKEN))
-        .build()
+    private lateinit var twitchAccessToken: String
 
     @Singleton
     @Provides
-    fun provideTwitchService(): TwitchService {
+    fun provideTwitchService(preferencesRepository: PreferencesRepository): TwitchService {
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(logger)
+            .addInterceptor(TwitchAuthInterceptor(preferencesRepository))
+            .build()
+
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
@@ -37,13 +43,21 @@ object TwitchNetworkModule {
             .create(TwitchService::class.java)
     }
 
-    class TwitchAuthInterceptor(private val accessToken: String) : Interceptor {
+    class TwitchAuthInterceptor(
+        private val preferencesRepository: PreferencesRepository
+    ) : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
+
+            runBlocking {
+                twitchAccessToken = preferencesRepository.getTwitchAccessToken().first()
+            }
+
             val newRequest = request().newBuilder()
-                .addHeader("Authorization", "Bearer $accessToken")
-                .addHeader("Client-Id", "ho8a2b48jp7kpylb5uac3fpbug3pam")
+                .addHeader("Authorization", "Bearer $twitchAccessToken")
+                .addHeader("Client-Id", BuildConfig.TWITCH_CLIENT_ID)
                 .build()
+
             proceed(newRequest)
         }
     }

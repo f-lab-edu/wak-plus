@@ -8,6 +8,9 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdk 31
 
@@ -19,6 +22,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "TWITCH_CLIENT_ID", properties["twitch_client_id"]
+        buildConfigField "String", "TWITCH_CLIENT_SECRET", properties["twitch_client_secret"]
+        buildConfigField "String", "YOUTUBE_API_KEY", properties["youtube_api_key"]
     }
 
     buildTypes {
@@ -86,4 +93,8 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.38.1")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 }
