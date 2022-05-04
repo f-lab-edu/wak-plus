@@ -9,19 +9,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ContentDao {
     @Query("SELECT * FROM streamer_table")
-    fun getStreamers(): Flow<List<StreamerEntity>>
+    fun getAllStreamers(): Flow<List<StreamerEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertStreamer(streamer: StreamerEntity)
 
     @Query("SELECT * FROM sns_table")
-    fun getSnsPlatforms(): Flow<List<SnsPlatformEntity>>
+    fun getAllSnsPlatforms(): Flow<List<SnsPlatformEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSnsPlatform(sns: SnsPlatformEntity)
 
     @Query("SELECT * FROM content_table")
-    fun getContents(): Flow<List<Content>>
+    fun getAllFavorites(): Flow<List<Content>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavorite(content: Content)
