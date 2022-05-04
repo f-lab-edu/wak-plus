@@ -34,18 +34,18 @@ class FavoriteViewModel @Inject constructor(
     val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms
 
     init {
-        repository.snsPlatforms.onEach { snsPlatforms ->
-            _snsPlatforms.value = (_snsPlatforms.value?.toMutableList() ?: mutableListOf()).apply {
-                addAll(snsPlatforms)
-            }
-        }.launchIn(viewModelScope)
+        repository.flowAllSnsPlatforms()
+            .onEach { snsPlatforms ->
+                _snsPlatforms.value = snsPlatforms
+            }.launchIn(viewModelScope)
 
-        repository.favorites.onEach { favorites ->
-            _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
-                clear()
-                addAll(favorites)
-            }
-        }.launchIn(viewModelScope)
+        repository.flowAllFavorites()
+            .onEach { favorites ->
+                _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
+                    clear()
+                    addAll(favorites)
+                }
+            }.launchIn(viewModelScope)
     }
 
     override fun onSnsClick(position: Int) {

@@ -10,9 +10,14 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ContentRepository @Inject constructor(private val contentDao: ContentDao) {
-    val isedolStreamers: Flow<List<StreamerEntity>> = contentDao.getStreamers()
-    val snsPlatforms: Flow<List<SnsPlatformEntity>> = contentDao.getSnsPlatforms()
-    val favorites: Flow<List<Content>> = contentDao.getContents()
+    fun flowAllStreamers(): Flow<List<StreamerEntity>> =
+        contentDao.getAllStreamers()
+
+    fun flowAllSnsPlatforms(): Flow<List<SnsPlatformEntity>> =
+        contentDao.getAllSnsPlatforms()
+
+    fun flowAllFavorites(): Flow<List<Content>> =
+        contentDao.getAllFavorites()
 
     suspend fun compareInfo(contentId: String): Boolean = withContext(Dispatchers.IO) {
         contentDao.compareInfo(contentId) > 0
