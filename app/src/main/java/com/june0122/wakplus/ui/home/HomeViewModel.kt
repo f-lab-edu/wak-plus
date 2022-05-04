@@ -60,21 +60,22 @@ class HomeViewModel @Inject constructor(
     val streamers: LiveData<List<StreamerEntity>> = _streamers
 
     init {
-        repository.flowAllStreamers()
-            .onEach { streamers ->
-                _streamers.value = streamers
-            }.launchIn(viewModelScope)
+        repository.run {
+            flowAllStreamers()
+                .onEach { streamers -> _streamers.value = streamers }
+                .launchIn(viewModelScope)
 
-        repository.flowAllSnsPlatforms()
-            .onEach { snsPlatforms ->
-                _snsPlatforms.value = snsPlatforms
-            }.launchIn(viewModelScope)
+            flowAllSnsPlatforms()
+                .onEach { snsPlatforms -> _snsPlatforms.value = snsPlatforms }
+                .launchIn(viewModelScope)
 
-        repository.flowAllFavorites()
-            .onEach { favorites ->
-                _favorites.value = favorites
-                checkFavorites(favorites)
-            }.launchIn(viewModelScope)
+            flowAllFavorites()
+                .onEach { favorites ->
+                    _favorites.value = favorites
+                    checkFavorites(favorites)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     private var contentsJob: Job? = null
