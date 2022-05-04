@@ -31,9 +31,14 @@ class HomeViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel(), StreamerClickListener, SnsClickListener, FavoriteClickListener {
 
-    @Inject lateinit var twitchService: TwitchService
-    @Inject lateinit var twitchAuthService: TwitchAuthService
-    @Inject lateinit var youtubeService: YoutubeService
+    @Inject
+    lateinit var twitchService: TwitchService
+
+    @Inject
+    lateinit var twitchAuthService: TwitchAuthService
+
+    @Inject
+    lateinit var youtubeService: YoutubeService
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
@@ -55,24 +60,21 @@ class HomeViewModel @Inject constructor(
     val streamers: LiveData<List<StreamerEntity>> = _streamers
 
     init {
-        repository.isedolStreamers.onEach { streamers ->
-            _streamers.value = (_streamers.value?.toMutableList() ?: mutableListOf()).apply {
-                addAll(streamers)
-            }
-        }.launchIn(viewModelScope)
+        repository.flowAllStreamers()
+            .onEach { streamers ->
+                _streamers.value = streamers
+            }.launchIn(viewModelScope)
 
-        repository.snsPlatforms.onEach { snsPlatforms ->
-            _snsPlatforms.value = (_snsPlatforms.value?.toMutableList() ?: mutableListOf()).apply {
-                addAll(snsPlatforms)
-            }
-        }.launchIn(viewModelScope)
+        repository.flowAllSnsPlatforms()
+            .onEach { snsPlatforms ->
+                _snsPlatforms.value = snsPlatforms
+            }.launchIn(viewModelScope)
 
-        repository.favorites.onEach { favorites ->
-            _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
-                addAll(favorites)
+        repository.flowAllFavorites()
+            .onEach { favorites ->
+                _favorites.value = favorites
                 checkFavorites(favorites)
-            }
-        }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     private var contentsJob: Job? = null
@@ -326,12 +328,13 @@ class HomeViewModel @Inject constructor(
         contentsJob = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val contents = mutableListOf<Content>()
-                repository.isedolStreamers.onEach { streamers ->
-                    streamers.forEach { streamer ->
-                        contents.addAll(fetchSnsContents(streamer.idSet))
-                    }
-                    updateContentsList(contents)
-                }.collect()
+                repository.flowAllStreamers()
+                    .onEach { streamers ->
+                        streamers.forEach { streamer ->
+                            contents.addAll(fetchSnsContents(streamer.idSet))
+                        }
+                        updateContentsList(contents)
+                    }.collect()
             } catch (e: CancellationException) {
                 Log.e("TEST", "${e.message}")
             } finally {
