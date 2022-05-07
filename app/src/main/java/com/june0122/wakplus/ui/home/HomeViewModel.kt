@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.june0122.wakplus.BuildConfig
+import com.june0122.wakplus.data.api.HolodexService
 import com.june0122.wakplus.data.api.TwitchAuthService
 import com.june0122.wakplus.data.api.TwitchService
 import com.june0122.wakplus.data.api.YoutubeService
@@ -39,6 +40,9 @@ class HomeViewModel @Inject constructor(
 
     @Inject
     lateinit var youtubeService: YoutubeService
+
+    @Inject
+    lateinit var holodexService: HolodexService
 
     lateinit var contentListAdapter: ContentListAdapter
     lateinit var streamerListAdapter: StreamerListAdapter
@@ -195,6 +199,8 @@ class HomeViewModel @Inject constructor(
                         twitchVideoInfo.description,
                         twitchVideoInfo.createdAt,
                         twitchVideoInfo.publishedAt,
+                        "availableAt",
+                        "status",
                         twitchVideoInfo.url,
                         "https://www.twitch.tv/" + twitchUserInfo.login,
                         twitchVideoInfo.thumbnailUrl,
@@ -203,7 +209,7 @@ class HomeViewModel @Inject constructor(
                         twitchVideoInfo.language,
                         twitchVideoInfo.type,
                         twitchVideoInfo.duration,
-                        "twitchVideoInfo.mutedSegments",
+                        "mutedSegments",
                         twitchUserInfo.display_name,
                         twitchUserInfo.profile_image_url
                     ),
@@ -217,7 +223,47 @@ class HomeViewModel @Inject constructor(
         return contentData.await()
     }
 
-    /** YOUTUBE */
+    /** YOUTUBE with Holodex API */
+    private suspend fun getHolodexVideos(idSet: IdSet): List<Content> = withContext(Dispatchers.IO) {
+        holodexService.getChannelVideos(channelId = idSet.youtubeId)
+            .map { video ->
+                val videoInfo = youtubeService.getVideoInfo(id = video.id).items[0]
+
+                Content(
+                    contentId = video.id,
+                    contentType = "youtube",
+                    contentInfo = ContentInfo(
+                        video.id,
+                        "streamId",
+                        video.channel.id,
+                        "userLogin",
+                        video.channel.name,
+                        video.title,
+                        video.description,
+                        videoInfo.snippet.publishedAt,
+                        videoInfo.snippet.publishedAt,
+                        "video.availableAt",
+                        video.status,
+                        "https://youtu.be/" + video.id,
+                        "https://www.youtube.com/channel/" + video.channel.id,
+                        videoInfo.snippet.thumbnails.high.url,
+                        "viewable",
+                        videoInfo.statistics.viewCount,
+                        "language",
+                        "type",
+                        videoInfo.contentDetails.duration,
+                        "",
+                        "",
+                        video.channel.photo
+                    ),
+                    profileUrl = video.channel.photo,
+                    isFavorite = false
+                )
+            }
+    }
+
+
+    /** YOUTUBE with Youtube Data API */
     private suspend fun getYoutubeVideos(idSet: IdSet): List<Content> = withContext(Dispatchers.IO) {
         youtubeService.run {
             getPlaylists(channelId = idSet.youtubeId)
@@ -244,6 +290,8 @@ class HomeViewModel @Inject constructor(
                                             videoInfo.snippet.description,
                                             "videoInfo.createdAt",
                                             videoInfo.snippet.publishedAt,
+                                            "availableAt",
+                                            "status",
                                             "https://youtu.be/" + videoInfo.id,
                                             "https://www.youtube.com/channel/" + videoInfo.snippet.channelId,
                                             videoInfo.snippet.thumbnails.high.url,
@@ -296,7 +344,8 @@ class HomeViewModel @Inject constructor(
                 getTwitchVideos(idSet)
             }
             "유튜브" -> {
-                getYoutubeVideos(idSet)
+//                getYoutubeVideos(idSet)
+                getHolodexVideos(idSet)
             }
             else -> {
                 mutableListOf()
