@@ -21,6 +21,8 @@ data class ContentInfo(
     val description: String,
     val createdAt: String,
     val publishedAt: String,
+    val availableAt: String,
+    val status: String,
     val url: String,
     val channelUrl: String,
     val thumbnailUrl: String,
