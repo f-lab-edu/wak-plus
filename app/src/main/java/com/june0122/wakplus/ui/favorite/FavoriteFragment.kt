@@ -1,5 +1,7 @@
 package com.june0122.wakplus.ui.favorite
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,9 +29,10 @@ class FavoriteFragment : Fragment() {
     private val snsListAdapter: SnsListAdapter = SnsListAdapter { position ->
         favoriteViewModel.onSnsClick(position)
     }
-    private val contentListAdapter: ContentListAdapter = ContentListAdapter { content ->
-        favoriteViewModel.onFavoriteClick(content)
-    }
+    private val contentListAdapter = ContentListAdapter(
+        { content -> favoriteViewModel.onFavoriteClick(content) },
+        { url, _ -> launchSnsWithUrl(url) }
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite, container, false)
@@ -71,5 +74,10 @@ class FavoriteFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(context)
             adapter = contentListAdapter
         }
+    }
+
+    private fun launchSnsWithUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context?.startActivity(intent)
     }
 }

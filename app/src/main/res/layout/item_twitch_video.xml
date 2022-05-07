@@ -10,6 +10,10 @@
             type="com.june0122.wakplus.utils.listeners.FavoriteClickListener" />
 
         <variable
+            name="contentClickListener"
+            type="com.june0122.wakplus.utils.listeners.ContentClickListener" />
+
+        <variable
             name="content"
             type="com.june0122.wakplus.data.entity.Content" />
     </data>
@@ -17,6 +21,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> contentClickListener.onContentClick(content.contentInfo.url, content)}"
         android:paddingBottom="16dp">
 
         <ImageView
@@ -55,6 +62,9 @@
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> contentClickListener.onContentClick(content.contentInfo.channelUrl, content)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_thumbnail"
             app:shapeAppearanceOverlay="@style/roundedImageView"

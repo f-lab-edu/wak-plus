@@ -10,10 +10,12 @@ import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
 import com.june0122.wakplus.ui.home.viewholder.YoutubeVideoHolder
 import com.june0122.wakplus.utils.diffcallbacks.ContentDiffCallback
+import com.june0122.wakplus.utils.listeners.ContentClickListener
 import com.june0122.wakplus.utils.listeners.FavoriteClickListener
 
 class ContentListAdapter(
     private val favoriteListener: FavoriteClickListener,
+    private val contentListener: ContentClickListener,
 ) : ListAdapter<Content, RecyclerView.ViewHolder>(ContentDiffCallback()) {
 
     override fun getItemViewType(position: Int): Int {
@@ -29,17 +31,17 @@ class ContentListAdapter(
             VIEW_TYPE_TWITCH_VIDEO -> {
                 val binding =
                     ItemTwitchVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                TwitchVideoHolder(binding, favoriteListener)
+                TwitchVideoHolder(binding, favoriteListener, contentListener)
             }
             VIEW_TYPE_YOUTUBE_VIDEO -> {
                 val binding =
                     ItemYoutubeVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                YoutubeVideoHolder(binding, favoriteListener)
+                YoutubeVideoHolder(binding, favoriteListener, contentListener)
             }
             else -> {
                 val tempBinding =
                     ItemTwitchVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                TwitchVideoHolder(tempBinding, favoriteListener)
+                TwitchVideoHolder(tempBinding, favoriteListener, contentListener)
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.june0122.wakplus.ui.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,14 +29,14 @@ class HomeFragment : Fragment() {
     private lateinit var snsRecyclerView: RecyclerView
     private lateinit var contentRecyclerView: RecyclerView
     private val homeViewModel: HomeViewModel by viewModels()
-    private val horizontalLayoutManager by lazy {
+    private val horizontalLayoutManager =
         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-    }
-    private val contentListAdapter: ContentListAdapter = ContentListAdapter { content ->
-        homeViewModel.onFavoriteClick(content)
-    }
-    private val streamerListAdapter: StreamerListAdapter by lazy {
-        StreamerListAdapter(object : StreamerClickListener {
+    private val contentListAdapter = ContentListAdapter(
+        { content -> homeViewModel.onFavoriteClick(content) },
+        { url, _ -> launchSnsWithUrl(url) }
+    )
+    private val streamerListAdapter = StreamerListAdapter(
+        object : StreamerClickListener {
             override fun onStreamerClick(position: Int) {
                 configureSmoothScroller(position)
                 homeViewModel.onStreamerClick(position)
@@ -42,8 +44,8 @@ class HomeFragment : Fragment() {
 
             override fun onStreamerLongClick(position: Int) {
             }
-        })
-    }
+        }
+    )
     private val snsListAdapter: SnsListAdapter = SnsListAdapter { position ->
         homeViewModel.onSnsClick(position)
     }
@@ -112,6 +114,11 @@ class HomeFragment : Fragment() {
         val smoothScroller = CenterSmoothScroller(requireContext())
         smoothScroller.targetPosition = position
         horizontalLayoutManager.startSmoothScroll(smoothScroller)
+    }
+
+    private fun launchSnsWithUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context?.startActivity(intent)
     }
 }
 
