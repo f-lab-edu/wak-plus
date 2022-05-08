@@ -27,6 +27,8 @@ class FavoriteViewModel @Inject constructor(
 
     private var currentSns: SnsPlatformEntity = SnsPlatformEntity("전체", true)
 
+    private val tempFavorites = mutableListOf<Content>()
+
     private val _favorites = MutableLiveData<List<Content>>()
     val favorites: LiveData<List<Content>> = _favorites
 
@@ -41,10 +43,11 @@ class FavoriteViewModel @Inject constructor(
 
         repository.flowAllFavorites()
             .onEach { favorites ->
-                _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
+                tempFavorites.run {
                     clear()
                     addAll(favorites)
                 }
+                updateContentsList()
             }.launchIn(viewModelScope)
     }
 
@@ -55,6 +58,8 @@ class FavoriteViewModel @Inject constructor(
         _snsPlatforms.value = _snsPlatforms.value?.map { sns ->
             sns.copy(isSelected = sns == selectedSns)
         }
+
+        updateContentsList()
     }
 
     override fun onFavoriteClick(content: Content) {
@@ -62,5 +67,21 @@ class FavoriteViewModel @Inject constructor(
     }
 
     private fun deleteFavorite(content: Content) =
-        viewModelScope.launch { repository.deleteFavorite(content) }
+        viewModelScope.launch {
+            repository.deleteFavorite(content)
+        }
+
+    private fun updateContentsList() = viewModelScope.launch {
+        _favorites.value = when (currentSns.serviceName) {
+            "전체" -> {
+                tempFavorites
+            }
+            else -> {
+                val filteredContents = tempFavorites.filter { content ->
+                    content.contentType == currentSns.serviceName
+                }
+                filteredContents
+            }
+        }
+    }
 }
