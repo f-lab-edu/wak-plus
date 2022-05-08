@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.june0122.wakplus.R
 import com.june0122.wakplus.data.entity.Content
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
@@ -20,8 +21,9 @@ class ContentListAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (currentList[position].contentType) {
-            "twitch" -> VIEW_TYPE_TWITCH_VIDEO
-            "youtube" -> VIEW_TYPE_YOUTUBE_VIDEO
+            // TODO: string.xml로부터 문자열 데이터 불러오기
+            "트위치" -> VIEW_TYPE_TWITCH_VIDEO
+            "유튜브" -> VIEW_TYPE_YOUTUBE_VIDEO
             else -> VIEW_TYPE_TWITCH_VIDEO
         }
     }
@@ -49,10 +51,10 @@ class ContentListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val content = currentList[holder.absoluteAdapterPosition]
         when (content.contentType) {
-            "twitch" -> if (holder is TwitchVideoHolder) {
+            holder.itemView.context.getString(R.string.sns_twitch) -> if (holder is TwitchVideoHolder) {
                 holder.bind(content)
             }
-            "youtube" -> if (holder is YoutubeVideoHolder) {
+            holder.itemView.context.getString(R.string.sns_youtube) -> if (holder is YoutubeVideoHolder) {
                 holder.bind(content)
             }
         }

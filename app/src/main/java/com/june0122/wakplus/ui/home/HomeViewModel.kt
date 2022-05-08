@@ -184,7 +184,7 @@ class HomeViewModel @Inject constructor(
             val contents = twitchVideos.map { twitchVideoInfo ->
                 Content(
                     contentId = twitchVideoInfo.id,
-                    contentType = "twitch",
+                    contentType = "트위치",  // TODO: string.xml로부터 문자열 데이터 불러오기
                     contentInfo = ContentInfo(
                         twitchVideoInfo.id,
                         twitchVideoInfo.streamId,
@@ -233,7 +233,7 @@ class HomeViewModel @Inject constructor(
                                 .let { videoInfo ->
                                     Content(
                                         contentId = videoInfo.id,
-                                        contentType = "youtube",
+                                        contentType = "유튜브",  // TODO: string.xml로부터 문자열 데이터 불러오기
                                         contentInfo = ContentInfo(
                                             videoInfo.id,
                                             "videoInfo.streamId",
