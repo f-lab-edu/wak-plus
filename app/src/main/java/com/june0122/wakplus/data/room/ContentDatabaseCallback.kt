@@ -6,7 +6,7 @@ import com.june0122.wakplus.data.entity.IdSet
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.data.room.ContentRoomDatabase.Companion.INSTANCE
-import com.june0122.wakplus.utils.SNS
+import com.june0122.wakplus.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,13 +69,13 @@ class ContentDatabaseCallback @Inject constructor(
         streamerList.forEach { streamer -> contentDao.insertStreamer(streamer) }
 
         val snsList = mutableListOf(
-            SnsPlatformEntity(SNS.ALL.ordinal, true), // Default Selected Sns Platform
-            SnsPlatformEntity(SNS.TWITCH.ordinal, false),
-            SnsPlatformEntity(SNS.YOUTUBE.ordinal, false),
-            SnsPlatformEntity(SNS.INSTAGRAM.ordinal, false),
-            SnsPlatformEntity(SNS.NAVER_CAFE.ordinal, false),
-            SnsPlatformEntity(SNS.TWITTER.ordinal, false),
-            SnsPlatformEntity(SNS.SOUNDCLOUD.ordinal, false),
+            SnsPlatformEntity(SNS_ALL, true), // Default Selected Sns Platform
+            SnsPlatformEntity(SNS_TWITCH, false),
+            SnsPlatformEntity(SNS_YOUTUBE, false),
+            SnsPlatformEntity(SNS_INSTAGRAM, false),
+            SnsPlatformEntity(SNS_NAVER_CAFE, false),
+            SnsPlatformEntity(SNS_TWITTER, false),
+            SnsPlatformEntity(SNS_SOUNDCLOUD, false),
         )
 
         snsList.forEach { sns -> contentDao.insertSnsPlatform(sns) }

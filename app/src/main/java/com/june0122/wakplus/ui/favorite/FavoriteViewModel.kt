@@ -9,7 +9,7 @@ import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
-import com.june0122.wakplus.utils.SNS
+import com.june0122.wakplus.utils.SNS_ALL
 import com.june0122.wakplus.utils.listeners.FavoriteClickListener
 import com.june0122.wakplus.utils.listeners.SnsClickListener
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +27,7 @@ class FavoriteViewModel @Inject constructor(
     lateinit var contentListAdapter: ContentListAdapter
 
     private var currentSns: SnsPlatformEntity =
-        SnsPlatformEntity(SNS.ALL.ordinal, true)
+        SnsPlatformEntity(SNS_ALL, true)
 
     private val tempFavorites = mutableListOf<Content>()
 
@@ -75,7 +75,7 @@ class FavoriteViewModel @Inject constructor(
 
     private fun updateContentsList() = viewModelScope.launch {
         _favorites.value = when (currentSns.serviceId) {
-            SNS.ALL.ordinal -> {
+            SNS_ALL -> {
                 tempFavorites
             }
             else -> {

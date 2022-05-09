@@ -15,10 +15,8 @@ import com.june0122.wakplus.data.repository.PreferencesRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
-import com.june0122.wakplus.utils.SNS
-import com.june0122.wakplus.utils.listeners.FavoriteClickListener
-import com.june0122.wakplus.utils.listeners.SnsClickListener
-import com.june0122.wakplus.utils.listeners.StreamerClickListener
+import com.june0122.wakplus.utils.*
+import com.june0122.wakplus.utils.listeners.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -47,7 +45,7 @@ class HomeViewModel @Inject constructor(
 
     private var currentIdSet: IdSet? = null
     private var currentSns: SnsPlatformEntity =
-        SnsPlatformEntity(SNS.ALL.ordinal, true)
+        SnsPlatformEntity(SNS_ALL, true)
 
     private val _snsPlatforms = MutableLiveData<List<SnsPlatformEntity>>()
     val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms
@@ -186,7 +184,7 @@ class HomeViewModel @Inject constructor(
             val contents = twitchVideos.map { twitchVideoInfo ->
                 Content(
                     contentId = twitchVideoInfo.id,
-                    contentType = SNS.TWITCH.ordinal,
+                    contentType = SNS_TWITCH,
                     contentInfo = ContentInfo(
                         twitchVideoInfo.id,
                         twitchVideoInfo.streamId,
@@ -235,7 +233,7 @@ class HomeViewModel @Inject constructor(
                                 .let { videoInfo ->
                                     Content(
                                         contentId = videoInfo.id,
-                                        contentType = SNS.YOUTUBE.ordinal,
+                                        contentType = SNS_YOUTUBE,
                                         contentInfo = ContentInfo(
                                             videoInfo.id,
                                             "videoInfo.streamId",
@@ -289,15 +287,15 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun fetchSnsContents(idSet: IdSet): List<Content> {
         return when (currentSns.serviceId) {
-            SNS.ALL.ordinal -> {
+            SNS_ALL -> {
                 /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
                 // (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
                 mutableListOf()
             }
-            SNS.TWITCH.ordinal -> {
+            SNS_TWITCH -> {
                 getTwitchVideos(idSet)
             }
-            SNS.YOUTUBE.ordinal -> {
+            SNS_YOUTUBE -> {
                 getYoutubeVideos(idSet)
             }
             else -> {

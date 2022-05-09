@@ -9,7 +9,7 @@ import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
 import com.june0122.wakplus.databinding.ItemYoutubeVideoBinding
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder
 import com.june0122.wakplus.ui.home.viewholder.YoutubeVideoHolder
-import com.june0122.wakplus.utils.SNS
+import com.june0122.wakplus.utils.*
 import com.june0122.wakplus.utils.diffcallbacks.ContentDiffCallback
 import com.june0122.wakplus.utils.listeners.ContentClickListener
 import com.june0122.wakplus.utils.listeners.FavoriteClickListener
@@ -24,12 +24,12 @@ class ContentListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            SNS.TWITCH.ordinal -> {
+            SNS_TWITCH -> {
                 val binding =
                     ItemTwitchVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 TwitchVideoHolder(binding, favoriteListener, contentListener)
             }
-            SNS.YOUTUBE.ordinal -> {
+            SNS_YOUTUBE -> {
                 val binding =
                     ItemYoutubeVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 YoutubeVideoHolder(binding, favoriteListener, contentListener)
@@ -45,10 +45,10 @@ class ContentListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val content = currentList[holder.absoluteAdapterPosition]
         when (content.contentType) {
-            SNS.TWITCH.ordinal -> if (holder is TwitchVideoHolder) {
+            SNS_TWITCH -> if (holder is TwitchVideoHolder) {
                 holder.bind(content)
             }
-            SNS.YOUTUBE.ordinal -> if (holder is YoutubeVideoHolder) {
+            SNS_YOUTUBE -> if (holder is YoutubeVideoHolder) {
                 holder.bind(content)
             }
         }
