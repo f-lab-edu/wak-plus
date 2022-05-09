@@ -1,11 +1,13 @@
 package com.june0122.wakplus.data.entity
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "content_table")
 data class Content(
     @PrimaryKey val contentId: String,
-    @ColumnInfo val contentType: String,
+    @ColumnInfo val contentType: Int,
     @ColumnInfo val contentInfo: ContentInfo,
     @ColumnInfo val profileUrl: String,
     @ColumnInfo val isFavorite: Boolean,
@@ -49,6 +51,6 @@ data class IdSet(
 
 @Entity(tableName = "sns_table")
 data class SnsPlatformEntity(
-    @PrimaryKey val serviceName: String,
+    @PrimaryKey val serviceId: Int,
     val isSelected: Boolean,
 )

@@ -5,7 +5,7 @@ import com.june0122.wakplus.data.entity.SnsPlatformEntity
 
 class SnsDiffCallback : DiffUtil.ItemCallback<SnsPlatformEntity>() {
     override fun areItemsTheSame(oldItem: SnsPlatformEntity, newItem: SnsPlatformEntity): Boolean {
-        return oldItem.serviceName == newItem.serviceName
+        return oldItem.serviceId == newItem.serviceId
     }
 
     override fun areContentsTheSame(oldItem: SnsPlatformEntity, newItem: SnsPlatformEntity): Boolean {

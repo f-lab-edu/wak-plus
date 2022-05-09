@@ -6,12 +6,15 @@ import com.june0122.wakplus.data.entity.IdSet
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.data.room.ContentRoomDatabase.Companion.INSTANCE
+import com.june0122.wakplus.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ContentDatabaseCallback @Inject constructor(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+class ContentDatabaseCallback @Inject constructor(
+    private val scope: CoroutineScope
+) : RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
 
@@ -66,13 +69,13 @@ class ContentDatabaseCallback @Inject constructor(private val scope: CoroutineSc
         streamerList.forEach { streamer -> contentDao.insertStreamer(streamer) }
 
         val snsList = mutableListOf(
-            SnsPlatformEntity("전체", true), // Default Selected Sns Platform
-            SnsPlatformEntity("트위치", false),
-            SnsPlatformEntity("유튜브", false),
-            SnsPlatformEntity("인스타그램", false),
-            SnsPlatformEntity("왁물원", false),
-            SnsPlatformEntity("트위치", false),
-            SnsPlatformEntity("사운드클라우드", false),
+            SnsPlatformEntity(SNS.ALL, true), // Default Selected Sns Platform
+            SnsPlatformEntity(SNS.TWITCH, false),
+            SnsPlatformEntity(SNS.YOUTUBE, false),
+            SnsPlatformEntity(SNS.INSTAGRAM, false),
+            SnsPlatformEntity(SNS.NAVER_CAFE, false),
+            SnsPlatformEntity(SNS.TWITTER, false),
+            SnsPlatformEntity(SNS.SOUNDCLOUD, false),
         )
 
         snsList.forEach { sns -> contentDao.insertSnsPlatform(sns) }

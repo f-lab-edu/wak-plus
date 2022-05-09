@@ -9,6 +9,7 @@ import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
+import com.june0122.wakplus.utils.SNS
 import com.june0122.wakplus.utils.listeners.FavoriteClickListener
 import com.june0122.wakplus.utils.listeners.SnsClickListener
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,10 @@ class FavoriteViewModel @Inject constructor(
     lateinit var snsListAdapter: SnsListAdapter
     lateinit var contentListAdapter: ContentListAdapter
 
-    private var currentSns: SnsPlatformEntity = SnsPlatformEntity("전체", true)
+    private var currentSns: SnsPlatformEntity =
+        SnsPlatformEntity(SNS.ALL, true)
+
+    private val tempFavorites = mutableListOf<Content>()
 
     private val _favorites = MutableLiveData<List<Content>>()
     val favorites: LiveData<List<Content>> = _favorites
@@ -41,10 +45,11 @@ class FavoriteViewModel @Inject constructor(
 
         repository.flowAllFavorites()
             .onEach { favorites ->
-                _favorites.value = (_favorites.value?.toMutableList() ?: mutableListOf()).apply {
+                tempFavorites.run {
                     clear()
                     addAll(favorites)
                 }
+                updateContentsList()
             }.launchIn(viewModelScope)
     }
 
@@ -55,6 +60,8 @@ class FavoriteViewModel @Inject constructor(
         _snsPlatforms.value = _snsPlatforms.value?.map { sns ->
             sns.copy(isSelected = sns == selectedSns)
         }
+
+        updateContentsList()
     }
 
     override fun onFavoriteClick(content: Content) {
@@ -62,5 +69,21 @@ class FavoriteViewModel @Inject constructor(
     }
 
     private fun deleteFavorite(content: Content) =
-        viewModelScope.launch { repository.deleteFavorite(content) }
+        viewModelScope.launch {
+            repository.deleteFavorite(content)
+        }
+
+    private fun updateContentsList() = viewModelScope.launch {
+        _favorites.value = when (currentSns.serviceId) {
+            SNS.ALL -> {
+                tempFavorites
+            }
+            else -> {
+                val filteredContents = tempFavorites.filter { content ->
+                    content.contentType == currentSns.serviceId
+                }
+                filteredContents
+            }
+        }
+    }
 }

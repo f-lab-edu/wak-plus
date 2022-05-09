@@ -6,9 +6,12 @@ import androidx.databinding.BindingAdapter
 import coil.load
 import coil.size.Scale
 import coil.transform.CircleCropTransformation
+import com.google.android.material.chip.Chip
 import com.june0122.wakplus.R
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder.Companion.RES_STANDARD
 import com.june0122.wakplus.utils.Language
+import com.june0122.wakplus.utils.SNS
 import com.june0122.wakplus.utils.timeAgo
 import com.june0122.wakplus.utils.withSuffix
 import java.util.regex.Pattern
@@ -105,5 +108,21 @@ object BindingAdapters {
         regexMap["(\\d\\d)H(\\d\\d)S"] = "$1:00:$2"
         regexMap["(\\d\\d)H(\\d\\d)M"] = "$1:$2:00"
         regexMap["(\\d\\d)H(\\d\\d)M(\\d\\d)S"] = "$1:$2:$3"
+    }
+
+    @JvmStatic
+    @BindingAdapter("snsName")
+    fun setSnsName(view: Chip, sns: SnsPlatformEntity) {
+        val stringRes = when (sns.serviceId) {
+            SNS.ALL -> R.string.sns_all
+            SNS.YOUTUBE -> R.string.sns_youtube
+            SNS.TWITCH -> R.string.sns_twitch
+            SNS.INSTAGRAM -> R.string.sns_instagram
+            SNS.TWITTER -> R.string.sns_twitter
+            SNS.NAVER_CAFE -> R.string.sns_naver_cafe
+            SNS.SOUNDCLOUD -> R.string.sns_soundcloud
+            else -> throw Exception("Invalid sns type.")
+        }
+        view.setText(stringRes)
     }
 }
