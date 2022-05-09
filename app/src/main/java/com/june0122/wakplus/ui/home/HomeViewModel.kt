@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
 
     private var currentIdSet: IdSet? = null
     private var currentSns: SnsPlatformEntity =
-        SnsPlatformEntity(SNS.ALL.ordinal, SNS.ALL.serviceName, true)
+        SnsPlatformEntity(SNS.ALL.ordinal, true)
 
     private val _snsPlatforms = MutableLiveData<List<SnsPlatformEntity>>()
     val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms

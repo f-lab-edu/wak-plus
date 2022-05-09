@@ -27,7 +27,7 @@ class FavoriteViewModel @Inject constructor(
     lateinit var contentListAdapter: ContentListAdapter
 
     private var currentSns: SnsPlatformEntity =
-        SnsPlatformEntity(SNS.ALL.ordinal, SNS.ALL.serviceName, true)
+        SnsPlatformEntity(SNS.ALL.ordinal, true)
 
     private val tempFavorites = mutableListOf<Content>()
 
@@ -74,8 +74,8 @@ class FavoriteViewModel @Inject constructor(
         }
 
     private fun updateContentsList() = viewModelScope.launch {
-        _favorites.value = when (currentSns.serviceName) {
-            SNS.ALL.serviceName -> {
+        _favorites.value = when (currentSns.serviceId) {
+            SNS.ALL.ordinal -> {
                 tempFavorites
             }
             else -> {
