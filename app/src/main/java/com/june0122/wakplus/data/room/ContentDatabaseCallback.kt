@@ -69,13 +69,13 @@ class ContentDatabaseCallback @Inject constructor(
         streamerList.forEach { streamer -> contentDao.insertStreamer(streamer) }
 
         val snsList = mutableListOf(
-            SnsPlatformEntity(SNS_ALL, true), // Default Selected Sns Platform
-            SnsPlatformEntity(SNS_TWITCH, false),
-            SnsPlatformEntity(SNS_YOUTUBE, false),
-            SnsPlatformEntity(SNS_INSTAGRAM, false),
-            SnsPlatformEntity(SNS_NAVER_CAFE, false),
-            SnsPlatformEntity(SNS_TWITTER, false),
-            SnsPlatformEntity(SNS_SOUNDCLOUD, false),
+            SnsPlatformEntity(SNS.ALL, true), // Default Selected Sns Platform
+            SnsPlatformEntity(SNS.TWITCH, false),
+            SnsPlatformEntity(SNS.YOUTUBE, false),
+            SnsPlatformEntity(SNS.INSTAGRAM, false),
+            SnsPlatformEntity(SNS.NAVER_CAFE, false),
+            SnsPlatformEntity(SNS.TWITTER, false),
+            SnsPlatformEntity(SNS.SOUNDCLOUD, false),
         )
 
         snsList.forEach { sns -> contentDao.insertSnsPlatform(sns) }

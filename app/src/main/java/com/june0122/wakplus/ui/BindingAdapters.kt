@@ -10,7 +10,10 @@ import com.google.android.material.chip.Chip
 import com.june0122.wakplus.R
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder.Companion.RES_STANDARD
-import com.june0122.wakplus.utils.*
+import com.june0122.wakplus.utils.Language
+import com.june0122.wakplus.utils.SNS
+import com.june0122.wakplus.utils.timeAgo
+import com.june0122.wakplus.utils.withSuffix
 import java.util.regex.Pattern
 
 object BindingAdapters {
@@ -111,13 +114,13 @@ object BindingAdapters {
     @BindingAdapter("snsName")
     fun setSnsName(view: Chip, sns: SnsPlatformEntity) {
         val stringRes = when (sns.serviceId) {
-            SNS_ALL -> R.string.sns_all
-            SNS_YOUTUBE -> R.string.sns_youtube
-            SNS_TWITCH -> R.string.sns_twitch
-            SNS_INSTAGRAM -> R.string.sns_instagram
-            SNS_TWITTER -> R.string.sns_twitter
-            SNS_NAVER_CAFE -> R.string.sns_naver_cafe
-            SNS_SOUNDCLOUD -> R.string.sns_soundcloud
+            SNS.ALL -> R.string.sns_all
+            SNS.YOUTUBE -> R.string.sns_youtube
+            SNS.TWITCH -> R.string.sns_twitch
+            SNS.INSTAGRAM -> R.string.sns_instagram
+            SNS.TWITTER -> R.string.sns_twitter
+            SNS.NAVER_CAFE -> R.string.sns_naver_cafe
+            SNS.SOUNDCLOUD -> R.string.sns_soundcloud
             else -> throw Exception("Invalid sns type.")
         }
         view.setText(stringRes)
