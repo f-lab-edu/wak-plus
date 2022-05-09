@@ -5,8 +5,10 @@ import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.databinding.ItemStreamerBinding
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 
-class StreamerListViewHolder(private val binding: ItemStreamerBinding, private val listener: StreamerClickListener) :
-    RecyclerView.ViewHolder(binding.root) {
+class StreamerListViewHolder(
+    private val binding: ItemStreamerBinding,
+    private val listener: StreamerClickListener
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(streamer: StreamerEntity) = with(binding) {
         this.streamer = streamer
