@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.june0122.wakplus.data.repository.PreferencesRepository.PreferencesKeys.TWITCH_ACCESS_TOKEN
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -17,10 +16,6 @@ class PreferencesRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
     private val TAG: String = "UserPreferencesRepo"
-
-    private object PreferencesKeys {
-        val TWITCH_ACCESS_TOKEN = stringPreferencesKey("twitch_access_token")
-    }
 
     suspend fun saveTwitchAccessToken(accessToken: String) {
         dataStore.edit { prefercences ->
@@ -40,4 +35,8 @@ class PreferencesRepository @Inject constructor(
         }.map { preferences ->
             preferences[TWITCH_ACCESS_TOKEN] ?: ""
         }
+
+    companion object {
+        private val TWITCH_ACCESS_TOKEN = stringPreferencesKey("twitch_access_token")
+    }
 }
