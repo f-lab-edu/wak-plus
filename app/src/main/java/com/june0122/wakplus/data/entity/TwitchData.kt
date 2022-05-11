@@ -72,3 +72,43 @@ data class TwitchChannelInfo(
     @SerializedName("thumbnail_url") val thumbnailUrl: String,
     @SerializedName("title") val title: String
 )
+
+data class TwitchEventSubList(
+    @SerializedName("data") val dataList: List<Data>,
+    @SerializedName("max_total_cost") val maxTotalCost: Int,
+    @SerializedName("total") val total: Int,
+    @SerializedName("total_cost") val totalCost: Int
+)
+
+data class Data(
+    @SerializedName("condition") val condition: Condition,
+    @SerializedName("cost") val cost: Int,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("id") val id: String,
+    @SerializedName("status") val status: String,
+    @SerializedName("transport") val transport: Transport,
+    @SerializedName("type") val type: String,
+    @SerializedName("version") val version: String
+)
+
+data class Condition(
+    @SerializedName("broadcaster_user_id") val broadcasterUserId: String
+)
+
+data class Transport(
+    @SerializedName("callback") val callback: String,
+    @SerializedName("method") val method: String
+)
+
+data class TwitchEventSubBody(
+     @SerializedName("condition") val condition: Condition,
+     @SerializedName("transport") val transport: BodyTransport,
+     @SerializedName("type") val type: String,
+     @SerializedName("version") val version: String
+)
+
+data class BodyTransport(
+    @SerializedName("callback") val callback: String,
+    @SerializedName("method") val method: String,
+    @SerializedName("secret") val secret: String
+)
