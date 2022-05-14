@@ -5,13 +5,18 @@
 
     <!-- Elapsed Time -->
     <string name="moments_ago">조금 전</string>
+    <string name="minute_ago">1분 전</string>
     <string name="minutes_ago">%1$d분 전</string>
+    <string name="hour_ago">1시간 전</string>
     <string name="hours_ago">%1$d시간 전</string>
     <string name="day_ago">1일 전</string>
     <string name="days_ago">%1$d일 전</string>
     <string name="weeks_ago">%1$d주 전</string>
+    <string name="month_ago">1달 전</string>
     <string name="months_ago">%1$d달 전</string>
+    <string name="year_ago">1년 전</string>
     <string name="years_ago">%1$d년 전</string>
+    <string name="published_in_future">추후 공개</string>
 
     <!-- SNS Platforms -->
     <string name="sns_all">전체</string>
