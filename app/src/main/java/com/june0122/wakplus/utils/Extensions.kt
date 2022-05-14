@@ -78,31 +78,41 @@ private const val DAY_MILLIS = 24 * HOUR_MILLIS
 private const val WEEK_MILLIS = 7 * DAY_MILLIS
 private const val MONTH_MILLIS = 31 * DAY_MILLIS
 private const val YEAR_MILLIS = 12 * MONTH_MILLIS
+private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+private const val UTC = "UTC"
 
 private fun currentDate(): Date {
-    val calendar = Calendar.getInstance()
+    val calendar = Calendar.getInstance(Locale.getDefault())
     return calendar.time
 }
 
-// TODO: 언어를 영어로 설정 시에만 'a minute ago', 'an hour ago' 케이스 추가
+// 한국 시간은 UTC보다 9시간 빠르다.
+// ISO 8601 형식에서 'Z'는 UTC 타임존을 의미하므로 타임존을 UTC로 지정해주지 않으면 원하는 시간보다 9시간이 더해진 값이 나온다.
 fun String.timeAgo(context: Context): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-    val date = inputFormat.parse(this) as Date
-    var time = date.time
-    if (time < 1_000_000_000_000L) time *= 1_000
-    val now = currentDate().time
-    if (time > now || time <= 0) return "in the future"
-    val diff = now - time
+    val currentTime = currentDate().time
+    var publishedTime = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
+        .run {
+            timeZone = TimeZone.getTimeZone(UTC)
+            parse(this@timeAgo) as Date
+        }.time
+
+    if (publishedTime < 1_000_000_000_000L) publishedTime *= 1_000
+    if (publishedTime > currentTime || publishedTime <= 0) return context.getString(R.string.published_in_future)
+
+    val diff = currentTime - publishedTime
+
     return when {
         diff < MINUTE_MILLIS -> context.getString(R.string.moments_ago)
-//        diff < 2 * MINUTE_MILLIS -> "a minute ago"
+        diff < 2 * MINUTE_MILLIS -> context.getString(R.string.minute_ago)
         diff < 60 * MINUTE_MILLIS -> context.getString(R.string.minutes_ago, diff / MINUTE_MILLIS)
-//        diff < 2 * HOUR_MILLIS -> "an hour ago"
+        diff < 2 * HOUR_MILLIS -> context.getString(R.string.hour_ago)
         diff < 24 * HOUR_MILLIS -> context.getString(R.string.hours_ago, diff / HOUR_MILLIS)
         diff < 48 * HOUR_MILLIS -> context.getString(R.string.day_ago)
-        diff < WEEK_MILLIS -> context.getString(R.string.days_ago, diff / DAY_MILLIS)
+        diff < 2 * WEEK_MILLIS -> context.getString(R.string.days_ago, diff / DAY_MILLIS)
         diff < MONTH_MILLIS -> context.getString(R.string.weeks_ago, diff / WEEK_MILLIS)
+        diff < 2 * MONTH_MILLIS -> context.getString(R.string.month_ago)
         diff < YEAR_MILLIS -> context.getString(R.string.months_ago, diff / MONTH_MILLIS)
+        diff < 2 * YEAR_MILLIS -> context.getString(R.string.year_ago)
         else -> context.getString(R.string.years_ago, diff / YEAR_MILLIS)
     }
 }
