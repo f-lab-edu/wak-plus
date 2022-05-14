@@ -222,6 +222,48 @@ class HomeViewModel @Inject constructor(
     /** YOUTUBE */
     private suspend fun getYoutubeVideos(idSet: IdSet): List<Content> = withContext(Dispatchers.IO) {
         youtubeService.run {
+            getChannelVideos(channelId = idSet.youtubeId, order = "date")
+                .items
+                .map { video ->
+                    getVideoInfo(id = video.id.videoId)
+                        .items[0]
+                        .let { videoInfo ->
+                            Content(
+                                contentId = videoInfo.id,
+                                contentType = SNS.YOUTUBE,
+                                contentInfo = ContentInfo(
+                                    videoInfo.id,
+                                    "videoInfo.streamId",
+                                    videoInfo.snippet.channelId,
+                                    "videoInfo.userLogin",
+                                    videoInfo.snippet.channelTitle,
+                                    videoInfo.snippet.title,
+                                    videoInfo.snippet.description,
+                                    "videoInfo.createdAt",
+                                    videoInfo.snippet.publishedAt,
+                                    "https://youtu.be/" + videoInfo.id,
+                                    "https://www.youtube.com/channel/" + videoInfo.snippet.channelId,
+                                    videoInfo.snippet.thumbnails.high.url,
+                                    "videoInfo.viewable",
+                                    videoInfo.statistics.viewCount,
+                                    videoInfo.snippet.defaultAudioLanguage,
+                                    videoInfo.kind,
+                                    videoInfo.contentDetails.duration,
+                                    "",
+                                    "",
+                                    ""
+                                ),
+                                profileUrl = getStreamerProfile(videoInfo),
+                                isFavorite = false
+                            )
+                        }
+                }
+        }
+    }
+
+    // 할당량 최적화를 위해 플레이리스트를 통한 채널 비디오 검색
+    private suspend fun getYoutubeVideosByPlaylist(idSet: IdSet): List<Content> = withContext(Dispatchers.IO) {
+        youtubeService.run {
             getPlaylists(channelId = idSet.youtubeId)
                 .items
                 .flatMap { playlist ->
