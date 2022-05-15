@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val repository: ContentRepository
+    private val contentRepository: ContentRepository
 ) : ViewModel(), SnsClickListener, FavoriteClickListener {
 
     lateinit var snsListAdapter: SnsListAdapter
@@ -38,12 +38,12 @@ class FavoriteViewModel @Inject constructor(
     val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms
 
     init {
-        repository.flowAllSnsPlatforms()
+        contentRepository.flowAllSnsPlatforms()
             .onEach { snsPlatforms ->
                 _snsPlatforms.value = snsPlatforms
             }.launchIn(viewModelScope)
 
-        repository.flowAllFavorites()
+        contentRepository.flowAllFavorites()
             .onEach { favorites ->
                 cachedFavorites.run {
                     clear()
@@ -70,7 +70,7 @@ class FavoriteViewModel @Inject constructor(
 
     private fun deleteFavorite(content: Content) =
         viewModelScope.launch {
-            repository.deleteFavorite(content)
+            contentRepository.deleteFavorite(content)
         }
 
     private fun updateContentsList() {
