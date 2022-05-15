@@ -23,14 +23,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object TwitchNetworkModule {
     private const val BASE_URL = "https://api.twitch.tv/helix/"
-    private val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
     @Singleton
     @Provides
-    fun provideTwitchService(preferencesRepository: PreferencesRepository): TwitchService {
-
+    fun provideTwitchService(
+        preferencesRepository: PreferencesRepository,
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): TwitchService {
         val client = OkHttpClient.Builder()
-            .addInterceptor(logger)
+            .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(TwitchAuthInterceptor(preferencesRepository))
             .build()
 
