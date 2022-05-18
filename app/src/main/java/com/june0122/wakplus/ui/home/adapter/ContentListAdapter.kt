@@ -2,7 +2,7 @@ package com.june0122.wakplus.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.data.entity.Content
 import com.june0122.wakplus.databinding.ItemTwitchVideoBinding
@@ -17,10 +17,7 @@ import com.june0122.wakplus.utils.listeners.FavoriteClickListener
 class ContentListAdapter(
     private val favoriteListener: FavoriteClickListener,
     private val contentListener: ContentClickListener,
-) : ListAdapter<Content, RecyclerView.ViewHolder>(ContentDiffCallback()) {
-
-    override fun getItemViewType(position: Int): Int =
-        currentList[position].contentType
+) : PagingDataAdapter<Content, RecyclerView.ViewHolder>(ContentDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -43,8 +40,8 @@ class ContentListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val content = currentList[holder.absoluteAdapterPosition]
-        when (content.contentType) {
+        val content = getItem(holder.absoluteAdapterPosition)
+        when (content?.contentType) {
             SNS.TWITCH -> if (holder is TwitchVideoHolder) {
                 holder.bind(content)
             }

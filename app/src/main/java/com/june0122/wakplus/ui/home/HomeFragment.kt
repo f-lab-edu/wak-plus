@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.june0122.wakplus.R
@@ -21,6 +22,8 @@ import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -68,8 +71,14 @@ class HomeFragment : Fragment() {
             homeViewModel.collectAllStreamersContents()
         }
 
-        homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
-            contentListAdapter.submitList(contents)
+//        homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
+//            contentListAdapter.submitData(contents)
+//        }
+
+        lifecycleScope.launch {
+            homeViewModel.contentFlow.collectLatest { pagingData ->
+                contentListAdapter.submitData(pagingData)
+            }
         }
 
         homeViewModel.snsPlatforms.observe(viewLifecycleOwner) { snsPlatforms ->

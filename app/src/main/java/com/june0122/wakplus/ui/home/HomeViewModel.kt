@@ -5,10 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.june0122.wakplus.data.entity.Content
 import com.june0122.wakplus.data.entity.IdSet
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.entity.StreamerEntity
+import com.june0122.wakplus.data.paging.ContentPagingSource
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.data.repository.TwitchRepository
 import com.june0122.wakplus.data.repository.YoutubeRepository
@@ -21,6 +26,7 @@ import com.june0122.wakplus.utils.listeners.SnsClickListener
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -53,7 +59,19 @@ class HomeViewModel @Inject constructor(
     private val _streamers = MutableLiveData<List<StreamerEntity>>()
     val streamers: LiveData<List<StreamerEntity>> = _streamers
 
+    var contentFlow: Flow<PagingData<Content>>
+
     init {
+        contentFlow = Pager(PagingConfig(pageSize = 10)) {
+            ContentPagingSource(
+                idSet = currentIdSet ?: IdSet("", ""),
+                contentType = SNS.TWITCH,
+                profileUrl = getStreamerYoutubeProfile(currentIdSet ?: IdSet("", "")),
+                twitchRepository,
+                youtubeRepository
+            )
+        }.flow.cachedIn(viewModelScope)
+
         contentRepository.run {
             flowAllStreamers()
                 .onEach { streamers -> _streamers.value = streamers }
