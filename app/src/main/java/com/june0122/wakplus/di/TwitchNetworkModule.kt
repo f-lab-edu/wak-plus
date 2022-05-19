@@ -2,7 +2,7 @@ package com.june0122.wakplus.di
 
 import com.june0122.wakplus.BuildConfig
 import com.june0122.wakplus.data.api.TwitchService
-import com.june0122.wakplus.data.repository.PreferencesRepository
+import com.june0122.wakplus.data.repository.impl.PreferencesRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +27,7 @@ object TwitchNetworkModule {
     @Singleton
     @Provides
     fun provideTwitchService(
-        preferencesRepository: PreferencesRepository,
+        preferencesRepository: PreferencesRepositoryImpl,
         httpLoggingInterceptor: HttpLoggingInterceptor
     ): TwitchService {
         val client = OkHttpClient.Builder()
@@ -44,7 +44,7 @@ object TwitchNetworkModule {
     }
 
     class TwitchAuthInterceptor @Inject constructor(
-        private val preferencesRepository: PreferencesRepository
+        private val preferencesRepository: PreferencesRepositoryImpl
     ) : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response = with(chain) {

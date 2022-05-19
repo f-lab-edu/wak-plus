@@ -1,6 +1,6 @@
 package com.june0122.wakplus.di
 
-import com.june0122.wakplus.data.repository.ContentRepository
+import com.june0122.wakplus.data.repository.impl.ContentRepositoryImpl
 import com.june0122.wakplus.data.room.ContentDao
 import com.june0122.wakplus.data.room.ContentRoomDatabase
 import dagger.Module
@@ -20,7 +20,7 @@ object ContentRepositoryModule {
 
     @Singleton
     @Provides
-    fun provideContentRepository(contentDao: ContentDao): ContentRepository {
-        return ContentRepository(contentDao)
+    fun provideContentRepository(contentDao: ContentDao): ContentRepositoryImpl {
+        return ContentRepositoryImpl(contentDao)
     }
 }
