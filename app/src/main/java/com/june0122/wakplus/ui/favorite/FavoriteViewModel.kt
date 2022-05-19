@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.june0122.wakplus.data.entity.Content
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
-import com.june0122.wakplus.data.repository.ContentRepository
+import com.june0122.wakplus.data.repository.impl.ContentRepositoryImpl
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.utils.SNS
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val contentRepository: ContentRepository
+    private val contentRepository: ContentRepositoryImpl
 ) : ViewModel(), SnsClickListener, FavoriteClickListener {
 
     lateinit var snsListAdapter: SnsListAdapter

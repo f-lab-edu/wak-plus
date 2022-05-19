@@ -9,9 +9,9 @@ import com.june0122.wakplus.data.entity.Content
 import com.june0122.wakplus.data.entity.IdSet
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.entity.StreamerEntity
-import com.june0122.wakplus.data.repository.ContentRepository
-import com.june0122.wakplus.data.repository.TwitchRepository
-import com.june0122.wakplus.data.repository.YoutubeRepository
+import com.june0122.wakplus.data.repository.impl.ContentRepositoryImpl
+import com.june0122.wakplus.data.repository.impl.TwitchRepositoryImpl
+import com.june0122.wakplus.data.repository.impl.YoutubeRepositoryImpl
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
@@ -28,9 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val contentRepository: ContentRepository,
-    private val twitchRepository: TwitchRepository,
-    private val youtubeRepository: YoutubeRepository,
+    private val contentRepository: ContentRepositoryImpl,
+    private val twitchRepository: TwitchRepositoryImpl,
+    private val youtubeRepository: YoutubeRepositoryImpl,
 ) : ViewModel(), StreamerClickListener, SnsClickListener, FavoriteClickListener {
 
     lateinit var contentListAdapter: ContentListAdapter

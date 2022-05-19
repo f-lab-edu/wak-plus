@@ -1,7 +1,7 @@
 package com.june0122.wakplus.di
 
 import com.june0122.wakplus.data.api.TwitchEventSubService
-import com.june0122.wakplus.data.repository.PreferencesRepository
+import com.june0122.wakplus.data.repository.impl.PreferencesRepositoryImpl
 import com.june0122.wakplus.di.TwitchNetworkModule.TwitchAuthInterceptor
 import dagger.Module
 import dagger.Provides
@@ -21,7 +21,7 @@ object TwitchEventSubModule {
     @Singleton
     @Provides
     fun provideTwitchSubService(
-        preferencesRepository: PreferencesRepository,
+        preferencesRepository: PreferencesRepositoryImpl,
         httpLoggingInterceptor: HttpLoggingInterceptor
     ): TwitchEventSubService {
         val client = OkHttpClient.Builder()
