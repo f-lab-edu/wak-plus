@@ -18,6 +18,7 @@ import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
 import com.june0122.wakplus.ui.main.MainActivity
 import com.june0122.wakplus.utils.CenterSmoothScroller
+import com.june0122.wakplus.utils.EmptyDataObserver
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
@@ -113,8 +114,11 @@ class HomeFragment : Fragment() {
         }
 
         contentRecyclerView = binding.rvContent.apply {
+            val emptyObserver = EmptyDataObserver(binding.rvContent, binding.tvEmptyView)
             this.layoutManager = LinearLayoutManager(context)
-            adapter = contentListAdapter
+            adapter = contentListAdapter.apply {
+                registerAdapterDataObserver(emptyObserver)
+            }
         }
     }
 
