@@ -53,6 +53,9 @@ class HomeViewModel @Inject constructor(
     private val _streamers = MutableLiveData<List<StreamerEntity>>()
     val streamers: LiveData<List<StreamerEntity>> = _streamers
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     init {
         contentRepository.run {
             flowAllStreamers()
@@ -192,14 +195,17 @@ class HomeViewModel @Inject constructor(
             postValue(mutableListOf())
             postValue(checkedContent.sortByRecentUploads())
         }
+        _isLoading.postValue(false)
     }
 
     private fun collectStreamerContents(idSet: IdSet) {
         contentsJob = viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             try {
                 val contents = fetchSnsContents(idSet)
                 updateContentsList(contents)
             } catch (e: CancellationException) {
+                _isLoading.postValue(false)
                 Log.e("TEST", "${e.message}")
             } finally {
                 Log.d("TEST", "Close contentsJob resources in finally")
@@ -209,6 +215,7 @@ class HomeViewModel @Inject constructor(
 
     fun collectAllStreamersContents() {
         contentsJob = viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             try {
                 val contents = mutableListOf<Content>()
                 contentRepository.flowAllStreamers()
@@ -219,6 +226,7 @@ class HomeViewModel @Inject constructor(
                         updateContentsList(contents)
                     }.collect()
             } catch (e: CancellationException) {
+                _isLoading.postValue(false)
                 Log.e("TEST", "${e.message}")
             } finally {
                 Log.d("TEST", "Close contentsJob resources in finally")

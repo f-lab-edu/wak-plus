@@ -16,6 +16,7 @@ import com.june0122.wakplus.databinding.FragmentHomeBinding
 import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
+import com.june0122.wakplus.ui.main.MainActivity
 import com.june0122.wakplus.utils.CenterSmoothScroller
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
@@ -78,6 +79,13 @@ class HomeFragment : Fragment() {
 
         homeViewModel.streamers.observe(viewLifecycleOwner) { streamers ->
             streamerListAdapter.submitList(streamers)
+        }
+
+        homeViewModel.isLoading.observe(viewLifecycleOwner) { status ->
+            (requireActivity() as MainActivity).binding.progressLoading.visibility = when (status) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
         }
     }
 
