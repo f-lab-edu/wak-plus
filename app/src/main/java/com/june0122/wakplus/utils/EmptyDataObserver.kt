@@ -36,8 +36,8 @@ class EmptyDataObserver(
     }
 
     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-        checkItemEmpty()
         super.onItemRangeInserted(positionStart, itemCount)
+        checkItemEmpty()
     }
 
     override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {

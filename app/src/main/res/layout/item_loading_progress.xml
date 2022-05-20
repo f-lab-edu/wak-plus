@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ProgressBar
-        android:id="@+id/paging_progressbar"
+        android:id="@+id/progress_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
