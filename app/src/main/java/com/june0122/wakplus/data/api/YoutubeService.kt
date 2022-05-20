@@ -19,7 +19,7 @@ interface YoutubeService {
         @Query("part") part: String = "snippet",
         @Query("channelId") channelId: String,
         @Query("order") order: String,
-        @Query("maxResults") maxResults: Int = 8,
+        @Query("maxResults") maxResults: Int = 10,
     ): YoutubeChannelVideos
 
     @GET("videos")

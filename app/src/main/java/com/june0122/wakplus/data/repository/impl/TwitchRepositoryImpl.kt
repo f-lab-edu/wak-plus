@@ -19,14 +19,14 @@ class TwitchRepositoryImpl @Inject constructor(
     override suspend fun getTwitchUserInfo(userId: String): TwitchUserInfo =
         twitchApi.getUserInfo(userId).data[0]
 
-    override suspend fun getTwitchVideos(idSet: IdSet): List<Content> {
+    override suspend fun getTwitchVideos(idSet: IdSet, maxResults: Int): List<Content> {
         val twitchVideos = try {
             Log.e("TEST", "NO EXCEPTION")
-            twitchApi.getChannelVideos(idSet.twitchId).data
+            twitchApi.getChannelVideos(idSet.twitchId, maxResults).data
         } catch (e: Exception) {
             Log.e("TEST", "EXCEPTION : ${e.printStackTrace()}")
             storeTwitchAccessToken()
-            twitchApi.getChannelVideos(idSet.twitchId).data
+            twitchApi.getChannelVideos(idSet.twitchId, maxResults).data
         }
 
         val twitchUserInfo = twitchApi.getUserInfo(idSet.twitchId).data[0]
