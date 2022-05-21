@@ -1,6 +1,5 @@
 package com.june0122.wakplus.ui.home
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,7 +20,6 @@ import com.june0122.wakplus.utils.CenterSmoothScroller
 import com.june0122.wakplus.utils.EmptyDataObserver
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
-import com.june0122.wakplus.utils.listeners.DataLoadListener
 import com.june0122.wakplus.utils.listeners.StreamerClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +29,6 @@ class HomeFragment : Fragment() {
     private lateinit var streamerRecyclerView: RecyclerView
     private lateinit var snsRecyclerView: RecyclerView
     private lateinit var contentRecyclerView: RecyclerView
-    private lateinit var dataLoadListener: DataLoadListener
     private val homeViewModel: HomeViewModel by viewModels()
     private val horizontalLayoutManager =
         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -52,16 +49,6 @@ class HomeFragment : Fragment() {
     )
     private val snsListAdapter: SnsListAdapter = SnsListAdapter { position ->
         homeViewModel.onSnsClick(position)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        if (context is DataLoadListener) {
-            dataLoadListener = context
-        } else {
-            throw RuntimeException("$context must implement DataLoadListener")
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -92,10 +79,6 @@ class HomeFragment : Fragment() {
 
         homeViewModel.streamers.observe(viewLifecycleOwner) { streamers ->
             streamerListAdapter.submitList(streamers)
-        }
-
-        homeViewModel.isLoading.observe(viewLifecycleOwner) { status ->
-            dataLoadListener.onStatusChanged(status)
         }
     }
 
