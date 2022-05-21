@@ -59,8 +59,10 @@ class HomeFragment : Fragment() {
 
         if (context is DataLoadListener) {
             dataLoadListener = context
-        } else {
-            throw RuntimeException("$context must implement DataLoadListener")
+        }
+
+        if (this::dataLoadListener.isInitialized.not()) {
+            throw RuntimeException("lateinit property $dataLoadListener has not been initialized")
         }
     }
 
