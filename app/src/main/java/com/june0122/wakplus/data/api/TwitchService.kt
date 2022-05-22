@@ -7,7 +7,10 @@ import retrofit2.http.Query
 
 interface TwitchService {
     @GET("videos")
-    suspend fun getChannelVideos(@Query("user_id") userId: String): TwitchVideos
+    suspend fun getChannelVideos(
+        @Query("user_id") userId: String,
+        @Query("first") maxResults: Int = 20,
+    ): TwitchVideos
 
     @GET("users")
     suspend fun getUserInfo(@Query("id") userId: String): TwitchUserInfoSet

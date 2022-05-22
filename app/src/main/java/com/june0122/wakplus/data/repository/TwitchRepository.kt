@@ -8,7 +8,7 @@ import com.june0122.wakplus.data.entity.TwitchVideoInfo
 interface TwitchRepository {
     suspend fun getTwitchUserInfo(userId: String): TwitchUserInfo
 
-    suspend fun getTwitchVideos(idSet: IdSet): List<Content>
+    suspend fun getTwitchVideos(idSet: IdSet, maxResults: Int): List<Content>
 
     suspend fun createTwitchAccessToken(): String
 

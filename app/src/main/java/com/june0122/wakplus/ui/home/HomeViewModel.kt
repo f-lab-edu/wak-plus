@@ -53,6 +53,9 @@ class HomeViewModel @Inject constructor(
     private val _streamers = MutableLiveData<List<StreamerEntity>>()
     val streamers: LiveData<List<StreamerEntity>> = _streamers
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     init {
         contentRepository.run {
             flowAllStreamers()
@@ -165,24 +168,29 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private suspend fun fetchSnsContents(idSet: IdSet): List<Content> = withContext(Dispatchers.IO) {
-        when (currentSns.serviceId) {
-            SNS.ALL -> {
-                /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
-                // (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
-                mutableListOf()
-            }
-            SNS.TWITCH -> {
-                twitchRepository.getTwitchVideos(idSet)
-            }
-            SNS.YOUTUBE -> {
-                youtubeRepository.getYoutubeVideos(idSet, getStreamerYoutubeProfile(idSet))
-            }
-            else -> {
-                mutableListOf()
+    private suspend fun fetchSnsContents(idSet: IdSet, maxResults: Int): List<Content> =
+        withContext(Dispatchers.IO) {
+            when (currentSns.serviceId) {
+                SNS.ALL -> {
+                    /** Youtube API 할당량을 많이 소모하는 작업이기에 임시로 주석 처리 */
+                    // (getTwitchVideos(idSet) + getYoutubeVideos(idSet)).sortByRecentUploads()
+                    mutableListOf()
+                }
+                SNS.TWITCH -> {
+                    twitchRepository.getTwitchVideos(idSet, maxResults)
+                }
+                SNS.YOUTUBE -> {
+                    youtubeRepository.getYoutubeVideos(
+                        idSet = idSet,
+                        profileUrl = getStreamerYoutubeProfile(idSet),
+                        maxResults = maxResults
+                    )
+                }
+                else -> {
+                    mutableListOf()
+                }
             }
         }
-    }
 
     private fun updateContentsList(contents: List<Content>) = viewModelScope.launch {
         _contents.run {
@@ -192,14 +200,17 @@ class HomeViewModel @Inject constructor(
             postValue(mutableListOf())
             postValue(checkedContent.sortByRecentUploads())
         }
+        _isLoading.postValue(false)
     }
 
     private fun collectStreamerContents(idSet: IdSet) {
         contentsJob = viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             try {
-                val contents = fetchSnsContents(idSet)
+                val contents = fetchSnsContents(idSet, MAX_RESULTS)
                 updateContentsList(contents)
             } catch (e: CancellationException) {
+                _isLoading.postValue(false)
                 Log.e("TEST", "${e.message}")
             } finally {
                 Log.d("TEST", "Close contentsJob resources in finally")
@@ -209,20 +220,29 @@ class HomeViewModel @Inject constructor(
 
     fun collectAllStreamersContents() {
         contentsJob = viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             try {
                 val contents = mutableListOf<Content>()
                 contentRepository.flowAllStreamers()
                     .onEach { streamers ->
                         streamers.forEach { streamer ->
-                            contents.addAll(fetchSnsContents(streamer.idSet))
+                            contents.addAll(
+                                fetchSnsContents(streamer.idSet, MAX_RESULTS_ALL)
+                            )
                         }
                         updateContentsList(contents)
                     }.collect()
             } catch (e: CancellationException) {
+                _isLoading.postValue(false)
                 Log.e("TEST", "${e.message}")
             } finally {
                 Log.d("TEST", "Close contentsJob resources in finally")
             }
         }
+    }
+
+    companion object {
+        private const val MAX_RESULTS = 10
+        private const val MAX_RESULTS_ALL = 3
     }
 }

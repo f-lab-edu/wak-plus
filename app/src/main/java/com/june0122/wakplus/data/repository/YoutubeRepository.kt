@@ -5,7 +5,7 @@ import com.june0122.wakplus.data.entity.IdSet
 import com.june0122.wakplus.data.entity.YoutubeVideoInfo
 
 interface YoutubeRepository {
-    suspend fun getYoutubeVideos(idSet: IdSet, profileUrl: String): List<Content>
+    suspend fun getYoutubeVideos(idSet: IdSet, profileUrl: String, maxResults: Int): List<Content>
 
     suspend fun getYoutubeVideosByPlaylist(idSet: IdSet, profileUrl: String): List<Content>
 

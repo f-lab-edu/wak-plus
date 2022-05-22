@@ -12,9 +12,17 @@ import javax.inject.Inject
 class YoutubeRepositoryImpl @Inject constructor(
     private val youtubeApi: YoutubeService,
 ) : YoutubeRepository {
-    override suspend fun getYoutubeVideos(idSet: IdSet, profileUrl: String): List<Content> {
+    override suspend fun getYoutubeVideos(
+        idSet: IdSet,
+        profileUrl: String,
+        maxResults: Int,
+    ): List<Content> {
         return youtubeApi.run {
-            getChannelVideos(channelId = idSet.youtubeId, order = ORDER_BY_DATE)
+            getChannelVideos(
+                channelId = idSet.youtubeId,
+                order = ORDER_BY_DATE,
+                maxResults = maxResults
+            )
                 .items
                 .map { video ->
                     getVideoInfo(id = video.id.videoId)
