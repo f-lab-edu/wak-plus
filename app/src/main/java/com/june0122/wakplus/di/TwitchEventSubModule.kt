@@ -2,7 +2,7 @@ package com.june0122.wakplus.di
 
 import com.june0122.wakplus.data.api.TwitchEventSubService
 import com.june0122.wakplus.data.repository.impl.PreferencesRepositoryImpl
-import com.june0122.wakplus.di.TwitchNetworkModule.TwitchAuthInterceptor
+import com.june0122.wakplus.di.TwitchApiModule.TwitchAuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

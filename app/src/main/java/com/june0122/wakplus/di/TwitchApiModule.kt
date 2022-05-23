@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object TwitchNetworkModule {
+object TwitchApiModule {
     private const val BASE_URL = "https://api.twitch.tv/helix/"
 
     @Singleton
