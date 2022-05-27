@@ -15,4 +15,9 @@
         android:name="com.june0122.wakplus.ui.favorite.FavoriteFragment"
         android:label="FavoriteFragment"
         tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/settings_dest"
+        android:name="com.june0122.wakplus.ui.settings.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
