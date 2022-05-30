@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">WakPlus</string>
 
+    <!-- Fragment Title -->
+    <string name="fragment_home">홈</string>
+    <string name="fragment_favorite">즐겨찾기</string>
+    <string name="fragment_settings">설정</string>
+
+    <!-- Empty Content -->
+    <string name="empty_content">콘텐츠가 없습니다.</string>
+
+    <!-- View Count -->
     <string name="view_count">조회수 %1$s회</string>
 
     <!-- Elapsed Time -->

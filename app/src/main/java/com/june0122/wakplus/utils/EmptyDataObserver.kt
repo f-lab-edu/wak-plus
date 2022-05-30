@@ -1,12 +1,11 @@
 package com.june0122.wakplus.utils
 
 import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class EmptyDataObserver(
     private val recyclerView: RecyclerView,
-    private val textView: TextView
+    private val view: View
 ) : RecyclerView.AdapterDataObserver() {
 
     init {
@@ -15,8 +14,7 @@ class EmptyDataObserver(
 
     private fun checkItemEmpty() {
         val isEmpty = recyclerView.adapter?.itemCount == 0
-        // val isEmpty = recyclerView.isEmpty() // 아이템이 존재하는데도 true를 반환하는 케이스가 있음
-        textView.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        view.visibility = if (isEmpty) View.VISIBLE else View.GONE
     }
 
     // DiffUtil에서 동작하지 않음

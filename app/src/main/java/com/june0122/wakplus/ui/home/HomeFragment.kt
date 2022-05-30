@@ -121,7 +121,7 @@ class HomeFragment : Fragment() {
         }
 
         contentRecyclerView = binding.rvContent.apply {
-            val emptyObserver = EmptyDataObserver(binding.rvContent, binding.tvEmptyView)
+            val emptyObserver = EmptyDataObserver(binding.rvContent, binding.layoutEmptyContent)
             this.layoutManager = LinearLayoutManager(context)
             adapter = contentListAdapter.apply {
                 registerAdapterDataObserver(emptyObserver)
