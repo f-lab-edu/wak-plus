@@ -61,6 +61,7 @@
                             android:textColor="@color/Primary"
                             android:textSize="35sp"
                             android:textStyle="bold"
+                            android:visibility="invisible"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/tv_service_title"

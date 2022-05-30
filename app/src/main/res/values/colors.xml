@@ -6,8 +6,9 @@
     <color name="Secondary">#03DAC6</color>
     <color name="SecondaryVariant">#018786</color>
     <color name="Text">#222222</color>
+    <color name="TextVariant">#FFFFFFFF</color>
     <color name="Background">#FFFFFF</color>
-    <color name="Surface">#FFFFFF</color>
+    <color name="Surface">#797A7F</color>
     <color name="Error">#B00020</color>
     <color name="OnPrimary">#FFFFFF</color>
     <color name="OnSecondary">#000000</color>
