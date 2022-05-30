@@ -101,6 +101,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        dataLoadListener.onStatusChanged(false)
     }
 
     private fun configureRecyclerViews() {
