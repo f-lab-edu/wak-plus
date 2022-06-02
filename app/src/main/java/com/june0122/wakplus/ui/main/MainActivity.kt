@@ -3,9 +3,13 @@ package com.june0122.wakplus.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.june0122.wakplus.R
 import com.june0122.wakplus.databinding.ActivityMainBinding
@@ -16,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity(), DataLoadListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onStatusChanged(isLoading: Boolean) {
         when (isLoading) {
@@ -30,14 +35,26 @@ class MainActivity : AppCompatActivity(), DataLoadListener {
         val view = binding.root
         setContentView(view)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.home_dest, R.id.favorite_dest, R.id.settings_dest)
+        )
         setupBottomNavMenu(navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration)
     }
 
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = binding.bottomNavView
         bottomNav.setupWithNavController(navController)
+    }
+
+    fun setupActionBar(toolBar: Toolbar) {
+        setSupportActionBar(toolBar)
+        setupActionBarWithNavController(navController)
     }
 }

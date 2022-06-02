@@ -19,5 +19,22 @@
         android:id="@+id/settings_dest"
         android:name="com.june0122.wakplus.ui.settings.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settings_to_dark_mode"
+            app:destination="@id/dark_mode_dest" />
+        <action
+            android:id="@+id/action_settings_to_themes"
+            app:destination="@id/themes_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/dark_mode_dest"
+        android:name="com.june0122.wakplus.ui.settings.dark.DarkModeFragment"
+        android:label="@string/fragment_dark_mode"
+        tools:layout="@layout/fragment_dark_mode" />
+    <fragment
+        android:id="@+id/themes_dest"
+        android:name="com.june0122.wakplus.ui.settings.themes.ThemesFragment"
+        android:label="@string/fragment_themes"
+        tools:layout="@layout/fragment_themes" />
 </navigation>
