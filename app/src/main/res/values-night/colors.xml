@@ -6,15 +6,15 @@
     <color name="Secondary">#8a2be2</color>
     <color name="SecondaryVariant">#018786</color>
     <color name="Text">#FFFFFFFF</color>
-    <color name="TextLight">#E1E1E1</color>
+    <color name="TextLight">#7A7A7A</color>
     <color name="TextVariant">#222222</color>
     <color name="Background">#222222</color>
-    <color name="Surface">#D1D6DA</color>
+    <color name="Surface">#3A3A3A</color>
     <color name="Error">#B00020</color>
     <color name="OnPrimary">#FFFFFF</color>
     <color name="OnSecondary">#000000</color>
     <color name="OnBackground">#FFFFFF</color>
-    <color name="OnSurface">#3A3A3A</color>
+    <color name="OnSurface">#555555</color>
     <color name="OnError">#FFFFFF</color>
 
     <color name="black">#FF000000</color>

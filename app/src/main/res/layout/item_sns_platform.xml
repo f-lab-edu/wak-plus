@@ -31,6 +31,8 @@
             android:onClick="@{() -> snsClickListener.onSnsClick(position)}"
             android:textColor="@{snsPlatform.selected ? @color/TextVariant : @color/Text}"
             app:chipCornerRadius="15dp"
+            app:chipStrokeColor="@color/OnSurface"
+            app:chipStrokeWidth="@{snsPlatform.selected ? 0 : 2}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

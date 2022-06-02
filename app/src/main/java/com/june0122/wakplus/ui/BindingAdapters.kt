@@ -148,6 +148,6 @@ object BindingAdapters {
         view.context.theme.resolveAttribute(R.attr.Primary, typedValue, true)
 
         if (isSelected) view.setChipBackgroundColorResource(typedValue.resourceId)
-        else view.setChipBackgroundColorResource(R.color.OnSurface)
+        else view.setChipBackgroundColorResource(R.color.Surface)
     }
 }
