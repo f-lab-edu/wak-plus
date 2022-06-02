@@ -133,7 +133,7 @@ object BindingAdapters {
     @BindingAdapter("streamerBackground")
     fun setStreamerBackground(view: ConstraintLayout, isSelected: Boolean) {
         val typedValue = TypedValue()
-        view.context.theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+        view.context.theme.resolveAttribute(R.attr.PrimaryAlpha, typedValue, true)
         val color = ContextCompat.getColor(view.context, typedValue.resourceId)
 
         if (isSelected) view.setBackgroundColor(color)
@@ -145,7 +145,7 @@ object BindingAdapters {
     @BindingAdapter("chipBackground")
     fun setChipBackground(view: Chip, isSelected: Boolean) {
         val typedValue = TypedValue()
-        view.context.theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+        view.context.theme.resolveAttribute(R.attr.Primary, typedValue, true)
 
         if (isSelected) view.setChipBackgroundColorResource(typedValue.resourceId)
         else view.setChipBackgroundColorResource(R.color.OnSurface)

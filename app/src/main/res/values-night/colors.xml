@@ -27,13 +27,18 @@
     <color name="viichan_primary">#85ac20</color>
     <color name="transparent">#00ff0000</color>
 
-    <color name="colorPrimary">#8a2be2</color>
-    <color name="colorPrimaryDark">#252525</color>
-    <color name="colorAccent">#FF3C00</color>
-    <color name="colorText">#9C27B0</color>
+    <color name="InePrimary">#8a2be2</color>
+    <color name="InePrimaryAlpha">#808A2BE2</color>
+    <color name="InePrimaryDark">#252525</color>
+    <color name="IneAccent">#FFFFFFFF</color>
 
-    <color name="colorPrimary2">#FFC107</color>
-    <color name="colorPrimaryDark2">#FFBB29</color>
-    <color name="colorAccent2">#FFB728</color>
-    <color name="colorText2">#272727</color>
+    <color name="JingburgerPrimary">#FFC107</color>
+    <color name="JingburgerPrimaryAlpha">#80FFC107</color>
+    <color name="JingburgerPrimaryDark">#FFBB29</color>
+    <color name="JingburgerAccent">#FFFFFFFF</color>
+
+    <color name="ViichanPrimary">#85ac20</color>
+    <color name="ViichanPrimaryAlpha">#8085AC20</color>
+    <color name="ViichanPrimaryDark">#252525</color>
+    <color name="ViichanAccent">#FFFFFFFF</color>
 </resources>
