@@ -10,14 +10,14 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/Background"
+        android:background="?attr/colorBackground"
         tools:context=".ui.home.SettingsFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Background"
+            android:background="?attr/colorBackground"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
+                app:contentScrim="?attr/colorBackground"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:toolbarId="@+id/toolbar">
 
@@ -60,7 +60,7 @@
                             android:id="@+id/tv_plus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/Primary"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="35sp"
                             android:textStyle="bold"
                             android:visibility="invisible"

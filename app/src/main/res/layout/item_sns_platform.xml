@@ -24,12 +24,12 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_sns"
+            chipBackground="@{snsPlatform.selected}"
             snsName="@{snsPlatform}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> snsClickListener.onSnsClick(position)}"
             android:textColor="@{snsPlatform.selected ? @color/TextVariant : @color/Text}"
-            app:chipBackgroundColor="@{snsPlatform.selected ? @color/Primary : @color/OnSurface}"
             app:chipCornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
