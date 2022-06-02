@@ -3,9 +3,10 @@
     <color name="Primary">#8a2be2</color>
     <color name="Primary50">#808A2BE2</color>
     <color name="PrimaryVariant">#3700B3</color>
-    <color name="Secondary">#03DAC6</color>
+    <color name="Secondary">#B39DDB</color>
     <color name="SecondaryVariant">#018786</color>
     <color name="Text">#222222</color>
+    <color name="TextLight">#4A4A4A</color>
     <color name="TextVariant">#FFFFFFFF</color>
     <color name="Background">#FFFFFF</color>
     <color name="Surface">#797A7F</color>
@@ -25,4 +26,14 @@
     <color name="ine_secondary">#D7D7DC</color>
     <color name="viichan_primary">#85ac20</color>
     <color name="transparent">#00ff0000</color>
+
+    <color name="colorPrimary">#8a2be2</color>
+    <color name="colorPrimaryDark">#252525</color>
+    <color name="colorAccent">#FF3C00</color>
+    <color name="colorText">#9C27B0</color>
+
+    <color name="colorPrimary2">#FFC107</color>
+    <color name="colorPrimaryDark2">#FFBB29</color>
+    <color name="colorAccent2">#FFB728</color>
+    <color name="colorText2">#272727</color>
 </resources>

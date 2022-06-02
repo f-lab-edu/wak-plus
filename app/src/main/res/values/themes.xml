@@ -1,17 +1,28 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.WakPlus.Ine" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/Background</item>
-        <item name="colorPrimaryVariant">@color/PrimaryVariant</item>
-        <item name="colorOnPrimary">@color/OnPrimary</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/Secondary</item>
-        <item name="colorSecondaryVariant">@color/SecondaryVariant</item>
-        <item name="colorOnSecondary">@color/OnSecondary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorText">@color/colorText</item>
+        <item name="colorBackground">@color/Background</item>
         <!-- Status bar color. -->
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/Background</item>
+        <item name="android:statusBarColor">@color/Background</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.WakPlus.Jingburger" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary2</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
+        <item name="colorAccent">@color/colorAccent2</item>
+        <item name="colorText">@color/colorText2</item>
+        <item name="colorBackground">@color/Background</item>
+        <!-- Status bar color. -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/Background</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>
