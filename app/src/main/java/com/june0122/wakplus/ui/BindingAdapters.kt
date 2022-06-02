@@ -1,7 +1,10 @@
 package com.june0122.wakplus.ui
 
+import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import coil.load
 import coil.size.Scale
@@ -124,5 +127,27 @@ object BindingAdapters {
             else -> throw Exception("Invalid sns type.")
         }
         view.setText(stringRes)
+    }
+
+    @JvmStatic
+    @BindingAdapter("streamerBackground")
+    fun setStreamerBackground(view: ConstraintLayout, isSelected: Boolean) {
+        val typedValue = TypedValue()
+        view.context.theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+        val color = ContextCompat.getColor(view.context, typedValue.resourceId)
+
+        if (isSelected) view.setBackgroundColor(color)
+        else view.setBackgroundColor(ContextCompat.getColor(view.context, R.color.transparent))
+
+    }
+
+    @JvmStatic
+    @BindingAdapter("chipBackground")
+    fun setChipBackground(view: Chip, isSelected: Boolean) {
+        val typedValue = TypedValue()
+        view.context.theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+
+        if (isSelected) view.setChipBackgroundColorResource(typedValue.resourceId)
+        else view.setChipBackgroundColorResource(R.color.OnSurface)
     }
 }
