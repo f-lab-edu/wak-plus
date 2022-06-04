@@ -78,9 +78,7 @@ class HomeFragment : Fragment() {
         homeViewModel.streamerListAdapter = streamerListAdapter
         homeViewModel.snsListAdapter = snsListAdapter
 
-        if (contentListAdapter.itemCount == 0) {
-            homeViewModel.collectAllStreamersContents()
-        }
+        homeViewModel.initContentList()
 
         homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
             contentListAdapter.submitList(contents)
