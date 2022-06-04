@@ -33,7 +33,7 @@
         tools:layout="@layout/fragment_dark_mode" />
     <fragment
         android:id="@+id/themes_dest"
-        android:name="com.june0122.wakplus.ui.settings.themes.ThemeFragment"
+        android:name="com.june0122.wakplus.ui.settings.theme.ThemeFragment"
         android:label="@string/fragment_themes"
         tools:layout="@layout/fragment_themes" />
 </navigation>
