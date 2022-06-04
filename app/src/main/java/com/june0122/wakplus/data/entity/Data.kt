@@ -54,3 +54,7 @@ data class SnsPlatformEntity(
     @PrimaryKey val serviceId: Int,
     val isSelected: Boolean,
 )
+
+data class Theme(
+    val name: String,
+)
