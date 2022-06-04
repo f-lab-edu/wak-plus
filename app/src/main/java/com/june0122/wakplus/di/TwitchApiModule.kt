@@ -52,7 +52,7 @@ object TwitchApiModule {
             val twitchAccessToken: String
 
             runBlocking {
-                twitchAccessToken = preferencesRepository.getTwitchAccessToken().first()
+                twitchAccessToken = preferencesRepository.flowTwitchAccessTokens().first()
             }
 
             val newRequest = request().newBuilder()
