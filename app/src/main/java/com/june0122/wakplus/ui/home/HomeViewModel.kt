@@ -141,10 +141,11 @@ class HomeViewModel @Inject constructor(
 
     private fun checkFavorites(favorites: List<Content>) {
         _contents.value = _contents.value?.map { content ->
-            if (favorites.firstOrNull { it.contentId == content.contentId } != null) content.copy(
-                isFavorite = true
-            )
-            else content.copy(isFavorite = false)
+            if (favorites.firstOrNull { it.contentId == content.contentId } != null) {
+                content.copy(isFavorite = true)
+            } else {
+                content.copy(isFavorite = false)
+            }
         }
     }
 
