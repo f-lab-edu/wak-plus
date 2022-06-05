@@ -193,9 +193,7 @@ class HomeViewModel @Inject constructor(
         }
 
     fun initContentList() {
-        if (_contents.value?.size == 0 || _contents.value?.size == null) {
-            collectAllStreamersContents()
-        }
+        if (_contents.value?.size == null) collectAllStreamersContents()
     }
 
     private fun updateContentList(contents: List<Content>) = viewModelScope.launch {

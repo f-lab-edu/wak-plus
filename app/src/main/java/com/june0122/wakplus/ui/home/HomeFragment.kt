@@ -77,7 +77,6 @@ class HomeFragment : Fragment() {
         homeViewModel.contentListAdapter = contentListAdapter
         homeViewModel.streamerListAdapter = streamerListAdapter
         homeViewModel.snsListAdapter = snsListAdapter
-
         homeViewModel.initContentList()
 
         homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
