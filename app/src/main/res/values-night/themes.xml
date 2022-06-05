@@ -2,22 +2,22 @@
     <!-- Base application theme. -->
     <style name="Theme.Ine" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="Primary">@color/InePrimary</item>
-        <item name="PrimaryAlpha">@color/InePrimaryAlpha</item>
-        <item name="PrimaryDark">@color/InePrimaryDark</item>
-        <item name="Accent">@color/IneAccent</item>
-        <item name="Background">@color/Background</item>
+        <item name="colorPrimary">@color/InePrimary</item>
+        <item name="colorPrimaryAlpha">@color/InePrimaryAlpha</item>
+        <item name="colorPrimaryDark">@color/InePrimaryDark</item>
+        <item name="colorAccent">@color/IneAccent</item>
+        <item name="colorBackground">@color/Background</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/Background</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="Theme.Jingburger" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="Primary">@color/JingburgerPrimary</item>
-        <item name="PrimaryAlpha">@color/JingburgerPrimaryAlpha</item>
-        <item name="PrimaryDark">@color/JingburgerPrimaryDark</item>
-        <item name="Accent">@color/JingburgerAccent</item>
-        <item name="Background">@color/Background</item>
+        <item name="colorPrimary">@color/JingburgerPrimary</item>
+        <item name="colorPrimaryAlpha">@color/JingburgerPrimaryAlpha</item>
+        <item name="colorPrimaryDark">@color/JingburgerPrimaryDark</item>
+        <item name="colorAccent">@color/JingburgerAccent</item>
+        <item name="colorBackground">@color/Background</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/Background</item>
         <!-- Customize your theme here. -->
@@ -25,11 +25,11 @@
 
     <style name="Theme.Viichan" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="Primary">@color/ViichanPrimary</item>
-        <item name="PrimaryAlpha">@color/ViichanPrimaryAlpha</item>
-        <item name="PrimaryDark">@color/ViichanPrimaryDark</item>
-        <item name="Accent">@color/ViichanAccent</item>
-        <item name="Background">@color/Background</item>
+        <item name="colorPrimary">@color/ViichanPrimary</item>
+        <item name="colorPrimaryAlpha">@color/ViichanPrimaryAlpha</item>
+        <item name="colorPrimaryDark">@color/ViichanPrimaryDark</item>
+        <item name="colorAccent">@color/ViichanAccent</item>
+        <item name="colorBackground">@color/Background</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/Background</item>
         <!-- Customize your theme here. -->

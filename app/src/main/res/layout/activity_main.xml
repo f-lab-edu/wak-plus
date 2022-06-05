@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/Background"
+        android:background="?attr/colorBackground"
         tools:context=".ui.main.MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
@@ -29,7 +29,7 @@
             android:id="@+id/bottom_nav_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/botton_navigation_height"
-            android:background="?attr/Background"
+            android:background="?attr/colorBackground"
             app:itemIconTint="@drawable/selector_menu_color"
             app:itemTextColor="@drawable/selector_menu_color"
             app:layout_constraintBottom_toBottomOf="parent"

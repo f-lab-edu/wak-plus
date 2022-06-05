@@ -57,7 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_check"
-                app:tint="?attr/Primary" />
+                app:tint="?attr/colorPrimary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -81,7 +81,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_check"
-                app:tint="?attr/Primary" />
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/tv_light_mode"
@@ -120,7 +120,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_check"
-                app:tint="?attr/Primary" />
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/tv_system_mode"

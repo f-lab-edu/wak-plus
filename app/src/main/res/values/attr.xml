@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="Theme">
-        <attr name="Primary" format="color" />
-        <attr name="PrimaryAlpha" format="color" />
-        <attr name="PrimaryDark" format="color" />
-        <attr name="Accent" format="color" />
-        <attr name="Background" format="color" />
+        <attr name="colorPrimary" format="color" />
+        <attr name="colorPrimaryAlpha" format="color" />
+        <attr name="colorPrimaryDark" format="color" />
+        <attr name="colorAccent" format="color" />
+        <attr name="colorBackground" format="color" />
     </declare-styleable>
 </resources>

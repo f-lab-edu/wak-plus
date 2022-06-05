@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/Background"
+                app:contentScrim="?attr/colorBackground"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:toolbarId="@+id/toolbar">
 
@@ -59,7 +59,7 @@
                             android:id="@+id/tv_plus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="?attr/Primary"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="35sp"
                             android:textStyle="bold"
                             android:visibility="invisible"
