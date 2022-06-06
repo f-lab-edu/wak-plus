@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorBackground"
             android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
