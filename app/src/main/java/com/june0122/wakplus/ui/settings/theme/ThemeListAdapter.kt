@@ -3,6 +3,7 @@ package com.june0122.wakplus.ui.settings.theme
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.june0122.wakplus.R
 import com.june0122.wakplus.data.entity.Theme
 import com.june0122.wakplus.databinding.ItemThemeBinding
 import com.june0122.wakplus.utils.ISEDOL.INE
@@ -14,9 +15,9 @@ class ThemeListAdapter(
     private val themeClickListener: ThemeClickListener
 ) : RecyclerView.Adapter<ThemeViewHolder>() {
     private val themeList = mutableListOf(
-        Theme(INE),
-        Theme(JINGBURGER),
-        Theme(VIICHAN),
+        Theme(INE, R.color.InePrimary to R.color.InePrimaryDark),
+        Theme(JINGBURGER, R.color.JingburgerPrimary to R.color.JingburgerPrimaryDark),
+        Theme(VIICHAN, R.color.ViichanPrimary to R.color.ViichanPrimaryDark),
     )
 
     override fun getItemCount(): Int = themeList.size

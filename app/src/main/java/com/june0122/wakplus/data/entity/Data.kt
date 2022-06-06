@@ -1,5 +1,7 @@
 package com.june0122.wakplus.data.entity
 
+import androidx.annotation.ColorInt
+import androidx.annotation.IntegerRes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -57,4 +59,5 @@ data class SnsPlatformEntity(
 
 data class Theme(
     val name: String,
+    val colorset: Pair<Int, Int>,
 )
