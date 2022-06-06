@@ -12,7 +12,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Jingburger" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Jingburger" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/JingburgerPrimary</item>
         <item name="colorPrimaryAlpha">@color/JingburgerPrimaryAlpha</item>
         <item name="colorPrimaryDark">@color/JingburgerPrimaryDark</item>
@@ -23,7 +23,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Viichan" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Viichan" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/ViichanPrimary</item>
         <item name="colorPrimaryAlpha">@color/ViichanPrimaryAlpha</item>
