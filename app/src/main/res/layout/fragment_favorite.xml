@@ -48,7 +48,7 @@
                             android:id="@+id/tv_service_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="즐겨찾기"
+                            android:text="@string/fragment_favorite"
                             android:textColor="@color/Text"
                             android:textSize="28sp"
                             android:textStyle="bold"
