@@ -3,6 +3,7 @@ package com.june0122.wakplus.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(), DataLoadListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         lifecycleScope.launch {
             super.onCreate(savedInstanceState)
+            setupDarkMode()
             setupTheme()
             binding = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
             val view = binding.root
@@ -62,6 +64,11 @@ class MainActivity : AppCompatActivity(), DataLoadListener {
     private suspend fun setupTheme() {
         val appTheme = preferencesRepository.flowThemes().first()
         this.setTheme(appTheme)
+    }
+
+    private suspend fun setupDarkMode() {
+        val darkModeId = preferencesRepository.flowDarkModeIds().first()
+        AppCompatDelegate.setDefaultNightMode(darkModeId)
     }
 
     private fun setupBottomNavMenu(navController: NavController) {
