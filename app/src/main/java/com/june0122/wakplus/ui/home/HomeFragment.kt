@@ -18,7 +18,6 @@ import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
 import com.june0122.wakplus.utils.CenterSmoothScroller
-import com.june0122.wakplus.utils.EmptyDataObserver
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
 import com.june0122.wakplus.utils.listeners.DataLoadListener
@@ -81,6 +80,12 @@ class HomeFragment : Fragment() {
 
         homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
             contentListAdapter.submitList(contents)
+
+            if (contents != null && contents.isEmpty()) {
+                binding.layoutEmptyContent.visibility = View.VISIBLE
+            } else {
+                binding.layoutEmptyContent.visibility = View.INVISIBLE
+            }
         }
 
         homeViewModel.snsPlatforms.observe(viewLifecycleOwner) { snsPlatforms ->
@@ -118,11 +123,8 @@ class HomeFragment : Fragment() {
         }
 
         contentRecyclerView = binding.rvContent.apply {
-            val emptyObserver = EmptyDataObserver(binding.rvContent, binding.layoutEmptyContent)
             this.layoutManager = LinearLayoutManager(context)
-            adapter = contentListAdapter.apply {
-                registerAdapterDataObserver(emptyObserver)
-            }
+            adapter = contentListAdapter
         }
     }
 
