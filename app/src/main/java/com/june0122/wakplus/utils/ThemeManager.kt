@@ -27,4 +27,10 @@ class ThemeManager @Inject constructor(
             preferencesRepository.updateTheme(themeResourseId)
         }
     }
+
+    fun saveActiveDarkMode(activeMode: Int) {
+        coroutineScope.launch {
+            preferencesRepository.updateDarkModeId(activeMode)
+        }
+    }
 }
