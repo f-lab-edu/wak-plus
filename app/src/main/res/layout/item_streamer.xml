@@ -22,7 +22,7 @@
         android:id="@+id/layout_streamer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@{streamer.selected ? @color/Primary50 : @color/transparent}"
+        streamerBackground="@{streamer.selected}"
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{()->streamerClickListener.onStreamerClick(position)}"

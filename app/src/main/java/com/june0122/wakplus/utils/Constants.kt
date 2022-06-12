@@ -9,3 +9,12 @@ object SNS {
     const val TWITTER = 5
     const val SOUNDCLOUD = 6
 }
+
+object ISEDOL {
+    const val INE = "INE"
+    const val LILPA = "LILPA"
+    const val JURURU = "JURURU"
+    const val GOSEGU = "GOSEGU"
+    const val VIICHAN = "VIICHAN"
+    const val JINGBURGER = "JINGBURGER"
+}

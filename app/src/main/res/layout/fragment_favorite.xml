@@ -19,14 +19,15 @@
             android:layout_height="wrap_content"
             android:background="@color/Background"
             android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
+                app:contentScrim="?attr/colorBackground"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:toolbarId="@+id/toolbar">
 
@@ -47,7 +48,7 @@
                             android:id="@+id/tv_service_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="즐겨찾기"
+                            android:text="@string/fragment_favorite"
                             android:textColor="@color/Text"
                             android:textSize="28sp"
                             android:textStyle="bold"
@@ -58,9 +59,10 @@
                             android:id="@+id/tv_plus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/Primary"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="35sp"
                             android:textStyle="bold"
+                            android:visibility="invisible"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/tv_service_title"
@@ -94,8 +96,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_height="match_parent">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_content"

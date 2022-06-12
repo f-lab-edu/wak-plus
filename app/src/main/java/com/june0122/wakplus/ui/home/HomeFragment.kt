@@ -18,7 +18,6 @@ import com.june0122.wakplus.ui.home.adapter.ContentListAdapter
 import com.june0122.wakplus.ui.home.adapter.SnsListAdapter
 import com.june0122.wakplus.ui.home.adapter.StreamerListAdapter
 import com.june0122.wakplus.utils.CenterSmoothScroller
-import com.june0122.wakplus.utils.EmptyDataObserver
 import com.june0122.wakplus.utils.decorations.SnsPlatformItemDecoration
 import com.june0122.wakplus.utils.decorations.StreamerItemDecoration
 import com.june0122.wakplus.utils.listeners.DataLoadListener
@@ -33,8 +32,6 @@ class HomeFragment : Fragment() {
     private lateinit var contentRecyclerView: RecyclerView
     private lateinit var dataLoadListener: DataLoadListener
     private val homeViewModel: HomeViewModel by viewModels()
-    private val horizontalLayoutManager =
-        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     private val contentListAdapter = ContentListAdapter(
         { content -> homeViewModel.onFavoriteClick(content) },
         { url, _ -> launchSnsWithUrl(url) }
@@ -79,13 +76,16 @@ class HomeFragment : Fragment() {
         homeViewModel.contentListAdapter = contentListAdapter
         homeViewModel.streamerListAdapter = streamerListAdapter
         homeViewModel.snsListAdapter = snsListAdapter
-
-        if (contentListAdapter.itemCount == 0) {
-            homeViewModel.collectAllStreamersContents()
-        }
+        homeViewModel.initContentList()
 
         homeViewModel.contents.observe(viewLifecycleOwner) { contents ->
             contentListAdapter.submitList(contents)
+
+            if (contents != null && contents.isEmpty()) {
+                binding.layoutEmptyContent.visibility = View.VISIBLE
+            } else {
+                binding.layoutEmptyContent.visibility = View.INVISIBLE
+            }
         }
 
         homeViewModel.snsPlatforms.observe(viewLifecycleOwner) { snsPlatforms ->
@@ -103,9 +103,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        streamerRecyclerView.layoutManager = null
-        snsRecyclerView.layoutManager = null
-        contentRecyclerView.layoutManager = null
+        dataLoadListener.onStatusChanged(false)
     }
 
     private fun configureRecyclerViews() {
@@ -113,7 +111,7 @@ class HomeFragment : Fragment() {
         val snsItemPx = resources.getDimensionPixelSize(R.dimen.margin_small)
 
         streamerRecyclerView = binding.rvStreamer.apply {
-            this.layoutManager = horizontalLayoutManager
+            this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = streamerListAdapter
             addItemDecoration(StreamerItemDecoration(streamerItemPx))
         }
@@ -125,18 +123,15 @@ class HomeFragment : Fragment() {
         }
 
         contentRecyclerView = binding.rvContent.apply {
-            val emptyObserver = EmptyDataObserver(binding.rvContent, binding.tvEmptyView)
             this.layoutManager = LinearLayoutManager(context)
-            adapter = contentListAdapter.apply {
-                registerAdapterDataObserver(emptyObserver)
-            }
+            adapter = contentListAdapter
         }
     }
 
     private fun configureSmoothScroller(position: Int) {
         val smoothScroller = CenterSmoothScroller(requireContext())
         smoothScroller.targetPosition = position
-        horizontalLayoutManager.startSmoothScroll(smoothScroller)
+        streamerRecyclerView.layoutManager?.startSmoothScroll(smoothScroller)
     }
 
     private fun launchSnsWithUrl(url: String) {

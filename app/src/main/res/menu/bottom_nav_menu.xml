@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home_dest"
-        android:icon="@drawable/ic_nav_home"
-        android:title="Home" />
+        android:icon="@drawable/selector_home"
+        android:title="@string/fragment_home" />
     <item
         android:id="@+id/favorite_dest"
-        android:icon="@drawable/ic_favorite_border"
-        android:title="Favorite" />
+        android:icon="@drawable/selector_favorite"
+        android:title="@string/fragment_favorite" />
+    <item
+        android:id="@+id/settings_dest"
+        android:icon="@drawable/selector_settings"
+        android:title="@string/fragment_settings" />
 </menu>

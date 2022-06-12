@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">WakPlus</string>
 
+    <!-- Fragment Title -->
+    <string name="fragment_home">홈</string>
+    <string name="fragment_favorite">즐겨찾기</string>
+    <string name="fragment_settings">설정</string>
+    <string name="fragment_dark_mode">다크 모드</string>
+    <string name="fragment_themes">화면 테마</string>
+
+    <!-- Empty Content -->
+    <string name="empty_content">콘텐츠가 없습니다.</string>
+
+    <!-- View Count -->
     <string name="view_count">조회수 %1$s회</string>
 
     <!-- Elapsed Time -->
@@ -26,4 +37,10 @@
     <string name="sns_twitter">트위터</string>
     <string name="sns_naver_cafe">왁물원</string>
     <string name="sns_soundcloud">사운드클라우드</string>
+
+    <!-- Settings -->
+    <string name="personal_settings">개인 설정</string>
+    <string name="dark_mode">다크 모드</string>
+    <string name="light_mode">라이트 모드</string>
+    <string name="system_mode">시스템 설정과 같이</string>
 </resources>

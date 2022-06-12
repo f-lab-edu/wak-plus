@@ -3,6 +3,7 @@ package com.june0122.wakplus.ui.favorite
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
-
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var snsRecyclerView: RecyclerView
     private lateinit var contentRecyclerView: RecyclerView
@@ -54,11 +54,6 @@ class FavoriteFragment : Fragment() {
         favoriteViewModel.favorites.observe(viewLifecycleOwner) { favorites ->
             contentListAdapter.submitList(favorites)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        snsRecyclerView.layoutManager = null
     }
 
     private fun configureRecyclerViews() {

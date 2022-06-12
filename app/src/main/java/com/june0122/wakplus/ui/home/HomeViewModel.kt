@@ -141,10 +141,11 @@ class HomeViewModel @Inject constructor(
 
     private fun checkFavorites(favorites: List<Content>) {
         _contents.value = _contents.value?.map { content ->
-            if (favorites.firstOrNull { it.contentId == content.contentId } != null) content.copy(
-                isFavorite = true
-            )
-            else content.copy(isFavorite = false)
+            if (favorites.firstOrNull { it.contentId == content.contentId } != null) {
+                content.copy(isFavorite = true)
+            } else {
+                content.copy(isFavorite = false)
+            }
         }
     }
 
@@ -192,7 +193,11 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-    private fun updateContentsList(contents: List<Content>) = viewModelScope.launch {
+    fun initContentList() {
+        if (_contents.value?.size == null) collectAllStreamersContents()
+    }
+
+    private fun updateContentList(contents: List<Content>) = viewModelScope.launch {
         _contents.run {
             val checkedContent = contents.map { content ->
                 content.copy(isFavorite = contentRepository.compareInfo(content.contentId))
@@ -208,7 +213,7 @@ class HomeViewModel @Inject constructor(
             _isLoading.postValue(true)
             try {
                 val contents = fetchSnsContents(idSet, MAX_RESULTS)
-                updateContentsList(contents)
+                updateContentList(contents)
             } catch (e: CancellationException) {
                 _isLoading.postValue(false)
                 Log.e("TEST", "${e.message}")
@@ -218,7 +223,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun collectAllStreamersContents() {
+    private fun collectAllStreamersContents() {
         contentsJob = viewModelScope.launch(Dispatchers.IO) {
             _isLoading.postValue(true)
             try {
@@ -230,7 +235,7 @@ class HomeViewModel @Inject constructor(
                                 fetchSnsContents(streamer.idSet, MAX_RESULTS_ALL)
                             )
                         }
-                        updateContentsList(contents)
+                        updateContentList(contents)
                     }.collect()
             } catch (e: CancellationException) {
                 _isLoading.postValue(false)
