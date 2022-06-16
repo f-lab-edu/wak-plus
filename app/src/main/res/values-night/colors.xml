@@ -28,17 +28,38 @@
     <color name="transparent">#00ff0000</color>
 
     <color name="InePrimary">#8a2be2</color>
-    <color name="InePrimaryAlpha">#808A2BE2</color>
+    <color name="InePrimaryAlpha">#B38A2BE2</color>
     <color name="InePrimaryDark">#252525</color>
+    <color name="IneSecondary">#DADDEC</color>
     <color name="IneAccent">#FFFFFFFF</color>
 
     <color name="JingburgerPrimary">#FFC107</color>
-    <color name="JingburgerPrimaryAlpha">#80FFC107</color>
+    <color name="JingburgerPrimaryAlpha">#B3FFC107</color>
     <color name="JingburgerPrimaryDark">#FFBB29</color>
+    <color name="JingburgerSecondary">#FF5100</color>
     <color name="JingburgerAccent">#FFFFFFFF</color>
 
+    <color name="LilpaPrimary">#180989</color>
+    <color name="LilpaPrimaryAlpha">#B3180989</color>
+    <color name="LilpaPrimaryDark">#000080</color>
+    <color name="LilpaSecondary">#6CAAD8</color>
+    <color name="LilpaAccent">#FFFFFFFF</color>
+
+    <color name="JururuPrimary">#F44199</color>
+    <color name="JururuPrimaryAlpha">#B3F44199</color>
+    <color name="JururuPrimaryDark">#800080</color>
+    <color name="JururuSecondary">#1C1F5B</color>
+    <color name="JururuAccent">#FFFFFFFF</color>
+
+    <color name="GoseguPrimary">#467EC6</color>
+    <color name="GoseguPrimaryAlpha">#B3467EC6</color>
+    <color name="GoseguPrimaryDark">#467EC6</color>
+    <color name="GoseguSecondary">#3F456F</color>
+    <color name="GoseguAccent">#FFFFFFFF</color>
+
     <color name="ViichanPrimary">#85ac20</color>
-    <color name="ViichanPrimaryAlpha">#8085AC20</color>
+    <color name="ViichanPrimaryAlpha">#B385AC20</color>
     <color name="ViichanPrimaryDark">#252525</color>
+    <color name="ViichanSecondary">#AAA69E</color>
     <color name="ViichanAccent">#FFFFFFFF</color>
 </resources>

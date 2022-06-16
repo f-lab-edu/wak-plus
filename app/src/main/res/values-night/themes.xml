@@ -23,6 +23,42 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.Lilpa" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/LilpaPrimary</item>
+        <item name="colorPrimaryAlpha">@color/LilpaPrimaryAlpha</item>
+        <item name="colorPrimaryDark">@color/LilpaPrimaryDark</item>
+        <item name="colorAccent">@color/LilpaAccent</item>
+        <item name="colorBackground">@color/Background</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/Background</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.Jururu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/JururuPrimary</item>
+        <item name="colorPrimaryAlpha">@color/JururuPrimaryAlpha</item>
+        <item name="colorPrimaryDark">@color/JururuPrimaryDark</item>
+        <item name="colorAccent">@color/JururuAccent</item>
+        <item name="colorBackground">@color/Background</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/Background</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.Gosegu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/GoseguPrimary</item>
+        <item name="colorPrimaryAlpha">@color/GoseguPrimaryAlpha</item>
+        <item name="colorPrimaryDark">@color/GoseguPrimaryDark</item>
+        <item name="colorAccent">@color/GoseguAccent</item>
+        <item name="colorBackground">@color/Background</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/Background</item>
+        <!-- Customize your theme here. -->
+    </style>
+
     <style name="Theme.Viichan" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/ViichanPrimary</item>
