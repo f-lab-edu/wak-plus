@@ -15,6 +15,8 @@ class NetworkChecker @Inject constructor(
     private val _networkState = MutableStateFlow<NetworkState>(NetworkState.None)
     val networkState: StateFlow<NetworkState> = _networkState
 
+    private var previousNetworkState: NetworkState = NetworkState.None
+
     private val validTransportTypes = listOf(
         NetworkCapabilities.TRANSPORT_WIFI,
         NetworkCapabilities.TRANSPORT_CELLULAR
@@ -24,12 +26,22 @@ class NetworkChecker @Inject constructor(
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            _networkState.value = NetworkState.Connected
+
+            if (previousNetworkState == NetworkState.NotConnected) {
+                _networkState.value = NetworkState.Reconnected.also {
+                    previousNetworkState = it
+                }
+            } else {
+                _networkState.value = NetworkState.Connected.also {
+                    previousNetworkState = it
+                }
+            }
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
             _networkState.value = NetworkState.NotConnected
+            previousNetworkState = NetworkState.NotConnected
         }
     }
 
@@ -53,9 +65,9 @@ class NetworkChecker @Inject constructor(
             if (networkCapabilities != null &&
                 validTransportTypes.any { networkCapabilities.hasTransport(it) }
             ) {
-                NetworkState.Connected
+                NetworkState.Connected.also { previousNetworkState = it }
             } else {
-                NetworkState.NotConnected
+                NetworkState.NotConnected.also { previousNetworkState = it }
             }
     }
 
