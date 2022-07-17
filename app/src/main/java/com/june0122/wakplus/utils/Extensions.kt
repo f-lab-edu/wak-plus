@@ -1,6 +1,7 @@
 package com.june0122.wakplus.utils
 
 import android.content.Context
+import android.widget.Toast
 import com.june0122.wakplus.R
 import com.june0122.wakplus.utils.Language.*
 import java.text.DecimalFormat
@@ -116,3 +117,6 @@ fun String.timeAgo(context: Context): String {
         else -> context.getString(R.string.years_ago, diff / YEAR_MILLIS)
     }
 }
+
+fun Context.toast(message: CharSequence) =
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
