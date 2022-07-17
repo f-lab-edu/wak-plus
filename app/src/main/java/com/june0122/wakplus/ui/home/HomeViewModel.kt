@@ -1,6 +1,5 @@
 package com.june0122.wakplus.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,6 +23,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +40,19 @@ class HomeViewModel @Inject constructor(
     private var currentIdSet: IdSet? = null
     private var currentSns: SnsPlatformEntity =
         SnsPlatformEntity(SNS.ALL, true)
+
+    private val contentExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+
+        when (throwable) {
+            is CancellationException -> {
+                _isLoading.postValue(false)
+            }
+            is UnknownHostException -> {
+                _isLoading.postValue(false)
+            }
+        }
+    }
 
     private val _snsPlatforms = MutableLiveData<List<SnsPlatformEntity>>()
     val snsPlatforms: LiveData<List<SnsPlatformEntity>> = _snsPlatforms
@@ -75,10 +88,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private var contentsJob: Job? = null
+    private var contentJob: Job? = null
 
     override fun onStreamerClick(position: Int) {
-        contentsJob?.cancel("다른 스트리머의 콘텐츠 로딩으로 인한 취소", CancellationException())
+        contentJob?.cancel("다른 스트리머의 콘텐츠 로딩으로 인한 취소", CancellationException())
 
         val selectedStreamer = streamerListAdapter[position]
         currentIdSet = selectedStreamer.idSet
@@ -102,7 +115,7 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onSnsClick(position: Int) {
-        contentsJob?.cancel("다른 SNS의 콘텐츠 로딩으로 인한 취소", CancellationException())
+        contentJob?.cancel("다른 SNS의 콘텐츠 로딩으로 인한 취소", CancellationException())
         val selectedSns = snsListAdapter[position]
         currentSns = selectedSns
         _snsPlatforms.value = _snsPlatforms.value?.map { sns ->
@@ -209,40 +222,26 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun collectStreamerContents(idSet: IdSet) {
-        contentsJob = viewModelScope.launch(Dispatchers.IO) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
-            try {
-                val contents = fetchSnsContents(idSet, MAX_RESULTS)
-                updateContentList(contents)
-            } catch (e: CancellationException) {
-                _isLoading.postValue(false)
-                Log.e("TEST", "${e.message}")
-            } finally {
-                Log.d("TEST", "Close contentsJob resources in finally")
-            }
+            val contents = fetchSnsContents(idSet, MAX_RESULTS)
+            updateContentList(contents)
         }
     }
 
     private fun collectAllStreamersContents() {
-        contentsJob = viewModelScope.launch(Dispatchers.IO) {
+        contentJob = viewModelScope.launch(Dispatchers.IO + contentExceptionHandler) {
             _isLoading.postValue(true)
-            try {
-                val contents = mutableListOf<Content>()
-                contentRepository.flowAllStreamers()
-                    .onEach { streamers ->
-                        streamers.forEach { streamer ->
-                            contents.addAll(
-                                fetchSnsContents(streamer.idSet, MAX_RESULTS_ALL)
-                            )
-                        }
-                        updateContentList(contents)
-                    }.collect()
-            } catch (e: CancellationException) {
-                _isLoading.postValue(false)
-                Log.e("TEST", "${e.message}")
-            } finally {
-                Log.d("TEST", "Close contentsJob resources in finally")
-            }
+            val contents = mutableListOf<Content>()
+            contentRepository.flowAllStreamers()
+                .onEach { streamers ->
+                    streamers.forEach { streamer ->
+                        contents.addAll(
+                            fetchSnsContents(streamer.idSet, MAX_RESULTS_ALL)
+                        )
+                    }
+                    updateContentList(contents)
+                }.collect()
         }
     }
 
