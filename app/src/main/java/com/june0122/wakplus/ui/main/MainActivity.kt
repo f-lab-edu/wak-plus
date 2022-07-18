@@ -12,11 +12,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.june0122.wakplus.R
-import com.june0122.wakplus.data.network.NetworkState
 import com.june0122.wakplus.data.repository.impl.PreferencesRepositoryImpl
 import com.june0122.wakplus.databinding.ActivityMainBinding
 import com.june0122.wakplus.utils.listeners.DataLoadListener
-import com.june0122.wakplus.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -42,9 +40,14 @@ class MainActivity : AppCompatActivity(), DataLoadListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         lifecycleScope.launch {
             super.onCreate(savedInstanceState)
+
             setupDarkMode()
             setupTheme()
+
             binding = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
+            binding.lifecycleOwner = this@MainActivity
+            binding.viewModel = mainViewModel
+
             val view = binding.root
             setContentView(view)
 
@@ -55,18 +58,6 @@ class MainActivity : AppCompatActivity(), DataLoadListener {
                 setOf(R.id.home_dest, R.id.favorite_dest, R.id.settings_dest)
             )
             setupBottomNavMenu(navController)
-
-            mainViewModel.networkState.observe(this@MainActivity) { state ->
-                when (state) {
-                    NetworkState.Reconnected -> {
-                        this@MainActivity.toast(getString(R.string.network_reconneted))
-                    }
-                    NetworkState.NotConnected -> {
-                        this@MainActivity.toast(getString(R.string.network_not_connected))
-                    }
-                    else -> {}
-                }
-            }
         }
     }
 
