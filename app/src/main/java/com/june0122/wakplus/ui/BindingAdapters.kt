@@ -1,6 +1,7 @@
 package com.june0122.wakplus.ui
 
 import android.util.TypedValue
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -12,11 +13,17 @@ import coil.transform.CircleCropTransformation
 import com.google.android.material.chip.Chip
 import com.june0122.wakplus.R
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.network.NetworkState
 import com.june0122.wakplus.ui.home.viewholder.TwitchVideoHolder.Companion.RES_STANDARD
 import com.june0122.wakplus.utils.Language
+import com.june0122.wakplus.utils.NETWORK.RECONNECTION_UI_VISIBLE_TIME
 import com.june0122.wakplus.utils.SNS
 import com.june0122.wakplus.utils.timeAgo
 import com.june0122.wakplus.utils.withSuffix
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 object BindingAdapters {
@@ -149,5 +156,57 @@ object BindingAdapters {
 
         if (isSelected) view.setChipBackgroundColorResource(typedValue.resourceId)
         else view.setChipBackgroundColorResource(R.color.Surface)
+    }
+
+    @JvmStatic
+    @BindingAdapter("networkStatusBarBackground")
+    fun setNetworkStatusBarBackground(view: ConstraintLayout, status: NetworkState?) {
+        val primaryColorTypedValue = TypedValue()
+        view.context.theme.resolveAttribute(R.attr.colorPrimary, primaryColorTypedValue, true)
+
+        val backgroundColorTypedValue = TypedValue()
+        view.context.theme.resolveAttribute(R.attr.colorBackground, backgroundColorTypedValue, true)
+
+        if (status == NetworkState.Reconnected) view.setBackgroundResource(primaryColorTypedValue.resourceId)
+        else view.setBackgroundResource(backgroundColorTypedValue.resourceId)
+    }
+
+    @JvmStatic
+    @BindingAdapter("networkStatusBarVisibility")
+    fun setNetworkStatusBarVisibility(view: ConstraintLayout, status: NetworkState?) {
+        when (status) {
+            NetworkState.Reconnected -> {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(RECONNECTION_UI_VISIBLE_TIME)
+                    view.visibility = View.GONE
+                }
+                view.visibility = View.VISIBLE
+            }
+            NetworkState.NotConnected -> {
+                view.visibility = View.VISIBLE
+            }
+            else -> {
+                view.visibility = View.GONE
+            }
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("networkStatusText")
+    fun setNetworkStatusText(view: TextView, status: NetworkState?) {
+        when (status) {
+            NetworkState.Reconnected -> {
+                view.setTextColor(ContextCompat.getColor(view.context, R.color.Text))
+                view.setText(R.string.network_reconneted)
+            }
+            NetworkState.NotConnected -> {
+                view.setTextColor(ContextCompat.getColor(view.context, R.color.TextLight))
+                view.setText(R.string.network_not_connected)
+            }
+            else -> {
+                view.setTextColor(ContextCompat.getColor(view.context, R.color.Text))
+                view.setText(R.string.network_not_connected)
+            }
+        }
     }
 }

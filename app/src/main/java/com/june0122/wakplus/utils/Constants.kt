@@ -18,3 +18,8 @@ object ISEDOL {
     const val VIICHAN = "VIICHAN"
     const val JINGBURGER = "JINGBURGER"
 }
+
+object NETWORK {
+    const val RECONNECTION_DELAY = 1000L
+    const val RECONNECTION_UI_VISIBLE_TIME = 3000L
+}

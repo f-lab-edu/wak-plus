@@ -43,4 +43,10 @@
     <string name="dark_mode">다크 모드</string>
     <string name="light_mode">라이트 모드</string>
     <string name="system_mode">시스템 설정과 같이</string>
+
+    <!-- Network Status -->
+    <string name="network_reconneted">인터넷에 연결되었습니다.</string>
+    <string name="check_network_status">인터넷 연결 상태를 다시 확인해주세요.</string>
+    <string name="network_not_connected">인터넷에 연결되지 않음</string>
+    <string name="network_reconnected">인터넷에 다시 연결됨</string>
 </resources>
