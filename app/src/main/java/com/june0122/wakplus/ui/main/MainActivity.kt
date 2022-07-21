@@ -78,6 +78,11 @@ class MainActivity : AppCompatActivity(), DataLoadListener {
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = binding.bottomNavView
         bottomNav.setupWithNavController(navController)
+
+        bottomNav.setOnItemSelectedListener { item ->
+            NavigationUI.onNavDestinationSelected(item, navController)
+            return@setOnItemSelectedListener true
+        }
     }
 
     fun setupActionBar(toolBar: Toolbar) {
