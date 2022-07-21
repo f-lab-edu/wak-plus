@@ -3,7 +3,7 @@ buildscript {
     ext {
         kotlinVersion = "1.6.21"
         coroutinesVersion = "1.6.2"
-        navigationVersion = "2.4.2"
+        navigationVersion = "2.5.0"
         coilVersion = "2.1.0"
         roomVersion = "2.4.2"
         hiltVersion = "2.42"
