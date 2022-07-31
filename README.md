@@ -7,9 +7,7 @@
   <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat"/></a>
 </p>
 
-<!-- <p align="left">  
-<b>Wak+</b>는 인터넷 방송인 우왁굳이 기획한 왁타버스 프로젝트에 관련된 스트리머들이 운영하는 SNS 플랫폼<small>(유튜브, 트위치, 인스타그램, 트위터 등)</small>의 콘텐츠들을 하나의 앱에서 편리하게 접근할 수 있도록 도와주는 애플리케이션입니다.
-</p> -->
+Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](https://www.youtube.com/c/welshcorgimessi) member's SNS content such as YouTube, Twitch, Instagram, and Twitter in one app.
 
 ## Tech stack & Open-source libraries
 
