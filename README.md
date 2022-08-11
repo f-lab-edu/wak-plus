@@ -43,7 +43,7 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 
 | Multiple Color Themes | Change Dark Themes by System Default | Dark / Light / System Default Options |
 | :---------------: | :---------------: | :---------------: |
-| <img src="https://github.com/june0122/webp-test/blob/master/docs/theme_change.gif" align="center" width="300px"/> | <img src="https://github.com/june0122/webp-test/blob/master/docs/dark_mode_setting2.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/dark_mode_setting1.gif" align="center" width="300px"/> |
+| <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/theme_change.webp" align="center" width="300px"/> | <img src="https://github.com/june0122/webp-test/blob/master/docs/dark_mode_setting2.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/dark_mode_setting1.webp" align="center" width="300px"/> |
 
 </div>
 
@@ -70,15 +70,15 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 ```xml
 Designed and developed by 2022 Junseop Lim
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
 ```
