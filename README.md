@@ -9,6 +9,8 @@
 
 Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](https://www.youtube.com/c/welshcorgimessi) member's SNS content such as YouTube, Twitch, Instagram, and Twitter in one app.
 
+![WAK ENT LOGO](https://user-images.githubusercontent.com/39554623/184081781-65452abc-9ecf-42df-a517-4d35b21bea81.png)
+
 ## Tech stack & Open-source libraries
 
 - Minimum SDK level 23
