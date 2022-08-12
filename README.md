@@ -84,7 +84,7 @@ Currently, data is obtained through direct API calls from web services such as Y
 However, this method has an API limitation problem, so the method of caching in Firebase Cloud Firestore will be applied.
 
 <p align = 'center'>
-<img width = '1000' src = 'https://user-images.githubusercontent.com/39554623/184457227-3eb42776-f5e4-4dbe-a9c2-7a63279cf232.png'>
+<img width = '900' src = 'https://user-images.githubusercontent.com/39554623/184457227-3eb42776-f5e4-4dbe-a9c2-7a63279cf232.png'>
 </p>
 
 ## Design in Figma
