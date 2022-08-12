@@ -13,19 +13,31 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 
 ## Tech stack & Open-source libraries
 
+### Android
+
 - Minimum SDK level 23
 - [Kotlin](https://kotlinlang.org/) based, [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous.
 - JetPack
-  - Lifecycle - Create a UI that automatically responds to lifecycle events.
-  - LiveData - Build data objects that notify views when the underlying database changes.
-  - ViewModel - Store UI related data that isn't destroyed on app rotations.
-  - Room - Constructs Database by providing an abstraction layer over SQLite to allow fluent database access.
-  - DataBinding - Useful to bind data directly through layouts xml file, so no `findViewById()` anymore.
+  - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle) - Create a UI that automatically responds to lifecycle events.
+  - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - Build data objects that notify views when the underlying database changes.
+  - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - Store UI related data that isn't destroyed on app rotations.
+  - [Room](https://developer.android.com/training/data-storage/room) - Constructs Database by providing an abstraction layer over SQLite to allow fluent database access.
+  - [DataBinding](https://developer.android.com/topic/libraries/data-binding) - Useful to bind data directly through layouts xml file, so no `findViewById()` anymore.
   - [Navigation](https://developer.android.com/guide/navigation) - Handles navigating between your app's destinations.
   - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - Data storage solution that uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
 - [Hilt](https://dagger.dev/hilt/) - Dependency injection.
 - [Coil](https://coil-kt.github.io/coil/) - An image loading library for Android backed by Kotlin Coroutines.
 - [Retrofit2 & OkHttp3](https://github.com/square/retrofit) - Construct the REST APIs.
+
+### Caching API Data (Currently Updating)
+
+- [Node.js](https://nodejs.dev/) with [TypeScript](https://www.typescriptlang.org/)
+- [Firebase](https://firebase.google.com/)
+  - Cloud Firestore
+  - Cloud Functions
+- WebSub
+  - Youtube - [Google Pubsubhubbub](https://pubsubhubbub.appspot.com/)
+  - Twitch - [EventSub](https://dev.twitch.tv/docs/eventsub)
 
 ## Features
 
@@ -58,6 +70,22 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 | <img src="https://github.com/june0122/webp-test/blob/master/docs/favorite_add_remove.webp" align="center" width="300px"/> | <img src="https://github.com/june0122/webp-test/blob/master/docs/favorite_filter.webp" align="center" width="300px"/> |
 
 </div>
+
+## Architecture
+
+Wak+ is based on the MVVM architecture and the Repository pattern.
+
+<p align = 'center'>
+<img width = '600' src = 'https://user-images.githubusercontent.com/39554623/184456867-195f5989-dc9a-4dea-8f35-41e1f11145ff.png'>
+</p>
+
+Currently, data is obtained through direct API calls from web services such as Youtube and Twitch.
+
+However, this method has an API limitation problem, so the method of caching in Firebase Cloud Firestore will be applied.
+
+<p align = 'center'>
+<img width = '1000' src = 'https://user-images.githubusercontent.com/39554623/184457227-3eb42776-f5e4-4dbe-a9c2-7a63279cf232.png'>
+</p>
 
 ## Design in Figma
 
