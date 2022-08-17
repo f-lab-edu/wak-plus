@@ -2,6 +2,7 @@ package com.june0122.wakplus.utils
 
 import com.june0122.wakplus.R
 import com.june0122.wakplus.data.repository.impl.PreferencesRepositoryImpl
+import com.june0122.wakplus.di.coroutines.ApplicationScope
 import com.june0122.wakplus.utils.ISEDOL.GOSEGU
 import com.june0122.wakplus.utils.ISEDOL.INE
 import com.june0122.wakplus.utils.ISEDOL.JINGBURGER
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ThemeManager @Inject constructor(
-    private val coroutineScope: CoroutineScope,
+    @ApplicationScope private val externalScope: CoroutineScope,
     private val preferencesRepository: PreferencesRepositoryImpl,
 ) {
     fun saveTheme(activeTheme: String) {
@@ -29,13 +30,13 @@ class ThemeManager @Inject constructor(
             else -> R.style.Theme_Ine
         }
 
-        coroutineScope.launch {
+        externalScope.launch {
             preferencesRepository.updateTheme(themeResourseId)
         }
     }
 
     fun saveActiveDarkMode(activeMode: Int) {
-        coroutineScope.launch {
+        externalScope.launch {
             preferencesRepository.updateDarkModeId(activeMode)
         }
     }

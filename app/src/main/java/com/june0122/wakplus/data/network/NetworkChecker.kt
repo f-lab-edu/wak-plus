@@ -5,10 +5,11 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import com.june0122.wakplus.di.coroutines.ApplicationScope
 import com.june0122.wakplus.utils.NETWORK.RECONNECTION_DELAY
 import com.june0122.wakplus.utils.NETWORK.RECONNECTION_UI_VISIBLE_TIME
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 
 class NetworkChecker @Inject constructor(
-    applicationContext: Context
+    @ApplicationContext applicationContext: Context,
+    @ApplicationScope applicationScope: CoroutineScope
 ) {
     private val _networkState = MutableStateFlow<NetworkState>(NetworkState.None)
     val networkState: StateFlow<NetworkState> = _networkState
@@ -38,7 +40,7 @@ class NetworkChecker @Inject constructor(
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
             if (previousNetworkState == NetworkState.NotConnected) {
-                CoroutineScope(Dispatchers.Main).launch {
+                applicationScope.launch {
                     delay(RECONNECTION_UI_VISIBLE_TIME)
                     _networkState.value = NetworkState.Connected
                 }
@@ -56,7 +58,7 @@ class NetworkChecker @Inject constructor(
         // 네트워크에 연결된 상태가 아니므로 onLost가 호출되고 잠깐 뒤에 네트워크 연결 여부를 확인
         override fun onLost(network: Network) {
             super.onLost(network)
-            CoroutineScope(Dispatchers.Main).launch {
+            applicationScope.launch {
                 delay(RECONNECTION_DELAY)
                 if (isNetworkAvailable().not()) {
                     _networkState.value = NetworkState.NotConnected

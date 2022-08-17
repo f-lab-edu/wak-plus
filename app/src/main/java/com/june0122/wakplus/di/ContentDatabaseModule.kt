@@ -2,6 +2,7 @@ package com.june0122.wakplus.di
 
 import android.content.Context
 import com.june0122.wakplus.data.room.ContentRoomDatabase
+import com.june0122.wakplus.di.coroutines.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +16,9 @@ import javax.inject.Singleton
 object ContentDatabaseModule {
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context, scope: CoroutineScope): ContentRoomDatabase =
-        ContentRoomDatabase.getDatabase(context, scope)
+    fun provideDatabase(
+        @ApplicationContext context: Context,
+        @ApplicationScope externalScope: CoroutineScope
+    ): ContentRoomDatabase =
+        ContentRoomDatabase.getDatabase(context, externalScope)
 }
