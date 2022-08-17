@@ -6,8 +6,9 @@ import com.june0122.wakplus.data.api.TwitchAuthService
 import com.june0122.wakplus.data.api.TwitchService
 import com.june0122.wakplus.data.entity.*
 import com.june0122.wakplus.data.repository.TwitchRepository
+import com.june0122.wakplus.di.coroutines.IoDispatcher
 import com.june0122.wakplus.utils.SNS
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -15,13 +16,13 @@ class TwitchRepositoryImpl @Inject constructor(
     private val twitchApi: TwitchService,
     private val twitchAuthApi: TwitchAuthService,
     private val preferencesRepository: PreferencesRepositoryImpl,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : TwitchRepository {
     override suspend fun getTwitchUserInfo(userId: String): TwitchUserInfo =
         twitchApi.getUserInfo(userId).data[0]
 
     override suspend fun getTwitchVideos(idSet: IdSet, maxResults: Int): List<Content> {
         val twitchVideos = try {
-            Log.e("TEST", "NO EXCEPTION")
             twitchApi.getChannelVideos(idSet.twitchId, maxResults).data
         } catch (e: Exception) {
             Log.e("TEST", "EXCEPTION : ${e.printStackTrace()}")
@@ -37,7 +38,7 @@ class TwitchRepositoryImpl @Inject constructor(
         return contents
     }
 
-    override suspend fun createTwitchAccessToken(): String = withContext(Dispatchers.IO) {
+    override suspend fun createTwitchAccessToken(): String = withContext(ioDispatcher) {
         twitchAuthApi.getAccessToken(
             BuildConfig.TWITCH_CLIENT_ID,
             BuildConfig.TWITCH_CLIENT_SECRET,

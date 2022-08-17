@@ -6,20 +6,20 @@ import com.june0122.wakplus.data.entity.IdSet
 import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.data.room.ContentRoomDatabase.Companion.INSTANCE
-import com.june0122.wakplus.utils.*
+import com.june0122.wakplus.di.coroutines.ApplicationScope
+import com.june0122.wakplus.utils.SNS
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ContentDatabaseCallback @Inject constructor(
-    private val scope: CoroutineScope
+    @ApplicationScope private val applicationScope: CoroutineScope
 ) : RoomDatabase.Callback() {
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
 
         INSTANCE?.let { database ->
-            scope.launch(Dispatchers.IO) {
+            applicationScope.launch {
                 populateDatabase(database.contentDao())
             }
         }

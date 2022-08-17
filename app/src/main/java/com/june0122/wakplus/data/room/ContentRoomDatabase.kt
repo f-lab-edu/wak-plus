@@ -5,8 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.june0122.wakplus.data.entity.*
-import com.june0122.wakplus.utils.converters.*
+import com.june0122.wakplus.data.entity.Content
+import com.june0122.wakplus.data.entity.SnsPlatformEntity
+import com.june0122.wakplus.data.entity.StreamerEntity
+import com.june0122.wakplus.utils.converters.ContentInfoTypeConverter
+import com.june0122.wakplus.utils.converters.IdSetTypeConverter
+import com.june0122.wakplus.utils.converters.SnsPlatformTypeConverter
 import kotlinx.coroutines.CoroutineScope
 
 @Database(
@@ -32,14 +36,14 @@ abstract class ContentRoomDatabase : RoomDatabase() {
         @Volatile
         var INSTANCE: ContentRoomDatabase? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope): ContentRoomDatabase {
+        fun getDatabase(context: Context, applicationScope: CoroutineScope): ContentRoomDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ContentRoomDatabase::class.java,
                     "content_database"
                 )
-                    .addCallback(ContentDatabaseCallback(scope))
+                    .addCallback(ContentDatabaseCallback(applicationScope))
                     .build()
                 INSTANCE = instance
                 instance

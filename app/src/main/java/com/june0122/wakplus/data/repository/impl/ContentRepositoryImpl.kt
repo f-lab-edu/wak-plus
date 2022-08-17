@@ -5,13 +5,15 @@ import com.june0122.wakplus.data.entity.SnsPlatformEntity
 import com.june0122.wakplus.data.entity.StreamerEntity
 import com.june0122.wakplus.data.repository.ContentRepository
 import com.june0122.wakplus.data.room.ContentDao
-import kotlinx.coroutines.Dispatchers
+import com.june0122.wakplus.di.coroutines.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ContentRepositoryImpl @Inject constructor(
-    private val contentDao: ContentDao
+    private val contentDao: ContentDao,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ContentRepository {
     override fun flowAllStreamers(): Flow<List<StreamerEntity>> =
         contentDao.getAllStreamers()
@@ -22,15 +24,15 @@ class ContentRepositoryImpl @Inject constructor(
     override fun flowAllFavorites(): Flow<List<Content>> =
         contentDao.getAllFavorites()
 
-    override suspend fun compareInfo(contentId: String): Boolean = withContext(Dispatchers.IO) {
+    override suspend fun compareInfo(contentId: String): Boolean = withContext(ioDispatcher) {
         contentDao.compareInfo(contentId) > 0
     }
 
-    override suspend fun insertFavorite(content: Content) = withContext(Dispatchers.IO) {
+    override suspend fun insertFavorite(content: Content) = withContext(ioDispatcher) {
         contentDao.insertFavorite(content)
     }
 
-    override suspend fun deleteFavorite(content: Content) = withContext(Dispatchers.IO) {
+    override suspend fun deleteFavorite(content: Content) = withContext(ioDispatcher) {
         contentDao.deleteFavorite(content)
     }
 }
