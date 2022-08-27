@@ -71,6 +71,16 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 
 </div>
 
+> ### Network Connectivity
+
+<div align="center">
+
+| Network Disconnected | Network Reconnected |
+| :---------------: | :---------------: |
+| <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/network_off.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/network_on.webp" align="center" width="300px"/> |
+
+</div>
+
 ## Architecture
 
 Wak+ is based on the MVVM architecture and the Repository pattern.
