@@ -47,7 +47,7 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 
 | Switch from Twitch to Youtube Content | Show Content from the Selected Streamer | Show Content from All Streamers |
 | :---------------: | :---------------: | :---------------: |
-| <img src="https://github.com/june0122/webp-test/blob/master/docs/sns_change.webp" align="center" width="300px"/> | <img src="https://github.com/june0122/webp-test/blob/master/docs/streamer_selection.webp" align="center" width="300px"/> | <img src="https://github.com/june0122/webp-test/blob/master/docs/streamer_selection_all.webp" align="center" width="300px"/> |
+| <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/sns_change.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/streamer_selection.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/streamer_selection_all.webp" align="center" width="300px"/> |
 
 </div>
 
@@ -57,7 +57,7 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 
 | Multiple Color Themes | Change Dark Themes by System Default | Dark / Light / System Default Options |
 | :---------------: | :---------------: | :---------------: |
-| <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/theme_change.webp" align="center" width="300px"/> | <img src="https://github.com/june0122/webp-test/blob/master/docs/dark_mode_setting2.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/dark_mode_setting1.webp" align="center" width="300px"/> |
+| <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/theme_change.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/dark_mode_setting2.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/dark_mode_setting1.webp" align="center" width="300px"/> |
 
 </div>
 
@@ -67,7 +67,7 @@ Wak+ is an application that helps you to conveniently access to [WAKTAVERSE](htt
 
 | Add or Remove Content from Favorites  | Filter by SNS |
 | :---------------: | :---------------: |
-| <img src="https://github.com/june0122/webp-test/blob/master/docs/favorite_add_remove.webp" align="center" width="300px"/> | <img src="https://github.com/june0122/webp-test/blob/master/docs/favorite_filter.webp" align="center" width="300px"/> |
+| <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/favorite_add_remove.webp" align="center" width="300px"/> | <img src="https://github.com/f-lab-edu/wak-plus/blob/main/docs/favorite_filter.webp" align="center" width="300px"/> |
 
 </div>
 
